@@ -21,7 +21,7 @@ submission system.
 - `src/`: block-level environment, baselines, parcel policy, preprocessing
   helpers, and training/evaluation entry points.
 - `scripts/analysis/`: figure, table, ablation, reward-greedy, compactness,
-  and trajectory analysis scripts.
+  area-balance, and trajectory analysis scripts.
 - `scripts/training/`: Colab/A100 training scripts for the three townships.
 - `results/blocks/`: five-seed block-level DRL outputs for townships 109, 108
   v2, and 105.
@@ -52,6 +52,17 @@ python scripts/analysis/plot_training_curves_105.py
 
 Generated figures are written to `figures/`.
 
+The farmland-area balance audit reported in the revised manuscript requires
+controlled-access parcel geometry:
+
+```bash
+PAPER3_DLTB_PATH=/path/to/DLTB_with_slope.gpkg python scripts/analysis/paper3_area_drift_audit.py
+```
+
+Its aggregate outputs are included as
+`results/derived_analyses/paper3_area_drift_results.json` and
+`results/tables/paper3_area_drift_table.tex`.
+
 ## Data Availability Boundary
 
 The original Third National Land Survey parcel geometry, geodatabases,
@@ -64,7 +75,8 @@ and `restricted_data_manifest/TNLS_RESTRICTED_DATA.md`.
 
 ## Google Drive Recovery
 
-Additional Paper3 files were checked in `G:\我的云端硬盘`. Non-restricted
-artifacts recovered from that location are included under `notebooks/` and
-`results/google_drive_artifacts/`. The private `paper3_colab.zip` archive is
-not included because it contained restricted raw geospatial data.
+Additional Paper3 files were checked in a local Google Drive mirror.
+Non-restricted artifacts recovered from that location are included under
+`notebooks/` and `results/google_drive_artifacts/`. The private
+`paper3_colab.zip` archive is not included because it contained restricted raw
+geospatial data.

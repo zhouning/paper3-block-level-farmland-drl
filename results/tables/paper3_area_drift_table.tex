@@ -1,0 +1,33 @@
+\begin{table}[htbp]
+\centering
+\caption{Farmland-area balance audit. The optimization engine conserves farmland parcel count, not farmland area. This post-hoc audit replays each final configuration and reports the net farmland-area change. Random-Block and DRL are reported as mean $\pm$ standard deviation over five seeds; deterministic baselines report a single trajectory. Values are derived from controlled-access parcel geometry and released here only as aggregate diagnostics.}
+\label{tab:area_drift}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llrr}
+\toprule
+Township & Method & $\Delta$ farmland area (ha) & $\Delta$ farmland area (\%) \\
+\midrule
+A & Greedy-Global & $-43.6$ & $-2.06$ \\
+A & Greedy-Sequential & $-12.6$ & $-0.60$ \\
+A & Random-Block & $-2.4\pm13.0$ & $-0.11\pm0.61$ \\
+A & Round-Robin & $+31.2$ & $+1.47$ \\
+A & Reward-Greedy & $+4.0$ & $+0.19$ \\
+A & DRL & $+2.9\pm9.6$ & $+0.14\pm0.45$ \\
+\addlinespace
+B & Greedy-Global & $-13.7$ & $-0.40$ \\
+B & Greedy-Sequential & $-59.1$ & $-1.74$ \\
+B & Random-Block & $-37.8\pm25.9$ & $-1.12\pm0.77$ \\
+B & Round-Robin & $-11.6$ & $-0.34$ \\
+B & Reward-Greedy & $-101.6$ & $-3.00$ \\
+B & DRL & $+9.6\pm4.0$ & $+0.28\pm0.12$ \\
+\addlinespace
+C & Greedy-Global & $+23.2$ & $+0.40$ \\
+C & Greedy-Sequential & $-38.5$ & $-0.67$ \\
+C & Random-Block & $+7.7\pm30.2$ & $+0.13\pm0.52$ \\
+C & Round-Robin & $+89.8$ & $+1.56$ \\
+C & Reward-Greedy & $+7.2$ & $+0.12$ \\
+C & DRL & $+7.4\pm1.9$ & $+0.13\pm0.03$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}

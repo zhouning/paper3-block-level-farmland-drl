@@ -174,6 +174,10 @@ class BlockLevelEnv(gym.Env):
 
         # Load block compositions
         block_dir = os.path.join(BLOCK_DIR, f'township_{self.township_code}')
+        if not os.path.exists(block_dir) and self.township_code == '500227108':
+            v2_dir = os.path.join(BLOCK_DIR, 'township_500227108_v2')
+            if os.path.exists(v2_dir):
+                block_dir = v2_dir
         with open(os.path.join(block_dir, 'block_compositions.json')) as f:
             compositions = json.load(f)
 

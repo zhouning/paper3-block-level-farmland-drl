@@ -6,7 +6,7 @@
 1. **降低耕地平均坡度**（耕地上山→下山）
 2. **提高耕地空间连通性**（形成百亩方/千亩方连片耕地）
 
-Paper 2 证明了地块级（parcel-level）MDP 在大规模真实数据上失效——近独立性（near-independence）使 DRL 无法发挥序贯决策优势。Paper 3 将决策尺度从地块提升到地块组（block），恢复了有意义的序贯依赖关系。
+本文的核心判断是：在大规模真实地籍数据上，地块级（parcel-level）置换常呈现近独立性（near-independence），DRL 难以发挥序贯决策优势。为此，本文将决策尺度从地块提升到地块组（block），在资源分配层面恢复有意义的序贯依赖关系。
 
 ---
 
@@ -136,7 +136,7 @@ $$\text{score}_{\text{convert}}(j) = \text{slope}(j) - \gamma \cdot \text{farmla
 - 下次投资 B 时，边界林地优先被转为耕地（γ=1.0 的作用）
 - A 和 B 的耕地跨边界连通 → 可能形成百亩方
 
-当 γ = δ = 0 时，退化为纯坡度贪心（Paper 2 的 Greedy 基线）。
+当 γ = δ = 0 时，该执行器退化为不含连通性感知项的纯坡度贪心基线。
 
 ### 3.5 奖励函数 R(s, a, s')
 
@@ -203,7 +203,7 @@ $$\text{Contiguity} = \frac{\sum_{i \in \text{farmland}} \text{farmland\_nbr\_co
 
 ### 4.1 网络结构：EntityScoringPolicy（维度无关架构）
 
-采用 Per-Entity Scoring 架构，与 Paper 1 的 ParcelScoringPolicy 同构：
+采用 Per-Entity Scoring 架构，对每个地块组共享同一套评分网络参数：
 
 **Scorer 网络**（共享权重，逐实体打分）：
 $$\text{Scorer}: \mathbb{R}^{K\_BLOCK + K\_GLOBAL} \rightarrow \mathbb{R}^{1}$$
@@ -235,9 +235,9 @@ $$\text{结构}: (9) \rightarrow [64] \rightarrow \tanh \rightarrow [32] \righta
 - 训练时 N=78（A 镇），可直接迁移到 N=132（B 镇）或 N=338（C 镇）
 - Scorer 逐实体打分，Value 只看全局特征，均不依赖 N
 
-### 4.4 与 Paper 1 的对比
+### 4.4 与地块级策略的尺度差异
 
-| | Paper 1 | Paper 3 |
+| | 地块级策略 | 本文地块组策略 |
 |--|---------|---------|
 | 评分对象 | 地块（parcel） | 地块组（block） |
 | 实体特征维度 | 6（PoC）/ 10（real） | 17 |
@@ -286,7 +286,7 @@ $$\text{结构}: (9) \rightarrow [64] \rightarrow \tanh \rightarrow [32] \righta
 
 | 方法 | 选择策略 | 说明 |
 |------|---------|------|
-| Greedy-Global | 忽略地块组，全局排序 | Paper 2 的 Greedy 基线适配 |
+| Greedy-Global | 忽略地块组，全局排序 | 全局纯贪心参照 |
 | Greedy-Sequential | 按耕-林坡度差降序 | 优先投资坡度差最大的组 |
 | Random-Block | 随机选择（5 seeds） | 随机基线 |
 | Round-Robin | 固定顺序轮询 | 均匀分配基线 |

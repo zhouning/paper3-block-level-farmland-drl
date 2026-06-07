@@ -1,0 +1,470 @@
+[
+  {
+    "township_label": "A",
+    "township_code": "500227109",
+    "method": "Greedy-Global",
+    "initial_farmland_area_ha": 2117.6086864504923,
+    "final_farmland_area_ha": 2074.0170619832156,
+    "farmland_area_change_ha": -43.59162446727641,
+    "farmland_area_change_pct": -2.058530678788635
+  },
+  {
+    "township_label": "A",
+    "township_code": "500227109",
+    "method": "Greedy-Sequential",
+    "initial_farmland_area_ha": 2117.6086864504923,
+    "final_farmland_area_ha": 2104.989835356891,
+    "farmland_area_change_ha": -12.618851093601062,
+    "farmland_area_change_pct": -0.5959009884282547
+  },
+  {
+    "township_label": "A",
+    "township_code": "500227109",
+    "method": "Random-Block",
+    "initial_farmland_area_ha": 2117.6086864504923,
+    "final_farmland_area_ha": 2115.2365302832936,
+    "farmland_area_change_ha": -2.372156167198866,
+    "farmland_area_change_pct": -0.11202051551720085,
+    "farmland_area_change_ha_std": 12.970929879952973,
+    "farmland_area_change_pct_std": 0.6125272323894115,
+    "final_farmland_area_ha_std": 12.970929879952973,
+    "aggregation": "mean_sd_over_5_seeds",
+    "per_seed": [
+      {
+        "township_label": "A",
+        "township_code": "500227109",
+        "method": "Random-Block",
+        "initial_farmland_area_ha": 2117.6086864504923,
+        "final_farmland_area_ha": 2119.79908542196,
+        "farmland_area_change_ha": 2.190398971467838,
+        "farmland_area_change_pct": 0.1034373813010446
+      },
+      {
+        "township_label": "A",
+        "township_code": "500227109",
+        "method": "Random-Block",
+        "initial_farmland_area_ha": 2117.6086864504923,
+        "final_farmland_area_ha": 2133.171970754519,
+        "farmland_area_change_ha": 15.563284304026514,
+        "farmland_area_change_pct": 0.7349461873484041
+      },
+      {
+        "township_label": "A",
+        "township_code": "500227109",
+        "method": "Random-Block",
+        "initial_farmland_area_ha": 2117.6086864504923,
+        "final_farmland_area_ha": 2108.8307344791297,
+        "farmland_area_change_ha": -8.777951971362532,
+        "farmland_area_change_pct": -0.41452190990376125
+      },
+      {
+        "township_label": "A",
+        "township_code": "500227109",
+        "method": "Random-Block",
+        "initial_farmland_area_ha": 2117.6086864504923,
+        "final_farmland_area_ha": 2116.133849366868,
+        "farmland_area_change_ha": -1.4748370836239308,
+        "farmland_area_change_pct": -0.06964634651626941
+      },
+      {
+        "township_label": "A",
+        "township_code": "500227109",
+        "method": "Random-Block",
+        "initial_farmland_area_ha": 2117.6086864504923,
+        "final_farmland_area_ha": 2098.24701139399,
+        "farmland_area_change_ha": -19.36167505650222,
+        "farmland_area_change_pct": -0.9143178898154223
+      }
+    ]
+  },
+  {
+    "township_label": "A",
+    "township_code": "500227109",
+    "method": "Round-Robin",
+    "initial_farmland_area_ha": 2117.6086864504923,
+    "final_farmland_area_ha": 2148.819579720244,
+    "farmland_area_change_ha": 31.210893269751594,
+    "farmland_area_change_pct": 1.4738744447666052
+  },
+  {
+    "township_label": "A",
+    "township_code": "500227109",
+    "method": "Reward-Greedy",
+    "initial_farmland_area_ha": 2117.6086864504923,
+    "final_farmland_area_ha": 2121.633935324859,
+    "farmland_area_change_ha": 4.025248874366656,
+    "farmland_area_change_pct": 0.19008464123339638
+  },
+  {
+    "township_label": "A",
+    "township_code": "500227109",
+    "method": "DRL",
+    "initial_farmland_area_ha": 2117.6086864504923,
+    "final_farmland_area_ha": 2120.553234095104,
+    "farmland_area_change_ha": 2.9445476446117462,
+    "farmland_area_change_pct": 0.13905060285464538,
+    "farmland_area_change_ha_std": 9.623855881195617,
+    "farmland_area_change_pct_std": 0.4544680961489158,
+    "final_farmland_area_ha_std": 9.623855881195617,
+    "aggregation": "mean_sd_over_5_seeds",
+    "per_seed": [
+      {
+        "township_label": "A",
+        "township_code": "500227109",
+        "method": "DRL",
+        "initial_farmland_area_ha": 2117.6086864504923,
+        "final_farmland_area_ha": 2118.430643128535,
+        "farmland_area_change_ha": 0.8219566780429334,
+        "farmland_area_change_pct": 0.0388153242524088
+      },
+      {
+        "township_label": "A",
+        "township_code": "500227109",
+        "method": "DRL",
+        "initial_farmland_area_ha": 2117.6086864504923,
+        "final_farmland_area_ha": 2135.9225399860256,
+        "farmland_area_change_ha": 18.313853535533323,
+        "farmland_area_change_pct": 0.8648365324865929
+      },
+      {
+        "township_label": "A",
+        "township_code": "500227109",
+        "method": "DRL",
+        "initial_farmland_area_ha": 2117.6086864504923,
+        "final_farmland_area_ha": 2120.8107862816814,
+        "farmland_area_change_ha": 3.2020998311892153,
+        "farmland_area_change_pct": 0.15121300982933408
+      },
+      {
+        "township_label": "A",
+        "township_code": "500227109",
+        "method": "DRL",
+        "initial_farmland_area_ha": 2117.6086864504923,
+        "final_farmland_area_ha": 2109.413361721208,
+        "farmland_area_change_ha": -8.195324729284271,
+        "farmland_area_change_pct": -0.38700845825397356
+      },
+      {
+        "township_label": "A",
+        "township_code": "500227109",
+        "method": "DRL",
+        "initial_farmland_area_ha": 2117.6086864504923,
+        "final_farmland_area_ha": 2118.18883935807,
+        "farmland_area_change_ha": 0.5801529075775296,
+        "farmland_area_change_pct": 0.027396605958864582
+      }
+    ]
+  },
+  {
+    "township_label": "B",
+    "township_code": "500227108",
+    "method": "Greedy-Global",
+    "initial_farmland_area_ha": 3384.655501414646,
+    "final_farmland_area_ha": 3370.9665582959233,
+    "farmland_area_change_ha": -13.688943118722737,
+    "farmland_area_change_pct": -0.40444125297246125
+  },
+  {
+    "township_label": "B",
+    "township_code": "500227108",
+    "method": "Greedy-Sequential",
+    "initial_farmland_area_ha": 3384.655501414646,
+    "final_farmland_area_ha": 3325.603512704759,
+    "farmland_area_change_ha": -59.05198870988749,
+    "farmland_area_change_pct": -1.7446971688907837
+  },
+  {
+    "township_label": "B",
+    "township_code": "500227108",
+    "method": "Random-Block",
+    "initial_farmland_area_ha": 3384.655501414646,
+    "final_farmland_area_ha": 3346.8186301086466,
+    "farmland_area_change_ha": -37.83687130599968,
+    "farmland_area_change_pct": -1.1178943112581305,
+    "farmland_area_change_ha_std": 25.921195922893737,
+    "farmland_area_change_pct_std": 0.7658444385864308,
+    "final_farmland_area_ha_std": 25.921195922893737,
+    "aggregation": "mean_sd_over_5_seeds",
+    "per_seed": [
+      {
+        "township_label": "B",
+        "township_code": "500227108",
+        "method": "Random-Block",
+        "initial_farmland_area_ha": 3384.655501414646,
+        "final_farmland_area_ha": 3362.8856513995206,
+        "farmland_area_change_ha": -21.769850015125424,
+        "farmland_area_change_pct": -0.6431924905216063
+      },
+      {
+        "township_label": "B",
+        "township_code": "500227108",
+        "method": "Random-Block",
+        "initial_farmland_area_ha": 3384.655501414646,
+        "final_farmland_area_ha": 3369.178244792881,
+        "farmland_area_change_ha": -15.477256621765346,
+        "farmland_area_change_pct": -0.4572771620419417
+      },
+      {
+        "township_label": "B",
+        "township_code": "500227108",
+        "method": "Random-Block",
+        "initial_farmland_area_ha": 3384.655501414646,
+        "final_farmland_area_ha": 3359.7392583257815,
+        "farmland_area_change_ha": -24.916243088864537,
+        "farmland_area_change_pct": -0.7361530022317064
+      },
+      {
+        "township_label": "B",
+        "township_code": "500227108",
+        "method": "Random-Block",
+        "initial_farmland_area_ha": 3384.655501414646,
+        "final_farmland_area_ha": 3306.2399880030703,
+        "farmland_area_change_ha": -78.41551341157593,
+        "farmland_area_change_pct": -2.316794526911276
+      },
+      {
+        "township_label": "B",
+        "township_code": "500227108",
+        "method": "Random-Block",
+        "initial_farmland_area_ha": 3384.655501414646,
+        "final_farmland_area_ha": 3336.050008021979,
+        "farmland_area_change_ha": -48.60549339266717,
+        "farmland_area_change_pct": -1.4360543745841219
+      }
+    ]
+  },
+  {
+    "township_label": "B",
+    "township_code": "500227108",
+    "method": "Round-Robin",
+    "initial_farmland_area_ha": 3384.655501414646,
+    "final_farmland_area_ha": 3373.075311734027,
+    "farmland_area_change_ha": -11.580189680619538,
+    "farmland_area_change_pct": -0.3421379125816349
+  },
+  {
+    "township_label": "B",
+    "township_code": "500227108",
+    "method": "Reward-Greedy",
+    "initial_farmland_area_ha": 3384.655501414646,
+    "final_farmland_area_ha": 3283.103488499615,
+    "farmland_area_change_ha": -101.55201291503124,
+    "farmland_area_change_pct": -3.000364819184307
+  },
+  {
+    "township_label": "B",
+    "township_code": "500227108",
+    "method": "DRL",
+    "initial_farmland_area_ha": 3384.655501414646,
+    "final_farmland_area_ha": 3394.258769747165,
+    "farmland_area_change_ha": 9.603268332518935,
+    "farmland_area_change_pct": 0.2837295650474669,
+    "farmland_area_change_ha_std": 3.9536980313599006,
+    "farmland_area_change_pct_std": 0.11681242093050291,
+    "final_farmland_area_ha_std": 3.9536980313599006,
+    "aggregation": "mean_sd_over_5_seeds",
+    "per_seed": [
+      {
+        "township_label": "B",
+        "township_code": "500227108",
+        "method": "DRL",
+        "initial_farmland_area_ha": 3384.655501414646,
+        "final_farmland_area_ha": 3392.992025791926,
+        "farmland_area_change_ha": 8.336524377279728,
+        "farmland_area_change_pct": 0.24630348269699548
+      },
+      {
+        "township_label": "B",
+        "township_code": "500227108",
+        "method": "DRL",
+        "initial_farmland_area_ha": 3384.655501414646,
+        "final_farmland_area_ha": 3390.538968457362,
+        "farmland_area_change_ha": 5.883467042715847,
+        "farmland_area_change_pct": 0.1738276477548986
+      },
+      {
+        "township_label": "B",
+        "township_code": "500227108",
+        "method": "DRL",
+        "initial_farmland_area_ha": 3384.655501414646,
+        "final_farmland_area_ha": 3400.738913287326,
+        "farmland_area_change_ha": 16.08341187267974,
+        "farmland_area_change_pct": 0.47518608218643044
+      },
+      {
+        "township_label": "B",
+        "township_code": "500227108",
+        "method": "DRL",
+        "initial_farmland_area_ha": 3384.655501414646,
+        "final_farmland_area_ha": 3394.922231634713,
+        "farmland_area_change_ha": 10.266730220066757,
+        "farmland_area_change_pct": 0.3033316157516086
+      },
+      {
+        "township_label": "B",
+        "township_code": "500227108",
+        "method": "DRL",
+        "initial_farmland_area_ha": 3384.655501414646,
+        "final_farmland_area_ha": 3392.101709564499,
+        "farmland_area_change_ha": 7.446208149852604,
+        "farmland_area_change_pct": 0.21999899684740135
+      }
+    ]
+  },
+  {
+    "township_label": "C",
+    "township_code": "500227105",
+    "method": "Greedy-Global",
+    "initial_farmland_area_ha": 5760.052865983431,
+    "final_farmland_area_ha": 5783.221211286706,
+    "farmland_area_change_ha": 23.168345303275437,
+    "farmland_area_change_pct": 0.4022245254049389
+  },
+  {
+    "township_label": "C",
+    "township_code": "500227105",
+    "method": "Greedy-Sequential",
+    "initial_farmland_area_ha": 5760.052865983431,
+    "final_farmland_area_ha": 5721.534055454395,
+    "farmland_area_change_ha": -38.518810529036074,
+    "farmland_area_change_pct": -0.6687232118391269
+  },
+  {
+    "township_label": "C",
+    "township_code": "500227105",
+    "method": "Random-Block",
+    "initial_farmland_area_ha": 5760.052865983431,
+    "final_farmland_area_ha": 5767.741632001072,
+    "farmland_area_change_ha": 7.688766017640679,
+    "farmland_area_change_pct": 0.13348429600442485,
+    "farmland_area_change_ha_std": 30.184011937775995,
+    "farmland_area_change_pct_std": 0.5240231754821332,
+    "final_farmland_area_ha_std": 30.184011937775995,
+    "aggregation": "mean_sd_over_5_seeds",
+    "per_seed": [
+      {
+        "township_label": "C",
+        "township_code": "500227105",
+        "method": "Random-Block",
+        "initial_farmland_area_ha": 5760.052865983431,
+        "final_farmland_area_ha": 5761.600936112606,
+        "farmland_area_change_ha": 1.5480701291754841,
+        "farmland_area_change_pct": 0.02687597084946507
+      },
+      {
+        "township_label": "C",
+        "township_code": "500227105",
+        "method": "Random-Block",
+        "initial_farmland_area_ha": 5760.052865983431,
+        "final_farmland_area_ha": 5738.35835125147,
+        "farmland_area_change_ha": -21.69451473196149,
+        "farmland_area_change_pct": -0.3766374239389471
+      },
+      {
+        "township_label": "C",
+        "township_code": "500227105",
+        "method": "Random-Block",
+        "initial_farmland_area_ha": 5760.052865983431,
+        "final_farmland_area_ha": 5767.867434094815,
+        "farmland_area_change_ha": 7.81456811138317,
+        "farmland_area_change_pct": 0.13566834008647533
+      },
+      {
+        "township_label": "C",
+        "township_code": "500227105",
+        "method": "Random-Block",
+        "initial_farmland_area_ha": 5760.052865983431,
+        "final_farmland_area_ha": 5817.972870803164,
+        "farmland_area_change_ha": 57.9200048197329,
+        "farmland_area_change_pct": 1.0055464102037204
+      },
+      {
+        "township_label": "C",
+        "township_code": "500227105",
+        "method": "Random-Block",
+        "initial_farmland_area_ha": 5760.052865983431,
+        "final_farmland_area_ha": 5752.908567743304,
+        "farmland_area_change_ha": -7.14429824012667,
+        "farmland_area_change_pct": -0.12403181717858942
+      }
+    ]
+  },
+  {
+    "township_label": "C",
+    "township_code": "500227105",
+    "method": "Round-Robin",
+    "initial_farmland_area_ha": 5760.052865983431,
+    "final_farmland_area_ha": 5849.85395855543,
+    "farmland_area_change_ha": 89.80109257199913,
+    "farmland_area_change_pct": 1.55903243705155
+  },
+  {
+    "township_label": "C",
+    "township_code": "500227105",
+    "method": "Reward-Greedy",
+    "initial_farmland_area_ha": 5760.052865983431,
+    "final_farmland_area_ha": 5767.2442624119885,
+    "farmland_area_change_ha": 7.191396428557486,
+    "farmland_area_change_pct": 0.12484948655639945
+  },
+  {
+    "township_label": "C",
+    "township_code": "500227105",
+    "method": "DRL",
+    "initial_farmland_area_ha": 5760.052865983431,
+    "final_farmland_area_ha": 5767.454799926086,
+    "farmland_area_change_ha": 7.401933942655324,
+    "farmland_area_change_pct": 0.12850461818446474,
+    "farmland_area_change_ha_std": 1.9394856510764438,
+    "farmland_area_change_pct_std": 0.03367131684728574,
+    "final_farmland_area_ha_std": 1.9394856510764438,
+    "aggregation": "mean_sd_over_5_seeds",
+    "per_seed": [
+      {
+        "township_label": "C",
+        "township_code": "500227105",
+        "method": "DRL",
+        "initial_farmland_area_ha": 5760.052865983431,
+        "final_farmland_area_ha": 5769.537794173103,
+        "farmland_area_change_ha": 9.484928189671784,
+        "farmland_area_change_pct": 0.1646673808444707
+      },
+      {
+        "township_label": "C",
+        "township_code": "500227105",
+        "method": "DRL",
+        "initial_farmland_area_ha": 5760.052865983431,
+        "final_farmland_area_ha": 5767.0290800132425,
+        "farmland_area_change_ha": 6.976214029811323,
+        "farmland_area_change_pct": 0.12111371530997664
+      },
+      {
+        "township_label": "C",
+        "township_code": "500227105",
+        "method": "DRL",
+        "initial_farmland_area_ha": 5760.052865983431,
+        "final_farmland_area_ha": 5769.1118620346615,
+        "farmland_area_change_ha": 9.058996051230281,
+        "farmland_area_change_pct": 0.15727279353162
+      },
+      {
+        "township_label": "C",
+        "township_code": "500227105",
+        "method": "DRL",
+        "initial_farmland_area_ha": 5760.052865983431,
+        "final_farmland_area_ha": 5764.728041122739,
+        "farmland_area_change_ha": 4.675175139307976,
+        "farmland_area_change_pct": 0.08116549011064969
+      },
+      {
+        "township_label": "C",
+        "township_code": "500227105",
+        "method": "DRL",
+        "initial_farmland_area_ha": 5760.052865983431,
+        "final_farmland_area_ha": 5766.867222286686,
+        "farmland_area_change_ha": 6.81435630325526,
+        "farmland_area_change_pct": 0.11830371112560656
+      }
+    ]
+  }
+]

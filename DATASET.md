@@ -10,7 +10,7 @@ reported Paper3 results:
   JSON files for the final block-level experiments;
 - block construction audit outputs and maps;
 - derived analysis outputs for reward-greedy, compactness, kappa ablation, and
-  trajectory analyses;
+  trajectory analyses, plus aggregate farmland-area balance diagnostics;
 - manuscript figure PNGs and LaTeX table fragments;
 - sanitized Colab provenance notebooks and small timing metadata recovered from
   Google Drive.

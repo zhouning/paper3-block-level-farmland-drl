@@ -11,14 +11,17 @@
 - `src/paper3_paths.py`: repository-relative path configuration.
 - `scripts/training/`: Colab/A100 training entry points.
 - `scripts/preprocessing/`: DEM slope and parcel feature preprocessing.
-- `scripts/analysis/`: figure, table, and robustness analysis scripts.
+- `scripts/analysis/`: figure, table, area-balance, and robustness analysis
+  scripts.
 
 ## Results
 
 - `results/blocks/`: final five-seed township result folders.
 - `results/block_construction_audit/`: construction audit outputs and maps.
-- `results/derived_analyses/`: JSON outputs for derived analyses.
-- `results/tables/`: LaTeX table fragments used by the manuscript.
+- `results/derived_analyses/`: JSON outputs for derived analyses, including
+  the farmland-area balance audit.
+- `results/tables/`: LaTeX table fragments used by the manuscript, including
+  the farmland-area balance table.
 - `results/google_drive_artifacts/`: small non-restricted artifacts recovered
   from Google Drive.
 

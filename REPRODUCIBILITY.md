@@ -33,6 +33,16 @@ Derived analyses that instantiate the real block environment require the
 restricted parcel geometry unless their outputs are already present in
 `results/derived_analyses/`.
 
+The area-balance audit added for the revised manuscript replays final
+configurations against the controlled-access parcel geometry:
+
+```bash
+PAPER3_DLTB_PATH=/path/to/DLTB_with_slope.gpkg python scripts/analysis/paper3_area_drift_audit.py
+```
+
+It writes `results/derived_analyses/paper3_area_drift_results.json` and
+`results/tables/paper3_area_drift_table.tex`.
+
 ## 3. Re-run Training With Authorized Raw Data
 
 Full raw-data retraining requires local access to the restricted TNLS parcel
