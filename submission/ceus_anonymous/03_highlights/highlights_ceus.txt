@@ -1,0 +1,5 @@
+- Block-level spatial abstraction rescales cadastral farmland optimization.
+- A macroscopic planning and microscopic execution framework is proposed.
+- Threshold-based field-block rewards link DRL to land-resource policy.
+- Block-level DRL converges across 15 seed-township combinations.
+- Results clarify where DRL adds value over reward-aware greedy planning.

@@ -1,0 +1,62 @@
+[
+  {
+    "kappa": 1,
+    "H_steps": 100,
+    "seed": 0,
+    "train_seconds": 959.6842682361603,
+    "total_reward": -47.905251735463416,
+    "slope_change_pct": -0.19762367782433185,
+    "cont_change": -0.010619469026548867,
+    "baimu_count_change": 2,
+    "baimu_area_change_ha": 6.661530497646704,
+    "budget_used": 8
+  },
+  {
+    "kappa": 3,
+    "H_steps": 33,
+    "seed": 0,
+    "train_seconds": 869.735190153122,
+    "total_reward": 78.53134839783914,
+    "slope_change_pct": -2.06718731777665,
+    "cont_change": 0.11327433628318584,
+    "baimu_count_change": 1,
+    "baimu_area_change_ha": -4.54139396276921,
+    "budget_used": 42
+  },
+  {
+    "kappa": 5,
+    "H_steps": 20,
+    "seed": 0,
+    "train_seconds": 880.1456925868988,
+    "total_reward": 85.53204370355597,
+    "slope_change_pct": -2.0081841656907296,
+    "cont_change": 0.07433628318584073,
+    "baimu_count_change": 1,
+    "baimu_area_change_ha": 18.440366266011818,
+    "budget_used": 38
+  },
+  {
+    "kappa": 10,
+    "H_steps": 10,
+    "seed": 0,
+    "train_seconds": 952.6035766601562,
+    "total_reward": 52.16210780679155,
+    "slope_change_pct": -0.5892109173438749,
+    "cont_change": 0.008849557522123686,
+    "baimu_count_change": 1,
+    "baimu_area_change_ha": 21.962609757746012,
+    "budget_used": 18
+  },
+  {
+    "kappa": 20,
+    "H_steps": 5,
+    "seed": 0,
+    "train_seconds": 984.0814824104309,
+    "total_reward": 17.02023126141067,
+    "slope_change_pct": -0.059356136875835526,
+    "cont_change": 0.001769911504424737,
+    "baimu_count_change": 1,
+    "baimu_area_change_ha": -1.716649376058206,
+    "budget_used": 4
+  }
+]

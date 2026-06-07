@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this repository, cite the associated Paper3 manuscript."
+title: "From Parcels to Blocks: Rescaling Deep Reinforcement Learning for Farmland Consolidation Planning through Spatial Abstraction"
+type: software
+authors:
+  - family-names: "Anonymous"
+    given-names: "Author 1"
+  - family-names: "Anonymous"
+    given-names: "Author 2"
+date-released: "2026-06-07"
+repository-code: "https://github.com/<owner>/paper3-block-level-farmland-drl"
+abstract: "Code, derived result artifacts, figures, and anonymous manuscript files for a block-level deep reinforcement learning study of farmland consolidation planning."

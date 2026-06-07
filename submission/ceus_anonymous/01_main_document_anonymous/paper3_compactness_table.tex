@@ -1,0 +1,29 @@
+\begin{table}[htbp]
+\centering
+\caption{Post-hoc compactness audit of \textit{baimu fang} formed by the block-level DRL agent. 
+For each township and each evaluation seed we recover the final farmland configuration 
+by replaying the agent's block selection sequence, identify all connected farmland 
+components with area $\geq$6.67\,ha (the raw \textit{baimu fang} count), and compute 
+the isoperimetric quotient $\mathrm{IPQ} = 4\pi A / P^2$ on the dissolved farmland polygon 
+of each component (IPQ$=$1 for a circle; lower means more elongated/fragmented shape). 
+The ``Init.\ IPQ'' columns report the same compactness counts on the \emph{initial} land-use 
+configuration before any optimization, providing a fairness baseline: the Queen-contiguity 
+connectivity definition combined with real cadastral parcel shapes typically yields 
+low-IPQ components even prior to consolidation, so the post-DRL counts at each 
+$\tau$ should be read against the corresponding initial value rather than against an ideal of $\tau{=}1$. 
+DRL values are means over 5 seeds.}
+\label{tab:compactness}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrrrrrrrr}
+\toprule
+ & \multicolumn{4}{c}{Initial state} & \multicolumn{5}{c}{After DRL optimization (mean over 5 seeds)} \\
+\cmidrule(lr){2-5}\cmidrule(lr){6-10}
+Township & Init.\ raw & Init.\ IPQ$\geq$0.10 & Init.\ IPQ$\geq$0.20 & Init.\ IPQ$\geq$0.30 & Final raw & Final IPQ$\geq$0.10 & Final IPQ$\geq$0.20 & Final IPQ$\geq$0.30 & $\Delta$ raw \\
+\midrule
+A & 9 & 3 & 0 & 0 & 9.0 & 0.6 & 0.0 & 0.0 & +0.0 \\
+B & 6 & 1 & 0 & 0 & 5.0 & 1.6 & 0.0 & 0.0 & -1.0 \\
+C & 6 & 0 & 0 & 0 & 11.0 & 1.0 & 0.0 & 0.0 & +5.0 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}

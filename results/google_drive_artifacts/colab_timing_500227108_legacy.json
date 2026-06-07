@@ -1,0 +1,17 @@
+{
+  "total_seconds": 24026.861010074615,
+  "townships": [
+    "500227108"
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "timesteps": 200000,
+  "device": "cuda",
+  "gpu": "NVIDIA A100-SXM4-40GB",
+  "note": "Recovered from Google Drive paper3_results/colab_timing.json; legacy 500227108 run, not the final 500227108_v2 manuscript result."
+}

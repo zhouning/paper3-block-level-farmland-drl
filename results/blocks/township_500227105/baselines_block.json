@@ -1,0 +1,123 @@
+{
+  "greedy_global": {
+    "method": "Greedy-Global",
+    "slope_change_pct": -1.4838168036674453,
+    "cont_change": 0.12122416534181246,
+    "baimu_count_change": -1,
+    "baimu_area_change_ha": 34.598641026055816,
+    "completed_swaps": 100,
+    "elapsed": 0.013178348541259766,
+    "initial_slope": 9.647492811440708,
+    "final_slope": 9.50434169182356,
+    "initial_cont": 3.577503974562798,
+    "final_cont": 3.6987281399046106,
+    "initial_baimu_count": 6,
+    "final_baimu_count": 5
+  },
+  "greedy_sequential": {
+    "method": "Greedy-Sequential",
+    "slope_change_pct": -1.1706916029767682,
+    "cont_change": 0.019872813990461147,
+    "baimu_count_change": 0,
+    "baimu_area_change_ha": -43.034049948631974,
+    "completed_swaps": 66,
+    "steps": 20,
+    "elapsed": 0.27362728118896484,
+    "initial_slope": 9.647492811440708,
+    "final_slope": 9.534550423082315,
+    "initial_cont": 3.577503974562798,
+    "final_cont": 3.5973767885532593
+  },
+  "random_block": {
+    "method": "Random-Block",
+    "slope_pct_mean": -0.236944210655268,
+    "cont_mean": 0.025516693163751915,
+    "baimu_count_mean": 0.8,
+    "baimu_area_mean": 9.613763500923513,
+    "per_seed": [
+      {
+        "method": "Random-Block",
+        "seed": 0,
+        "slope_change_pct": -0.4008893779478439,
+        "cont_change": 0.03219395866454677,
+        "baimu_count_change": 2,
+        "baimu_area_change_ha": 0.49055725790187715,
+        "completed_swaps": 73,
+        "elapsed": 0.0039539337158203125,
+        "initial_slope": 9.647492811440708,
+        "final_slope": 9.608817037481272,
+        "initial_cont": 3.577503974562798,
+        "final_cont": 3.609697933227345
+      },
+      {
+        "method": "Random-Block",
+        "seed": 1,
+        "slope_change_pct": -0.6550981289322444,
+        "cont_change": 0.01669316375198715,
+        "baimu_count_change": 1,
+        "baimu_area_change_ha": -21.920660708215088,
+        "completed_swaps": 55,
+        "elapsed": 0.003139019012451172,
+        "initial_slope": 9.647492811440708,
+        "final_slope": 9.584292266478577,
+        "initial_cont": 3.577503974562798,
+        "final_cont": 3.5941971383147853
+      },
+      {
+        "method": "Random-Block",
+        "seed": 2,
+        "slope_change_pct": -0.19587717716137631,
+        "cont_change": 0.037758346581875823,
+        "baimu_count_change": 0,
+        "baimu_area_change_ha": 3.770430860798061,
+        "completed_swaps": 63,
+        "elapsed": 0.0034885406494140625,
+        "initial_slope": 9.647492811440708,
+        "final_slope": 9.628595574835224,
+        "initial_cont": 3.577503974562798,
+        "final_cont": 3.615262321144674
+      },
+      {
+        "method": "Random-Block",
+        "seed": 3,
+        "slope_change_pct": 0.3151019325270953,
+        "cont_change": 0.02344992050874417,
+        "baimu_count_change": 1,
+        "baimu_area_change_ha": 72.88035521993562,
+        "completed_swaps": 56,
+        "elapsed": 0.0035254955291748047,
+        "initial_slope": 9.647492811440708,
+        "final_slope": 9.67789224776148,
+        "initial_cont": 3.577503974562798,
+        "final_cont": 3.6009538950715423
+      },
+      {
+        "method": "Random-Block",
+        "seed": 4,
+        "slope_change_pct": -0.2479583017619705,
+        "cont_change": 0.01748807631160565,
+        "baimu_count_change": 0,
+        "baimu_area_change_ha": -7.151865125802904,
+        "completed_swaps": 64,
+        "elapsed": 0.0034906864166259766,
+        "initial_slope": 9.647492811440708,
+        "final_slope": 9.623571052078056,
+        "initial_cont": 3.577503974562798,
+        "final_cont": 3.5949920508744038
+      }
+    ]
+  },
+  "round_robin": {
+    "method": "Round-Robin",
+    "slope_change_pct": 1.1011955281304726,
+    "cont_change": 0.04650238473767887,
+    "baimu_count_change": 2,
+    "baimu_area_change_ha": 114.38237330647559,
+    "completed_swaps": 73,
+    "elapsed": 0.003336668014526367,
+    "initial_slope": 9.647492811440708,
+    "final_slope": 9.753730570967122,
+    "initial_cont": 3.577503974562798,
+    "final_cont": 3.624006359300477
+  }
+}
