@@ -43,6 +43,35 @@ PAPER3_DLTB_PATH=/path/to/DLTB_with_slope.gpkg python scripts/analysis/paper3_ar
 It writes `results/derived_analyses/paper3_area_drift_results.json` and
 `results/tables/paper3_area_drift_table.tex`.
 
+The limited-lookahead robustness baseline also instantiates the real block
+environment and therefore requires the same controlled-access parcel geometry.
+It evaluates shallow depth-2 or depth-3 search under the same reward and
+within-block transition model as Reward-Greedy. Use `--beam-width 0` for the
+primary depth-2 Township-B check: this disables immediate-reward pruning and
+evaluates all valid second-step actions, so the result cannot be dismissed as a
+beam-pruning artifact.
+
+```bash
+PAPER3_DLTB_PATH=/path/to/DLTB_with_slope.gpkg python scripts/analysis/paper3_lookahead_baseline.py --township B --depth 2 --beam-width 0
+PAPER3_DLTB_PATH=/path/to/DLTB_with_slope.gpkg python scripts/analysis/paper3_lookahead_baseline.py --township B --depth 3 --beam-width 8 --suffix b_depth3_sensitivity
+```
+
+It writes configuration-specific outputs such as
+`results/derived_analyses/paper3_lookahead_d2_ball_results.json` and
+`results/tables/paper3_lookahead_d2_ball_table_fragment.tex`. These outputs
+are not inserted into the manuscript until the controlled-data run has been
+completed. Use Township B first because it is the critical case for separating
+DRL from one-step reward-greedy planning.
+
+The lookahead action-selection logic can be tested without restricted data:
+
+```bash
+python -m unittest tests.test_paper3_lookahead_baseline -v
+```
+
+For the exact macOS run sequence on a machine with the restricted parcel
+geometry, see `docs/MAC_LOOKAHEAD_EXPERIMENT.md`.
+
 ## 3. Re-run Training With Authorized Raw Data
 
 Full raw-data retraining requires local access to the restricted TNLS parcel
@@ -70,5 +99,7 @@ source is requested.
 - Raw parcel geometries and DEM rasters are not in the public repository.
 - Public figure/table regeneration works from included derived artifacts.
 - Exact full retraining from source parcels requires controlled raw-data access.
+- Limited-lookahead baseline outputs require controlled parcel geometry and
+  should be treated as pending until rerun on an authorized machine.
 - For CEUS double-blind review, use an anonymous mirror rather than this public
   GitHub repository.

@@ -73,6 +73,28 @@ python scripts/analysis/plot_framework_diagram.py
 
 Generated figures are written to `figures/`.
 
+## Limited-Lookahead Robustness Baseline
+
+The manuscript identifies Township B as the critical case where DRL differs
+from one-step Reward-Greedy planning. If controlled-access parcel geometry is
+available on Colab, run the exact depth-2 check first:
+
+```bash
+export PAPER3_DLTB_PATH=/path/to/DLTB_with_slope.gpkg
+python scripts/analysis/paper3_lookahead_baseline.py --township B --depth 2 --beam-width 0
+```
+
+The `--beam-width 0` setting evaluates all valid first- and second-step block
+choices, avoiding immediate-reward beam pruning. If the depth-2 result is
+ambiguous, run a depth-3 sensitivity check with pruning:
+
+```bash
+python scripts/analysis/paper3_lookahead_baseline.py --township B --depth 3 --beam-width 8 --suffix b_depth3_sensitivity
+```
+
+These runs write configuration-specific JSON and LaTeX fragments under
+`results/derived_analyses/` and `results/tables/`.
+
 ## Restricted Raw Data
 
 The public repository intentionally excludes original cadastral geometry,

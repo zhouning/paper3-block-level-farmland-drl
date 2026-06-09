@@ -20,8 +20,8 @@ submission system.
 
 - `src/`: block-level environment, baselines, parcel policy, preprocessing
   helpers, and training/evaluation entry points.
-- `scripts/analysis/`: figure, table, ablation, reward-greedy, compactness,
-  area-balance, and trajectory analysis scripts.
+- `scripts/analysis/`: figure, table, ablation, reward-greedy, limited
+  lookahead, compactness, area-balance, and trajectory analysis scripts.
 - `scripts/training/`: Colab/A100 training scripts for the three townships.
 - `results/blocks/`: five-seed block-level DRL outputs for townships 109, 108
   v2, and 105.
@@ -62,6 +62,21 @@ PAPER3_DLTB_PATH=/path/to/DLTB_with_slope.gpkg python scripts/analysis/paper3_ar
 Its aggregate outputs are included as
 `results/derived_analyses/paper3_area_drift_results.json` and
 `results/tables/paper3_area_drift_table.tex`.
+
+The optional limited-lookahead robustness baseline also requires
+controlled-access parcel geometry:
+
+```bash
+PAPER3_DLTB_PATH=/path/to/DLTB_with_slope.gpkg python scripts/analysis/paper3_lookahead_baseline.py --township B --depth 2 --beam-width 0
+```
+
+Run Township B first because it is the critical case where DRL differs most
+from one-step Reward-Greedy planning. `--beam-width 0` means exact depth-2
+lookahead over all valid actions; use a positive beam width only for depth-3
+sensitivity runs.
+
+For a step-by-step macOS checklist, see
+`docs/MAC_LOOKAHEAD_EXPERIMENT.md`.
 
 ## Data Availability Boundary
 
