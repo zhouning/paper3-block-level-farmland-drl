@@ -12,6 +12,6 @@ Figure 5. Township B trajectory comparison between DRL (seed 0) and Reward-Greed
 
 Figure 6. Pareto analysis of slope reduction and baimu fang area change. DRL is the only primary method with positive baimu fang area on Township B.
 
-Figure 7. Pareto analysis of slope reduction and baimu fang count change. DRL and Reward-Greedy satisfy both non-negative count and negative slope across all townships.
+Figure 7. Pareto analysis of slope reduction and baimu fang count change. Reward-Greedy preserves non-negative count while reducing slope across all townships; DRL does so on Townships A and C but trades one consolidated field for positive baimu fang area growth on Township B.
 
 Figure 8. Township C trajectory of the DRL agent. The policy first forms five new baimu fang, then recovers slope while holding the count fixed.

@@ -232,7 +232,7 @@ plt.suptitle('Block Construction: Hybrid Barrier Segmentation + Constrained Aggl
 plt.tight_layout()
 FIGURES_DIR.mkdir(parents=True, exist_ok=True)
 out_path = FIGURES_DIR / 'paper3_block_construction.png'
-plt.savefig(out_path, dpi=200, bbox_inches='tight',
+plt.savefig(out_path, dpi=600, bbox_inches='tight',
             facecolor='white', edgecolor='none')
 plt.close()
 print(f"Saved: {out_path}")

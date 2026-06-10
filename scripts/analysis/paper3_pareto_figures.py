@@ -134,7 +134,7 @@ def render_figure(y_key: str, y_label: str, out_path: Path, title: str) -> None:
 
     fig.suptitle(title, y=1.02, fontsize=11)
     fig.tight_layout()
-    fig.savefig(out_path, dpi=150, bbox_inches="tight")
+    fig.savefig(out_path, dpi=600, bbox_inches="tight")
     print(f"Wrote {out_path}")
 
 

@@ -24,18 +24,22 @@ import numpy as np
 REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 from block_level_env import BlockLevelEnv  # noqa: E402
-from paper3_paths import BLOCK_RESULTS_DIR, FIGURES_DIR  # noqa: E402
+from paper3_paths import BLOCK_RESULTS_DIR, DERIVED_RESULTS_DIR, FIGURES_DIR  # noqa: E402
 
 EVAL_PATH = BLOCK_RESULTS_DIR / "township_500227105" / "block_eval_seed0.json"
 OUT_PNG = FIGURES_DIR / "paper3_trajectory_C.png"
+DERIVED_JSON = DERIVED_RESULTS_DIR / "paper3_trajectory_C.json"
 TOWNSHIP_CODE = "500227105"
 
 
-def main() -> None:
+def load_trajectory() -> dict:
+    if DERIVED_JSON.exists():
+        print(f"Reading derived trajectory {DERIVED_JSON}")
+        return json.loads(DERIVED_JSON.read_text(encoding="utf-8"))
+
     with EVAL_PATH.open() as f:
         ev = json.load(f)
     history = ev["block_history"]
-    n_steps = len(history)
 
     env = BlockLevelEnv(TOWNSHIP_CODE, total_budget=100, swaps_per_step=5)
     env.reset(seed=0)
@@ -62,7 +66,29 @@ def main() -> None:
         baimu_area_chg_ha.append((env.baimu_total_area - init_baimu_area) / 10000.0)
         blocks_visited.append(action)
 
-    # Build figure
+    trajectory = {
+        "step": steps,
+        "block": blocks_visited,
+        "slope_change_pct": slope_pct,
+        "contiguity_change": cont_chg,
+        "baimu_count_change": baimu_cnt_chg,
+        "baimu_area_change_ha": baimu_area_chg_ha,
+    }
+    DERIVED_JSON.parent.mkdir(parents=True, exist_ok=True)
+    DERIVED_JSON.write_text(json.dumps(trajectory, indent=2), encoding="utf-8")
+    print(f"Wrote {DERIVED_JSON}")
+    return trajectory
+
+
+def main() -> None:
+    trajectory = load_trajectory()
+    steps = trajectory["step"]
+    slope_pct = trajectory["slope_change_pct"]
+    cont_chg = trajectory["contiguity_change"]
+    baimu_cnt_chg = trajectory["baimu_count_change"]
+    baimu_area_chg_ha = trajectory["baimu_area_change_ha"]
+    n_steps = max(steps)
+
     fig, axes = plt.subplots(2, 1, figsize=(7.5, 6.5), sharex=True)
 
     ax_top = axes[0]
@@ -110,20 +136,8 @@ def main() -> None:
 
     OUT_PNG.parent.mkdir(parents=True, exist_ok=True)
     fig.tight_layout()
-    fig.savefig(OUT_PNG, dpi=150, bbox_inches="tight")
+    fig.savefig(OUT_PNG, dpi=600, bbox_inches="tight")
     print(f"Wrote {OUT_PNG}")
-
-    # Also dump per-step CSV for the supplementary
-    out_json = OUT_PNG.with_suffix(".json")
-    out_json.write_text(json.dumps({
-        "step": steps,
-        "block": blocks_visited,
-        "slope_change_pct": slope_pct,
-        "contiguity_change": cont_chg,
-        "baimu_count_change": baimu_cnt_chg,
-        "baimu_area_change_ha": baimu_area_chg_ha,
-    }, indent=2), encoding="utf-8")
-    print(f"Wrote {out_json}")
 
 
 if __name__ == "__main__":

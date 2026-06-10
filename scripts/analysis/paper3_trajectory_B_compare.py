@@ -111,7 +111,7 @@ def main() -> None:
 
     OUT_PNG.parent.mkdir(parents=True, exist_ok=True)
     fig.tight_layout()
-    fig.savefig(OUT_PNG, dpi=150, bbox_inches="tight")
+    fig.savefig(OUT_PNG, dpi=600, bbox_inches="tight")
     print(f"\nWrote {OUT_PNG}")
     print(f"DRL final: slope={drl_traj['slope_pct'][-1]:+.2f}%, "
           f"baimu_cnt={drl_traj['baimu_cnt_chg'][-1]:+d}, "

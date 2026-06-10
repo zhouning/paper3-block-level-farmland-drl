@@ -505,7 +505,7 @@ Per-seed variability is low. Township~C has reward CV of 0.26\%, slope std of 0.
 \subsection{Multi-objective Pareto analysis}
 \label{sec:pareto}
 
-The Pareto plots reinforce the same interpretation. DRL and Reward-Greedy are the only primary methods that maintain non-negative \textit{baimu fang} count on every township while also reducing slope. Reward-aware block selection defines most of the Pareto frontier; learned scheduling adds its clearest increment on Township~B. Round-Robin maximizes \textit{baimu fang} area on Township~C, but only by increasing mean farmland slope.
+The Pareto plots reinforce the same interpretation. Reward-Greedy maintains non-negative \textit{baimu fang} count while reducing slope across all three townships, whereas DRL keeps this count non-negative on Townships~A and C but trades one consolidated field on Township~B for positive \textit{baimu fang} area growth. Reward-aware block selection defines much of the frontier; learned scheduling adds its clearest increment on Township~B. Round-Robin maximizes \textit{baimu fang} area on Township~C, but only by increasing mean farmland slope.
 
 \begin{figure}[htbp]
 \centering
@@ -517,7 +517,7 @@ The Pareto plots reinforce the same interpretation. DRL and Reward-Greedy are th
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.95\textwidth]{paper3_pareto_all_slope_baimucnt.png}
-\caption{Pareto analysis of slope reduction and \textit{baimu fang} count change. DRL and Reward-Greedy satisfy both non-negative count and negative slope across all townships.}
+\caption{Pareto analysis of slope reduction and \textit{baimu fang} count change. Reward-Greedy preserves non-negative count while reducing slope across all townships; DRL does so on Townships~A and C but trades one consolidated field for positive \textit{baimu fang} area growth on Township~B.}
 \label{fig:pareto_cnt}
 \end{figure}
 

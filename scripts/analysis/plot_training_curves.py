@@ -134,7 +134,7 @@ plt.suptitle('Township 109 (A-Small): Training Curves — 200K Steps × 5 Seeds\
              'Episode = 20 steps, ~10,000 episodes per seed',
              fontsize=14, fontweight='bold')
 plt.tight_layout()
-plt.savefig(FIGURES_DIR / 'paper3_training_curves_109.png', dpi=150, bbox_inches='tight')
+plt.savefig(FIGURES_DIR / 'paper3_training_curves_109.png', dpi=600, bbox_inches='tight')
 plt.close()
 print("Saved: paper3_training_curves_109.png")
 

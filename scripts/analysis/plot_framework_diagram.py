@@ -65,7 +65,7 @@ add_box(ax, 0.6, 6.0, 5.8, 1.0,
 
 # Policy network
 add_box(ax, 0.6, 4.5, 5.8, 1.1,
-        'ParcelScoringPolicy (14,530 params)\n'
+        'BlockScoringPolicy (14,530 params)\n'
         'Scorer: [26 → 128 → 64 → 1] per block\n'
         'Value:  [9 → 64 → 32 → 1] global',
         C_DRL, C_DRL_BORDER, fontsize=9, bold=True)
@@ -73,7 +73,7 @@ add_box(ax, 0.6, 4.5, 5.8, 1.1,
 # Action selection
 add_box(ax, 0.6, 3.0, 5.8, 1.0,
         'Masked Softmax → Select Block $a_t$\n'
-        'Action mask: blocks with both F & L parcels',
+        'Action mask: blocks with farmland & forest parcels',
         C_DRL, C_DRL_BORDER, fontsize=9, bold=True)
 
 # Budget
@@ -96,7 +96,7 @@ ax.text(11.5, 7.3, '(Connectivity-Aware Greedy Engine)', ha='center', va='center
 # Selected block
 add_box(ax, 7.6, 6.0, 3.5, 1.0,
         'Selected Block $b$\n'
-        'Contains F parcels + L parcels',
+        'Contains farmland + forest parcels',
         C_GREEDY, C_GREEDY_BORDER, fontsize=9, bold=True)
 
 # Removal scoring
@@ -156,7 +156,7 @@ ax.text(13.55, 6.55, 'Spatial Spillover\n'
 plt.tight_layout()
 FIGURES_DIR.mkdir(parents=True, exist_ok=True)
 out_path = FIGURES_DIR / 'paper3_framework_diagram.png'
-plt.savefig(out_path, dpi=200, bbox_inches='tight',
+plt.savefig(out_path, dpi=600, bbox_inches='tight',
             facecolor='white', edgecolor='none')
 plt.close()
 print(f"Saved: {out_path}")
