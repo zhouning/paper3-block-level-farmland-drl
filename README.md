@@ -63,8 +63,8 @@ Its aggregate outputs are included as
 `results/derived_analyses/paper3_area_drift_results.json` and
 `results/tables/paper3_area_drift_table.tex`.
 
-The optional limited-lookahead robustness baseline also requires
-controlled-access parcel geometry:
+The limited-lookahead robustness baseline also requires controlled-access
+parcel geometry if rerun from raw data:
 
 ```bash
 PAPER3_DLTB_PATH=/path/to/DLTB_with_slope.gpkg python scripts/analysis/paper3_lookahead_baseline.py --township B --depth 2 --beam-width 0
@@ -74,6 +74,10 @@ Run Township B first because it is the critical case where DRL differs most
 from one-step Reward-Greedy planning. `--beam-width 0` means exact depth-2
 lookahead over all valid actions; use a positive beam width only for depth-3
 sensitivity runs.
+
+The controlled-data depth-2 Township B result is included as
+`results/derived_analyses/paper3_lookahead_d2_ball_results.json` and
+`results/tables/paper3_lookahead_d2_ball_table_fragment.tex`.
 
 For a step-by-step macOS checklist, see
 `docs/MAC_LOOKAHEAD_EXPERIMENT.md`.

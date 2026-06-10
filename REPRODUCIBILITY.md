@@ -58,10 +58,10 @@ PAPER3_DLTB_PATH=/path/to/DLTB_with_slope.gpkg python scripts/analysis/paper3_lo
 
 It writes configuration-specific outputs such as
 `results/derived_analyses/paper3_lookahead_d2_ball_results.json` and
-`results/tables/paper3_lookahead_d2_ball_table_fragment.tex`. These outputs
-are not inserted into the manuscript until the controlled-data run has been
-completed. Use Township B first because it is the critical case for separating
-DRL from one-step reward-greedy planning.
+`results/tables/paper3_lookahead_d2_ball_table_fragment.tex`. The controlled
+Township-B depth-2 result is included in this repository and is reported in the
+revised manuscript. Use Township B first when rerunning because it is the
+critical case for separating DRL from one-step reward-greedy planning.
 
 The lookahead action-selection logic can be tested without restricted data:
 
@@ -99,7 +99,8 @@ source is requested.
 - Raw parcel geometries and DEM rasters are not in the public repository.
 - Public figure/table regeneration works from included derived artifacts.
 - Exact full retraining from source parcels requires controlled raw-data access.
-- Limited-lookahead baseline outputs require controlled parcel geometry and
-  should be treated as pending until rerun on an authorized machine.
+- Limited-lookahead baseline reruns require controlled parcel geometry; the
+  included Township-B depth-2 output documents the controlled-data run used in
+  the revised manuscript.
 - For CEUS double-blind review, use an anonymous mirror rather than this public
   GitHub repository.

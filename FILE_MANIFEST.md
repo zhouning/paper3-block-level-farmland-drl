@@ -23,11 +23,10 @@
 - `results/blocks/`: final five-seed township result folders.
 - `results/block_construction_audit/`: construction audit outputs and maps.
 - `results/derived_analyses/`: JSON outputs for derived analyses, including
-  the farmland-area balance audit. Limited-lookahead JSON output is generated
-  here after rerunning `scripts/analysis/paper3_lookahead_baseline.py` with
-  controlled parcel geometry.
+  the farmland-area balance audit and the controlled-data Township-B depth-2
+  limited-lookahead result.
 - `results/tables/`: LaTeX table fragments used by the manuscript, including
-  the farmland-area balance table.
+  the farmland-area balance and limited-lookahead tables.
 - `results/google_drive_artifacts/`: small non-restricted artifacts recovered
   from Google Drive.
 
