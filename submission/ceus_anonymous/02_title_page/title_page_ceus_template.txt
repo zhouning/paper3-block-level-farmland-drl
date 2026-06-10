@@ -1,0 +1,30 @@
+CEUS title page template
+
+Journal: Computers, Environment and Urban Systems
+
+Title:
+From Parcels to Blocks: Rescaling Deep Reinforcement Learning for Farmland Consolidation Planning through Spatial Abstraction
+
+Authors:
+[Author 1 full name]
+[Author 2 full name]
+
+Affiliations:
+[Affiliation 1: department, institution, city, country]
+[Affiliation 2: department, institution, city, country, if applicable]
+
+Corresponding author:
+[Name]
+[Full postal address]
+[Email address]
+
+Acknowledgments:
+[Insert acknowledgments if applicable, or state "Not applicable."]
+
+Funding:
+[Insert funder names and grant numbers, or state "This research received no specific grant from any funding agency in the public, commercial, or not-for-profit sectors."]
+
+Notes for submission:
+- Replace all placeholders with actual author and administrative information before submission.
+- Do not upload this placeholder file as the final title page.
+- Keep the anonymous manuscript separate from this title page during double-anonymized review.
