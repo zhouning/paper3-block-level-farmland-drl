@@ -1,4 +1,4 @@
-CEUS title page template
+CEUS separate title page
 
 Journal: Computers, Environment and Urban Systems
 
@@ -6,25 +6,22 @@ Title:
 From Parcels to Blocks: Rescaling Deep Reinforcement Learning for Farmland Consolidation Planning through Spatial Abstraction
 
 Authors:
-[Author 1 full name]
-[Author 2 full name]
+Ning Zhou
+ORCID: 0009-0002-5647-7388
 
 Affiliations:
-[Affiliation 1: department, institution, city, country]
-[Affiliation 2: department, institution, city, country, if applicable]
+SuperMap Software Co., Ltd., Beijing 100015, China
 
 Corresponding author:
-[Name]
-[Full postal address]
-[Email address]
+Ning Zhou
+SuperMap Software Co., Ltd., Beijing 100015, China
+Email: zhouning1@supermap.com
 
 Acknowledgments:
-[Insert acknowledgments if applicable, or state "Not applicable."]
+Not applicable.
 
 Funding:
-[Insert funder names and grant numbers, or state "This research received no specific grant from any funding agency in the public, commercial, or not-for-profit sectors."]
+This research received no specific grant from any funding agency in the public, commercial, or not-for-profit sectors.
 
 Notes for submission:
-- Replace all placeholders with actual author and administrative information before submission.
-- Do not upload this placeholder file as the final title page.
 - Keep the anonymous manuscript separate from this title page during double-anonymized review.

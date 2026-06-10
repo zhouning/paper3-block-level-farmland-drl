@@ -1,0 +1,27 @@
+June 10, 2026
+
+Editors
+Computers, Environment and Urban Systems
+
+Dear Editors,
+
+I am pleased to submit the manuscript entitled "From Parcels to Blocks: Rescaling Deep Reinforcement Learning for Farmland Consolidation Planning through Spatial Abstraction" for consideration as an original research article in Computers, Environment and Urban Systems.
+
+This manuscript addresses a practical bottleneck in applying deep reinforcement learning to real cadastral farmland consolidation. Real parcel systems are irregular, sparsely connected, heterogeneous in area, and constrained by policy-defined field-block thresholds. The study proposes a block-level spatial abstraction in which a Maskable PPO scheduler allocates consolidation effort across spatially coherent blocks, while a deterministic connectivity-aware greedy engine executes parcel-level farmland-forest exchanges within selected blocks.
+
+The empirical analysis uses three townships in Bishan District, Chongqing, derived from Third National Land Survey cadastral parcels. The results show stable convergence across 15 seed-township combinations and identify where learned scheduling adds value over reward-aware greedy planning. The strongest scheduler-specific evidence occurs on the medium township, where DRL is the only tested block-selection rule to achieve positive baimu fang area growth under the shared within-block engine and reward. The manuscript also reports important boundaries, including the competitiveness of reward-aware greedy planning on other townships and the need for area-balanced deployment variants.
+
+I believe the manuscript is well suited to Computers, Environment and Urban Systems because it connects geospatial decision support, spatial optimization, land-use planning, and machine-learning methods for real urban-rural environmental systems. The contribution is framed as a scalable scenario-screening framework rather than an unbounded claim that reinforcement learning dominates heuristics.
+
+This manuscript is original, has not been published previously, and is not under consideration elsewhere. I am the sole author and have approved the submitted version. The manuscript is submitted for double-anonymized review with a separate title page. The original restricted cadastral data cannot be redistributed, but derived aggregate results, code, training logs, model artifacts, evaluation outputs, and figure-generation scripts will be made available as described in the data and code availability statement.
+
+I declare that there are no known competing financial interests or personal relationships that could have appeared to influence the work reported in this manuscript. This research received no specific grant from any funding agency in the public, commercial, or not-for-profit sectors. A declaration on the use of generative AI and AI-assisted technologies is provided in the submission materials.
+
+Thank you for considering this manuscript for publication in Computers, Environment and Urban Systems.
+
+Sincerely,
+
+Ning Zhou
+SuperMap Software Co., Ltd., Beijing 100015, China
+ORCID: 0009-0002-5647-7388
+Email: zhouning1@supermap.com

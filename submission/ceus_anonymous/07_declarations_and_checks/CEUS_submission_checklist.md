@@ -1,24 +1,26 @@
 # CEUS Submission Checklist - Paper 3
 
-## Anonymous review package files included here
+## Submission package files included here
 
 - [x] Anonymous manuscript PDF: `01_main_document_anonymous/manuscript_ceus_anonymous.pdf`
 - [x] Anonymous manuscript LaTeX: `01_main_document_anonymous/manuscript_ceus_anonymous.tex`
-- [x] Title page template: `02_title_page/title_page_ceus_template.txt`
+- [x] Separate title page: `02_title_page/title_page_ceus_template.txt`
 - [x] Highlights: `03_highlights/highlights_ceus.txt`
 - [x] Separate figure captions: `04_figure_captions/figure_captions_ceus.txt`
 - [x] Separate figure files: `05_figures/*.png`
+- [x] Cover letter: `06_cover_letter/cover_letter_ceus.txt`
 - [x] Anonymous source archive if requested: `CEUS_paper3_latex_source_anonymous.zip`
 - [x] Data and code availability text: `07_declarations_and_checks/data_availability_ceus.txt`
 - [x] Declaration of competing interest: `07_declarations_and_checks/competing_interest_ceus.txt`
 - [x] Generative AI declaration: `07_declarations_and_checks/generative_ai_declaration_ceus.txt`
 
-## Administrative files to submit outside this anonymous repo copy
+## Administrative files to upload separately from the anonymous manuscript/source
 
-- [ ] Replace the title-page placeholders with actual author information.
-- [ ] Cover letter, if requested by the submission system.
-- [ ] Declaration of interest form.
-- [ ] Funding and acknowledgments in the separate administrative submission files.
+- [x] Title page contains actual author, affiliation, ORCID, and corresponding-author email.
+- [x] Cover letter, if requested by the submission system.
+- [x] Declaration of interest form.
+- [x] Funding statement in the separate title page.
+- [x] Acknowledgments in the separate title page.
 
 ## CEUS / Elsevier format checks
 
@@ -34,7 +36,7 @@
 
 ## Pre-submission scientific checks still recommended
 
-- [ ] Insert the final anonymous review repository URL if the submission system requires a live link.
-- [ ] Confirm whether CEUS wants line numbering in the anonymous PDF.
-- [ ] Decide whether to keep the policy-heavy "baimu fang" terminology in the abstract or move part of it into the introduction.
-- [ ] Confirm all author names, affiliations, acknowledgments, funding, and AI-use declarations in the separate administrative submission files.
+- [x] Final anonymous review repository URL inserted: `https://anonymous.4open.science/r/block-level-farmland-drl-8456/`.
+- [x] Line numbering checked against the current CEUS Guide for Authors; no line-number requirement was found, so the anonymous PDF is kept without line numbers.
+- [x] The policy-heavy "baimu fang" terminology is retained in the abstract because it is central to the outcome metric and is immediately defined as 100-mu consolidated fields.
+- [x] Author names, affiliations, acknowledgments, funding, and AI-use declarations confirmed in separate administrative files.
