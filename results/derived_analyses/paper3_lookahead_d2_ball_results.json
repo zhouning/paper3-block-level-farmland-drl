@@ -1,0 +1,316 @@
+{
+  "B": {
+    "method": "lookahead-depth2-beamall",
+    "township_code": "500227108",
+    "depth": 2,
+    "beam_width": 0,
+    "total_reward": 110.31331311275576,
+    "slope_change_pct": -4.2343640554436455,
+    "cont_change": 0.01301301301301283,
+    "baimu_count_change": 1,
+    "baimu_area_change_ha": -108.77227717753276,
+    "budget_used": 80,
+    "n_steps": 20,
+    "block_history": [
+      {
+        "step": 1,
+        "block": 111,
+        "lookahead_score": 19.452154534757597,
+        "lookahead_sequence": [
+          111,
+          111
+        ],
+        "reward": 0.12849967179338062,
+        "swaps": 5,
+        "slope_pct": -0.04897586834043424,
+        "cont": -0.0030030030030032684,
+        "baimu_cnt": 0,
+        "baimu_ha": -3.113784030984342
+      },
+      {
+        "step": 2,
+        "block": 68,
+        "lookahead_score": 27.450201818602842,
+        "lookahead_sequence": [
+          68,
+          111
+        ],
+        "reward": 8.113716658549757,
+        "swaps": 5,
+        "slope_pct": -0.5703391596631648,
+        "cont": -0.007007007007007182,
+        "baimu_cnt": 0,
+        "baimu_ha": -15.245558648222685
+      },
+      {
+        "step": 3,
+        "block": 111,
+        "lookahead_score": 26.325541368939902,
+        "lookahead_sequence": [
+          111,
+          4
+        ],
+        "reward": 19.336485160053083,
+        "swaps": 3,
+        "slope_pct": -0.5793868996907067,
+        "cont": -0.009009009009008917,
+        "baimu_cnt": 1,
+        "baimu_ha": -19.197356666876377
+      },
+      {
+        "step": 4,
+        "block": 4,
+        "lookahead_score": 13.168762234606994,
+        "lookahead_sequence": [
+          4,
+          31
+        ],
+        "reward": 6.98905620888682,
+        "swaps": 2,
+        "slope_pct": -0.5954574115271439,
+        "cont": 0.020020020020020013,
+        "baimu_cnt": 0,
+        "baimu_ha": 0.350158225736022
+      },
+      {
+        "step": 5,
+        "block": 31,
+        "lookahead_score": 10.31476869765115,
+        "lookahead_sequence": [
+          31,
+          65
+        ],
+        "reward": 6.179706025720173,
+        "swaps": 3,
+        "slope_pct": -1.1361863046196472,
+        "cont": 0.010010010010010006,
+        "baimu_cnt": 0,
+        "baimu_ha": -22.201332639665157
+      },
+      {
+        "step": 6,
+        "block": 65,
+        "lookahead_score": 8.31163450440133,
+        "lookahead_sequence": [
+          65,
+          63
+        ],
+        "reward": 4.135062671930977,
+        "swaps": 3,
+        "slope_pct": -1.5598125985397926,
+        "cont": -0.0030030030030032684,
+        "baimu_cnt": 0,
+        "baimu_ha": -40.09255258050114
+      },
+      {
+        "step": 7,
+        "block": 63,
+        "lookahead_score": 8.269814405598048,
+        "lookahead_sequence": [
+          63,
+          75
+        ],
+        "reward": 4.176571832470351,
+        "swaps": 5,
+        "slope_pct": -1.6984184491799468,
+        "cont": 0.008008008008007828,
+        "baimu_cnt": 0,
+        "baimu_ha": -40.29109897352904
+      },
+      {
+        "step": 8,
+        "block": 35,
+        "lookahead_score": 8.099093162880328,
+        "lookahead_sequence": [
+          35,
+          75
+        ],
+        "reward": 3.972207701464227,
+        "swaps": 2,
+        "slope_pct": -1.9464238723479257,
+        "cont": 0.007007007007006738,
+        "baimu_cnt": 0,
+        "baimu_ha": -46.09616666556895
+      },
+      {
+        "step": 9,
+        "block": 75,
+        "lookahead_score": 8.022284431118175,
+        "lookahead_sequence": [
+          75,
+          114
+        ],
+        "reward": 4.126885461416101,
+        "swaps": 4,
+        "slope_pct": -2.297361428965026,
+        "cont": 0.0010010010010010895,
+        "baimu_cnt": 0,
+        "baimu_ha": -60.37806593950242
+      },
+      {
+        "step": 10,
+        "block": 83,
+        "lookahead_score": 25.52276124464444,
+        "lookahead_sequence": [
+          83,
+          90
+        ],
+        "reward": 3.8685549831003185,
+        "swaps": 5,
+        "slope_pct": -2.491197986858217,
+        "cont": 0.004004004004003914,
+        "baimu_cnt": 0,
+        "baimu_ha": -63.08043242477476
+      },
+      {
+        "step": 11,
+        "block": 90,
+        "lookahead_score": 25.563158298697154,
+        "lookahead_sequence": [
+          90,
+          114
+        ],
+        "reward": 21.65420626154412,
+        "swaps": 2,
+        "slope_pct": -2.6911178116902725,
+        "cont": -0.006006006006006093,
+        "baimu_cnt": 1,
+        "baimu_ha": -70.12558712432534
+      },
+      {
+        "step": 12,
+        "block": 114,
+        "lookahead_score": 7.623820697611851,
+        "lookahead_sequence": [
+          114,
+          69
+        ],
+        "reward": 3.9089520371530324,
+        "swaps": 5,
+        "slope_pct": -2.830681950125732,
+        "cont": 0.005005005005005003,
+        "baimu_cnt": 1,
+        "baimu_ha": -72.26547410470248
+      },
+      {
+        "step": 13,
+        "block": 69,
+        "lookahead_score": 7.229122433264121,
+        "lookahead_sequence": [
+          69,
+          104
+        ],
+        "reward": 3.7148686604588184,
+        "swaps": 5,
+        "slope_pct": -2.9555721397390586,
+        "cont": 0.012012012012011741,
+        "baimu_cnt": 1,
+        "baimu_ha": -70.20316213742271
+      },
+      {
+        "step": 14,
+        "block": 104,
+        "lookahead_score": 6.661633939626135,
+        "lookahead_sequence": [
+          104,
+          82
+        ],
+        "reward": 3.5142537728053025,
+        "swaps": 5,
+        "slope_pct": -3.1409216807478857,
+        "cont": 0.023023023023022837,
+        "baimu_cnt": 1,
+        "baimu_ha": -81.2135970096238
+      },
+      {
+        "step": 15,
+        "block": 82,
+        "lookahead_score": 6.013290849679876,
+        "lookahead_sequence": [
+          82,
+          101
+        ],
+        "reward": 3.1473801668208328,
+        "swaps": 4,
+        "slope_pct": -3.2115069635877327,
+        "cont": 0.03403403403403393,
+        "baimu_cnt": 1,
+        "baimu_ha": -79.17001430836693
+      },
+      {
+        "step": 16,
+        "block": 101,
+        "lookahead_score": 5.647219594176764,
+        "lookahead_sequence": [
+          101,
+          47
+        ],
+        "reward": 2.865910682859043,
+        "swaps": 4,
+        "slope_pct": -3.442456409482514,
+        "cont": 0.02702702702702675,
+        "baimu_cnt": 1,
+        "baimu_ha": -84.86076745748892
+      },
+      {
+        "step": 17,
+        "block": 47,
+        "lookahead_score": 5.392268587028559,
+        "lookahead_sequence": [
+          47,
+          108
+        ],
+        "reward": 2.7813089113177205,
+        "swaps": 4,
+        "slope_pct": -3.6939599591021848,
+        "cont": 0.022022022022021748,
+        "baimu_cnt": 1,
+        "baimu_ha": -95.67163832985163
+      },
+      {
+        "step": 18,
+        "block": 43,
+        "lookahead_score": 5.23797836297061,
+        "lookahead_sequence": [
+          43,
+          108
+        ],
+        "reward": 2.6075824652367756,
+        "swaps": 5,
+        "slope_pct": -3.8887590326703743,
+        "cont": 0.017017017017016745,
+        "baimu_cnt": 1,
+        "baimu_ha": -99.98151287225336
+      },
+      {
+        "step": 19,
+        "block": 108,
+        "lookahead_score": 5.092103779174934,
+        "lookahead_sequence": [
+          108,
+          91
+        ],
+        "reward": 2.630395897733834,
+        "swaps": 5,
+        "slope_pct": -4.16382401195475,
+        "cont": 0.007007007007006738,
+        "baimu_cnt": 1,
+        "baimu_ha": -110.59215474356488
+      },
+      {
+        "step": 20,
+        "block": 91,
+        "lookahead_score": 2.4617078814411,
+        "lookahead_sequence": [
+          91
+        ],
+        "reward": 2.4617078814411,
+        "swaps": 4,
+        "slope_pct": -4.2343640554436455,
+        "cont": 0.01301301301301283,
+        "baimu_cnt": 1,
+        "baimu_ha": -108.77227717753276
+      }
+    ]
+  }
+}
