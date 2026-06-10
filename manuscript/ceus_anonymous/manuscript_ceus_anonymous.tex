@@ -55,15 +55,11 @@ deep reinforcement learning \sep farmland consolidation \sep spatial abstraction
 \label{sec:intro}
 % ============================================================================
 
-Farmland consolidation---the spatial reorganization of fragmented agricultural parcels into contiguous, productive blocks---is a central instrument of China's Comprehensive Land Consolidation policy (\textit{quanyu tudi zonghe zhengzhi}). The current national standard for high-standard farmland construction, GB/T~30600-2022 ``General Rules for High-Standard Farmland Construction'' \citep{gbt30600_2022}, defines minimum field-block size, slope, contiguity, and access requirements for nationally recognized consolidated fields, and the National High-Standard Farmland Construction Plan (2021--2030) \citep{moa2021plan} sets quantitative provincial targets. In project practice across many provinces, the \textit{baimu fang} (100-mu consolidated field, $\geq$6.67\,ha of contiguous farmland) and \textit{qianmu fang} (1{,}000-mu field, $\geq$66.7\,ha) serve as operational planning units. In international terms, these are threshold-based consolidated operating-field metrics: connected management units large enough to support mechanized or administratively recognized operation. In the mountainous regions of southwest China, where steep slopes, fragmented ownership, and interspersed forest create particularly challenging spatial configurations, the optimization of farmland--forest exchange plans---determining which steep-slope farmland parcels to convert to forest and which gentle-slope forest parcels to convert to farmland---is a combinatorial problem of considerable complexity.
+Farmland consolidation reorganizes fragmented agricultural parcels into contiguous, productive blocks. In China, high-standard farmland policy defines operational field-block targets through standards such as GB/T~30600-2022 \citep{gbt30600_2022} and national construction plans \citep{moa2021plan}. One common planning unit is the \textit{baimu fang}, a 100-mu consolidated field ($\geq$6.67\,ha of contiguous farmland). In international terms, this is a threshold-based consolidated operating-field metric. In the mountainous regions of southwest China, where steep slopes, fragmented parcels, and interspersed forest are common, deciding which farmland and forest parcels to exchange is a large combinatorial problem.
 
-Deep reinforcement learning (DRL) has become a useful paradigm for sequential spatial decision problems, including urban configuration and ecological connectivity planning. Its value in cadastral farmland consolidation is less clear. Real cadastral parcels differ from regular grid cells in area, shape, neighborhood density, and barrier structure. These properties change the optimization problem rather than merely increasing its size.
+Deep reinforcement learning (DRL) has been useful for sequential spatial planning, but its value for cadastral farmland consolidation is not obvious. Real parcels differ from grid cells in area, shape, adjacency, and barrier structure. These properties can make individual farmland--forest swaps nearly independent: large parcels dominate slope, sparse Queen contiguity limits neighborhood effects, and roads or waterways split the swappable graph into small components. A parcel-level MDP can therefore collapse toward a one-step ranking problem. We treat this as a design diagnosis, not a proof that all parcel-level DRL must fail.
 
-We use this paper to make the diagnosis self-contained. On irregular cadastral parcels, individual farmland--forest exchanges tend toward \textit{swap near-independence}. Three geometric properties drive this tendency. First, parcel areas span several orders of magnitude, so the area-weighted slope contribution is dominated by a small number of large parcels. Second, Queen contiguity on real polygons is sparse and locally tree-like, so a swap rarely changes the neighborhood score of many other high-ranking candidates. Third, roads, waterways, and construction land split the swappable graph into disconnected sub-pieces, bounding any step-to-step coupling inside small components. Under these conditions, a parcel-level MDP can collapse toward a memoryless one-step problem. We treat this as a design diagnosis rather than a definitive negative benchmark for all parcel-level DRL formulations; the experiments below test whether a block-level formulation recovers useful sequential structure.
-
-This diagnosis motivates a coarser decision scale. Instead of selecting individual parcels, the agent should allocate a fixed consolidation budget across spatial units that compete for resources. Selecting one unit consumes budget that cannot be invested elsewhere. This resource-competition structure creates sequential dependencies that are absent or weak at the individual-parcel scale.
-
-We propose a \textbf{block-level spatial abstraction} that operationalizes this insight. The framework consists of three stages:
+We propose a \textbf{block-level spatial abstraction} that asks the agent to allocate a fixed consolidation budget across spatial units rather than individual parcels. Selecting one block consumes budget that cannot be used elsewhere, and swaps inside a block can affect adjacent blocks through township-wide contiguity and \textit{baimu fang} metrics. The framework has three stages:
 
 \begin{enumerate}
 \item \textbf{Spatial restructuring}: Thousands of irregular parcels are aggregated into tens to hundreds of spatially coherent \textit{consolidation blocks} using a hybrid method combining natural barrier segmentation (roads, waterways, construction land) with constrained agglomerative clustering.
@@ -73,32 +69,30 @@ We propose a \textbf{block-level spatial abstraction} that operationalizes this 
 \item \textbf{Connectivity-aware execution}: Within each selected block, a deterministic greedy engine executes farmland--forest swaps using a connectivity-aware scoring function that preferentially removes steep, isolated farmland and converts gentle, farmland-adjacent forest---creating spatial spillover effects across block boundaries.
 \end{enumerate}
 
-This ``\textit{macroscopic planning, microscopic execution}'' design draws a direct analogy to real-world consolidation governance: a Natural Resources Bureau director allocates annual consolidation quotas across townships and villages (macroscopic planning), while local implementers execute specific parcel-level land-type conversions within their assigned areas (microscopic execution). Our framework encodes this two-level decision structure, making the DRL agent's behavior interpretable in policy terms. Fig.~\ref{fig:framework} illustrates the overall architecture.
+This ``\textit{macroscopic planning, microscopic execution}'' design mirrors consolidation governance: planners allocate quotas across project areas, while local implementers execute parcel-level conversions. Fig.~\ref{fig:framework} illustrates the architecture.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.95\textwidth]{paper3_framework_diagram.png}
-\caption{``Macroscopic planning, microscopic execution'' framework architecture. The DRL agent allocates a consolidation budget across competing blocks (left), while a deterministic greedy engine executes optimized parcel swaps within each selected block (right). Spatial spillover across block boundaries creates sequential dependencies that a learned scheduler can exploit in selected settings.}
+\caption{Block-level planning framework. The DRL scheduler allocates budget across blocks, and a deterministic greedy engine executes parcel-level swaps within selected blocks.}
 \label{fig:framework}
 \end{figure}
 
-A key innovation is the introduction of \textit{baimu fang} formation as both a reward signal and an evaluation metric. In China, \textit{baimu fang} count and area are directly actionable policy targets: consolidation projects are evaluated and funded based on the number and total area of newly formed consolidated fields. For readers outside this policy setting, the same construct should be read more generally as a threshold-based consolidated operating-field metric: a connected management unit that is large enough to support mechanized or administratively recognized operation. By incorporating this metric, our framework bridges the gap between algorithmic optimization and land-resource planning outcomes while keeping the policy interpretation explicit.
-
-We evaluate the framework on three townships spanning a 3.6$\times$ range in parcel count (3{,}607 to 12{,}950), comparing against five block-selection baselines that share the same within-block engine (Greedy-Global, Greedy-Sequential, Random-Block, Round-Robin, and a one-step Reward-Greedy lookahead that has access to the same multi-objective reward DRL is trained on; Section~\ref{sec:baselines}) across 5 random seeds per township. We further run exact two-step and pruned depth-three deterministic lookahead checks on Township~B, the critical case where Reward-Greedy fails. The principal findings are:
+We evaluate the framework on three townships with 3{,}607--12{,}950 parcels and 78--338 constructed blocks. Five block-selection baselines share the same within-block engine, including a one-step Reward-Greedy baseline that uses the same reward as DRL. We also run exact depth-two and pruned depth-three lookahead checks on Township~B, where the key scheduler gap appears. The principal findings are:
 
 \begin{enumerate}
-\item The block-level MDP converges in all 15 seed--township combinations to positive-reward plateaus, with no instances of degenerate or bimodal seed behavior under the tested settings, providing a stable basis for multi-objective evaluation.
+\item The block-level MDP converges in all 15 seed--township combinations under identical hyperparameters.
 
-\item Under identical hyperparameters, the trained policies exhibit \textbf{township-specific strategy profiles}: a moderate, balanced profile on the small township (Township A); a contiguity-and-\textit{baimu fang}-area-preserving profile on the medium township (Township B); and a \textit{baimu fang} count-focused profile on the large township (Township C). These profiles are observed under the tested spatial structures rather than tuned per township.
+\item The trained policies show township-specific profiles: balanced on Township~A, \textit{baimu fang}-area preserving on Township~B, and count-focused on Township~C.
 
-\item On Township~B, DRL is the only tested method---including the reward-aware Reward-Greedy baseline, an exact two-step lookahead baseline, and a pruned depth-three beam-lookahead baseline that all share the same reward and transition model---to achieve a positive \textit{baimu fang} area outcome ($+12.9$\,ha vs.\ $-101.9$, $-108.8$, and $-103.8$\,ha, respectively). This is the most direct evidence in the present experiments that DRL contributes a multi-step scheduling advantage on top of access to the multi-objective signal.
+\item On Township~B, DRL is the only tested rule to achieve positive \textit{baimu fang} area ($+12.9$\,ha versus $-101.9$, $-108.8$, and $-103.8$\,ha for Reward-Greedy, exact depth-two lookahead, and pruned depth-three lookahead). This is the clearest evidence for a scheduler-specific advantage.
 
-\item On Townships~A and C, Reward-Greedy is competitive with or slightly exceeds DRL on several metrics, indicating that block-level abstraction itself, rather than RL-induced multi-step planning alone, drives most of the multi-objective gain we report. We therefore frame the contribution as ``block-level abstraction with a learnable scheduler'' rather than ``RL beats heuristics across the board.''
+\item On Townships~A and C, Reward-Greedy is competitive with or stronger than DRL on several metrics. The contribution is therefore block-level abstraction with a learnable scheduler, not a general claim that RL dominates heuristics.
 
-\item The framework produces \textbf{low variance} across random seeds under the tested settings (reward coefficient of variation $<$1\% on Township~C), indicating stable optimization within this experimental scope.
+\item Across seeds, the trained policies are stable, with reward coefficient of variation below 1\% on Township~C.
 \end{enumerate}
 
-These results support spatial abstraction as a practical design choice for scaling sequential optimization in real-world farmland consolidation planning, while leaving direct parcel-level DRL benchmarking, value-guided or longer-horizon search baselines, and area-balanced training as important robustness checks. The remainder of this paper is organized as follows: Section~\ref{sec:related} reviews related work; Section~\ref{sec:data} describes the study area and data; Section~\ref{sec:methods} presents the methodology in detail; Section~\ref{sec:results} reports experimental results; Section~\ref{sec:discussion} discusses implications and limitations; and Section~\ref{sec:conclusions} concludes.
+These results support spatial abstraction as a practical design choice for scaling sequential optimization in farmland consolidation, while leaving parcel-level DRL, longer-horizon search, and area-balanced training as robustness priorities.
 
 
 % ============================================================================
@@ -108,29 +102,25 @@ These results support spatial abstraction as a practical design choice for scali
 
 \subsection{Farmland consolidation optimization}
 
-Farmland consolidation has been studied extensively using operations research and spatial optimization methods. Multi-objective evolutionary algorithms, particularly NSGA-II \citep{deb2002fast} with spatial extensions \citep{cao2011sustainable} and boundary-based genetic algorithms \citep{cao2012spatial}, have been applied to land-use allocation at village and county scales. Hybrid genetic-game-theoretic approaches have been used for multi-objective land-use spatial optimization \citep{liu2012multi}, and ant-colony / cellular-automata couplings have been explored for land-use allocation \citep{li2011coupling}. Integer programming approaches can guarantee optimality for linearizable objectives but struggle with neighborhood-dependent spatial metrics \citep{aerts2003using}. However, these methods share a common limitation: they treat optimization as a static assignment problem, solving for a complete configuration without exploiting the sequential structure of consolidation decisions.
+Farmland consolidation has been studied with multi-objective evolutionary algorithms \citep{deb2002fast,cao2011sustainable,cao2012spatial}, hybrid genetic or game-theoretic methods \citep{liu2012multi}, ant-colony and cellular-automata couplings \citep{li2011coupling}, and integer programming \citep{aerts2003using}. These approaches are useful for land-use allocation, but most treat optimization as a static assignment problem. They rarely model the sequential allocation of limited consolidation effort across candidate project areas.
 
-Recent work in China has emphasized the formation of high-standard farmland blocks (\textit{gaobiaozhun nongtian}) as the operational unit for consolidation planning. The national standard GB/T~30600-2022 \citep{gbt30600_2022} specifies minimum slope, field size, contiguity, road access, and irrigation requirements, while the National High-Standard Farmland Construction Plan (2021--2030) \citep{moa2021plan} sets provincial quantitative targets. The \textit{baimu fang} (100-mu field, $\geq$6.67\,ha) serves as the fundamental planning unit in many regional projects, with explicit numeric targets specified in consolidation project approval documents. In international terms, it is a threshold-based consolidated operating-field metric rather than a China-specific algorithmic construct. Earlier empirical work in agricultural economics has documented productivity gains from land consolidation at the household level \citep{wu2005consolidation}. Despite this policy emphasis, existing optimization methods operate at the parcel level without explicit consideration of consolidated block formation.
+Chinese high-standard farmland policy emphasizes operational blocks such as \textit{baimu fang}. GB/T~30600-2022 specifies field size, slope, contiguity, access, and irrigation requirements \citep{gbt30600_2022}, while national plans set quantitative construction targets \citep{moa2021plan}. Existing optimization studies have not fully linked parcel exchange decisions to explicit consolidated-field formation, although land consolidation can improve agricultural productivity \citep{wu2005consolidation}.
 
 \subsection{DRL for spatial optimization}
 
-Deep reinforcement learning has been applied to several spatial planning tasks. \citet{zheng2023spatial} applied DRL to spatial planning of urban communities, demonstrating that policy-gradient methods can learn effective spatial configurations. \citet{wang2021deep} applied adversarial learning to urban generation. In ecological planning, \citet{equihua2024conservation} applied DRL to connectivity conservation planning. These studies show that learned policies can support spatial configuration problems, but they do not address rural cadastral consolidation where thousands of irregular parcels, hard land-type constraints, and policy-defined field-block targets interact.
-
-The gap addressed here is therefore narrower than generic spatial DRL. We ask whether a block-level allocation problem, coupled with deterministic within-block execution, can recover useful sequential structure for farmland consolidation on real cadastral data. The claim is made and tested entirely within this manuscript: the motivation, method, baselines, ablations, and limitations are all reported here, so the contribution can be evaluated without consulting any separate manuscript.
-
-Within the published literature reviewed for this study, the unresolved gap is the combination of block-level sequential allocation, deterministic parcel-level execution, and policy-relevant \textit{baimu fang} metrics for cadastral farmland consolidation.
+DRL has been applied to urban spatial planning \citep{zheng2023spatial}, urban generation \citep{wang2021deep}, and ecological connectivity planning \citep{equihua2024conservation}. These studies show that learned policies can support spatial configuration tasks, but they do not address rural cadastral consolidation where irregular parcels, hard land-type constraints, and policy-defined field-block targets interact. The gap addressed here is the combination of block-level sequential allocation, deterministic parcel-level execution, and \textit{baimu fang} metrics on real cadastral data.
 
 \subsection{Hierarchical and multi-scale optimization}
 
-The idea of decomposing spatial optimization across scales has precedent in operations research. Hierarchical reinforcement learning (HRL) decomposes complex tasks into sub-goals at different levels of abstraction \citep{barto2003recent}. In spatial planning, \citet{li2011coupling} proposed coupling different optimization scales through cellular automata. However, formal HRL methods (e.g., options framework, feudal networks) introduce substantial algorithmic complexity and training instability. Our approach achieves a similar scale decomposition through a simpler mechanism: the block-level agent selects \textit{where} to invest, while a deterministic engine handles \textit{how} to execute---avoiding the need to learn policies at both levels simultaneously.
+Spatial optimization can be decomposed across scales. Hierarchical reinforcement learning decomposes tasks into sub-goals \citep{barto2003recent}, and spatial planning studies have coupled optimization scales through cellular automata \citep{li2011coupling}. Our design uses a simpler split: the agent chooses \textit{where} to invest, and a deterministic engine decides \textit{how} to execute parcel swaps.
 
 \subsection{Multi-objective and constrained reinforcement learning}
 
-The reward signal in this paper combines four channels (slope, contiguity, \textit{baimu fang} area, \textit{baimu fang} count) and is treated as a weighted scalar. This is the simplest of the multi-objective RL approaches and corresponds to a single operating point determined by the chosen weights rather than a complete characterization of the Pareto front. More sophisticated treatments include vector-valued value functions and Pareto-conditioned policies in multi-objective RL, and Lagrangian dual methods and constrained policy optimization in constrained MDPs. We adopt the scalar-weighted formulation here because the weights have a direct policy interpretation (slope reduction is the primary objective, \textit{baimu fang} formation is the policy-relevant secondary objective) and because the Pareto analysis we report (Section~\ref{sec:pareto}) is sufficient to document the tested trade-off behavior against the selected baselines. A constrained-MDP variant in which farmland area conservation and \textit{baimu fang} qualification thresholds are formulated as hard constraints, with slope reduction as the unconstrained maximand, is a natural extension that we discuss in the limitations section.
+The reward combines slope, contiguity, \textit{baimu fang} area, and \textit{baimu fang} count as a weighted scalar. This gives one policy-relevant operating point rather than a complete Pareto-conditioned policy. More formal multi-objective or constrained MDP formulations remain possible; here, the scalar reward keeps the planner interpretable and allows direct comparison with reward-aware greedy baselines.
 
 \subsection{Spatial aggregation and constrained regionalization}
 
-The block construction step (Section~\ref{sec:blocks}) is closely related to a body of GIScience methods for partitioning a set of spatial units into a smaller number of contiguous regions subject to constraints---commonly referred to as constrained regionalization, zoning, or clustering with contiguity constraints. Algorithms such as SKATER, REDCAP, and constrained agglomerative clustering with a spatial connectivity matrix (the latter is what we use, via the \texttt{libpysal} / \texttt{scikit-learn} pipeline) produce contiguous regions that respect a user-supplied adjacency graph. We use the natural-barrier graph---roads, waterways, construction land excluded---as that adjacency, which embeds physical landscape barriers in the regionalization step itself. This makes our blocks fully consistent with the way Chinese consolidation projects partition the rural landscape (i.e., barriers segment the project area before clustering takes over within each barrier-delimited piece), and it gives the resulting decision units a direct physical interpretation rather than a purely statistical one.
+Block construction is related to constrained regionalization and zoning in GIScience. Methods such as SKATER, REDCAP, and constrained agglomerative clustering produce contiguous regions under adjacency constraints. We use a natural-barrier graph, with roads, waterways, and construction land excluded, so the resulting blocks have a physical planning interpretation rather than only a statistical one.
 
 
 % ============================================================================
@@ -140,7 +130,7 @@ The block construction step (Section~\ref{sec:blocks}) is closely related to a b
 
 \subsection{Study area}
 
-The study area is Bishan District ($29.4^\circ$--$29.7^\circ$N, $106.0^\circ$--$106.3^\circ$E), Chongqing Municipality, southwest China. Bishan lies at the transition between the Sichuan Basin and surrounding low-mountain terrain, with elevations of 180--885\,m above sea level. The subtropical monsoon climate supports a mixed agricultural--forest landscape where paddy fields, dry cropland, orchards, and forest interleave at fine spatial scales. For double-anonymized review, the three experimental townships are reported as Township A, Township B, and Township C. The processing codes below preserve reproducibility of the experimental pipeline without disclosing owner attributes or original parcel geometries.
+The study area is Bishan District ($29.4^\circ$--$29.7^\circ$N, $106.0^\circ$--$106.3^\circ$E), Chongqing Municipality, southwest China. It lies between the Sichuan Basin and surrounding low mountains, with elevations of 180--885\,m. For double-anonymized review, the three experimental townships are reported as Township A, Township B, and Township C.
 
 Three townships were selected to represent a gradient of spatial complexity:
 
@@ -152,7 +142,7 @@ Three townships were selected to represent a gradient of spatial complexity:
 
 \begin{table}[htbp]
 \centering
-\caption{Characteristics of the three study townships and their block-level aggregation. ``Init.\ \textit{baimu}'' indicates the number of \textit{baimu fang} ($\geq$6.67\,ha contiguous farmland) present in the initial land-use configuration before any optimization.}
+\caption{Township characteristics and block-level aggregation. ``Init.\ \textit{baimu}'' is the initial number of qualifying 6.67-ha contiguous farmland components.}
 \label{tab:townships}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lrrrrrrrr}
@@ -169,17 +159,9 @@ C (Large)  & 12{,}950 & 6{,}787 & 5{,}032 & 1{,}755 & 338 & 20 & 20 & 6 \\
 
 \subsection{Data sources}
 
-\paragraph{Cadastral data.} Land-use parcel data were obtained from the Third National Land Survey (TNLS) database for Bishan District, completed in 2019, containing 101{,}657 polygon parcels with DLBM (\textit{dilei bianma}, land-use classification) codes and parcel boundaries. The data are governed by the access regulations of China's relevant land-administration authorities and are not redistributed in this paper; we provide derived block-level metrics, training logs, model artifacts, evaluation outputs, and figure-generation scripts in the replication repository so that the reported tables and figures can be validated without access to the original dataset (Section: Data and code availability).
+\paragraph{Cadastral data.} Third National Land Survey parcels for Bishan District were classified by DLBM code as farmland (011--013), forest (031--033), or other. Farmland and forest parcels are swappable; other parcels act as fixed barriers. The controlled TNLS data contain owner-sensitive geometries and are not redistributed. We release aggregate statistics, derived metrics, logs, model artifacts, and figure-generation scripts.
 
-Parcels were classified into three categories using the first three digits of the DLBM code: \textbf{farmland} (DLBM 011 paddy field, 012 irrigated dry land, 013 dry land), \textbf{forest} (031 arboreal forest, 032 shrub forest, 033 other forest land), and \textbf{other} (all remaining classes including 04x grassland, 06x urban / built-up land, 1xx transportation, 11x water, etc.). Only the farmland and forest classes are considered swappable; ``other'' parcels are treated as fixed barriers throughout the optimization. Geometric cleaning consisted of removing zero-area artifacts, repairing self-intersections via shapely \texttt{buffer(0)}, and discarding parcels with no DLBM code; no further smoothing was applied.
-
-\paragraph{Coordinate reference system and area computation.} All polygons were re-projected from the source CRS to EPSG:32648 (UTM zone 48N), in which units are metres and parcel areas are computed as planar polygon areas $a_i = \int_{\partial p_i} \mathrm{d}A$ via shapely. The \textit{baimu fang} threshold $A_{\text{baimu}} = 66{,}700\,\text{m}^2$ is consistent with this metric definition (1\,mu = 666.7\,m$^2$; 100\,mu = 66{,}700\,m$^2$).
-
-\paragraph{Slope.} Slope was derived from the publicly available Copernicus DEM GLO-30 (30\,m posting; \citealt{copernicus2021dem}) using a planar slope operator on the DSM, expressed in degrees. A per-parcel mean slope $s_i$ was assigned by zonal statistics: each parcel polygon was rasterized at the DEM resolution and $s_i$ was computed as the unweighted mean of all DEM cells whose centre falls inside the polygon. Parcels smaller than a single DEM cell---a small fraction of the full database---were assigned the slope of the DEM cell containing the parcel centroid. No interpolation across parcel boundaries was applied.
-
-\paragraph{Adjacency.} Queen contiguity adjacency was constructed on the swappable subset using \texttt{libpysal}; two parcels are neighbours if their polygon boundaries share \emph{any} point (vertex or edge). Construction-land, water, and transportation parcels are excluded from this graph and therefore act as physical barriers (Section~\ref{sec:blocks}). Additional features (elevation, aspect sine/cosine, shape index) were computed in the same projection and used in the per-block feature vector (Section~\ref{sec:mdp}).
-
-\paragraph{Compliance.} Use of the cadastral data is restricted to research; aggregate statistics, derived metrics, and code are released; no individual cadastral identifiers, owner attributes, or original geometries are released.
+\paragraph{Geometry and terrain.} Polygons were repaired, filtered for valid land-use codes, and re-projected to EPSG:32648. Areas were computed as planar polygon areas, with $A_{\text{baimu}} = 66{,}700\,\text{m}^2$. Slope was derived from Copernicus DEM GLO-30 \citep{copernicus2021dem} using zonal statistics, assigning each parcel a mean slope in degrees. Queen contiguity was computed on the swappable subset using \texttt{libpysal}; excluded roads, water, and construction land therefore segment the graph.
 
 
 % ============================================================================
@@ -196,41 +178,27 @@ The farmland consolidation optimization is formulated as a tri-objective combina
 \text{Maximize:} \quad \bar{C} &= \frac{1}{|\mathcal{P}_F|} \sum_{i \in \mathcal{P}_F} \frac{|\{j \in \mathcal{N}(i): l_j = F\}|}{|\mathcal{N}(i)|} \quad \text{(farmland contiguity)} \label{eq:cont} \\
 \text{Maximize:} \quad B &= \sum_{k=1}^{K} \mathbb{1}\!\left[\text{area}(\mathcal{C}_k) \geq A_{\text{baimu}}\right] \quad \text{(\textit{baimu fang} count)} \label{eq:baimu}
 \end{align}
-where $\mathcal{N}(i)$ denotes the set of parcels adjacent to $p_i$ (Queen contiguity), $\mathcal{C}_1, \ldots, \mathcal{C}_K$ are the connected components of the farmland adjacency subgraph, and $A_{\text{baimu}} = 66{,}700$\,m$^2$ (6.67\,ha = 100\,mu) is the policy-defined threshold for a consolidated field. The optimization is subject to farmland count conservation ($|\mathcal{P}_F'| = |\mathcal{P}_F|$) and an exchange budget ($B_{\max} = 100$ paired swaps).
-
-The third objective (Eq.~\ref{eq:baimu}) is a contribution of this paper: \textit{baimu fang} count is a discrete, non-differentiable, globally computed metric that depends on the connected component structure of the entire farmland subgraph. A single parcel conversion can merge two sub-threshold farmland clusters into a super-threshold consolidated field, creating a discontinuous reward signal that rewards strategic placement of exchanges.
+where $\mathcal{N}(i)$ is the Queen-contiguity neighborhood, $\mathcal{C}_k$ are farmland connected components, and $A_{\text{baimu}}=66{,}700$\,m$^2$. The optimization uses a 100 paired-swap budget and conserves farmland parcel count. Eq.~\ref{eq:baimu} is discrete and globally computed, so one parcel conversion can push a near-threshold connected component across the policy boundary.
 
 \subsection{Block-level spatial abstraction}
 \label{sec:blocks}
 
-The key methodological innovation is the aggregation of individual parcels into \textit{consolidation blocks}---spatially coherent groups of farmland and forest parcels that serve as the decision units for the DRL agent. This aggregation serves three purposes: (1) it reduces the action space by approximately 20$\times$ (from thousands of parcels to tens or hundreds of blocks), making training tractable; (2) it creates resource-competition dynamics where selecting one block consumes budget that could be invested elsewhere; and (3) it aligns the agent's decision granularity with the planning scale at which consolidation projects are actually designed and funded.
+The key methodological step is aggregating parcels into \textit{consolidation blocks}, which reduce the action space, create budget competition among spatial units, and align decisions with project-scale planning.
 
 \subsubsection{Hybrid barrier segmentation and clustering}
 
-Block construction proceeds in five steps:
-
-\textbf{Step 1: Identify swappable parcels.} From the full parcel set, extract all farmland and forest parcels as swappable candidates. Non-swappable parcels (roads, waterways, construction land, etc.) are retained as spatial barriers.
-
-\textbf{Step 2: Build swappable-only adjacency.} Construct a Queen contiguity graph on swappable parcels only, using the \texttt{libpysal} library. Because barrier parcels (roads, waterways) are excluded from the graph, they naturally segment the swappable parcels into disconnected clusters---parcels separated by a road or stream will not be adjacent in this graph, even if they are physically proximate.
-
-\textbf{Step 3: Connected component decomposition.} Apply breadth-first search to identify connected components of the swappable adjacency graph. Each component represents a group of parcels enclosed by natural or infrastructure barriers. Many components are small (3--10 parcels), but some are very large (hundreds of parcels) where barriers are sparse.
-
-\textbf{Step 4: Constrained agglomerative clustering.} Large components (those exceeding 30 parcels) are subdivided using Ward-linkage agglomerative clustering with a connectivity constraint, implemented via \texttt{sklearn.cluster.AgglomerativeClustering}. The connectivity matrix ensures that only spatially adjacent parcels can be merged, producing geographically contiguous sub-blocks. The target is approximately 20 parcels per block, chosen to balance the desire for fine-grained control (smaller blocks) with the need for sufficient within-block diversity to enable meaningful swaps (each block should contain both farmland and forest parcels).
-
-\textbf{Step 5: Filtering.} Remove blocks with fewer than 3 parcels or less than 0.5\,ha total area, as these are too small to support meaningful consolidation activity. The remaining parcels are assigned to their respective blocks.
-
-This hybrid approach combines the physical interpretability of barrier-based segmentation (blocks respect real landscape boundaries) with the statistical control of clustering (blocks are approximately equal in size). Table~\ref{tab:block_stats} summarizes the block construction results. Fig.~\ref{fig:block_construction} illustrates the five-step block construction process on a representative area.
+Block construction has five steps. We first extract farmland and forest parcels as swappable candidates, then build a Queen-contiguity graph after excluding roads, waterways, construction land, and other fixed barriers. Breadth-first search identifies barrier-delimited connected components. Components with more than 30 parcels are subdivided by Ward-linkage agglomerative clustering with a spatial connectivity constraint, targeting approximately 20 parcels per block. Blocks with fewer than 3 parcels or less than 0.5\,ha are removed. Table~\ref{tab:block_stats} and Fig.~\ref{fig:block_construction} summarize the result.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.95\textwidth]{paper3_block_construction.png}
-\caption{Block construction process illustrated on synthetic parcels resembling Township A. Step 1: raw parcels colored by land use (farmland=green, forest=brown, road=gray, water=blue). Step 2: barriers removed, only swappable parcels retained. Step 3: connected components identified via BFS. Step 4: large components subdivided by constrained Ward clustering. Step 5: final blocks labeled ($\sim$20 parcels each).}
+\caption{Block construction on synthetic parcels resembling Township A: swappable parcels are separated by barriers, decomposed into connected components, subdivided by constrained clustering, and labeled as final blocks.}
 \label{fig:block_construction}
 \end{figure}
 
 \begin{table}[htbp]
 \centering
-\caption{Block construction statistics. ``Both F+F'' indicates the percentage of blocks containing both farmland and forest parcels (eligible for within-block swaps). ``Assigned'' indicates the percentage of swappable parcels successfully assigned to blocks.}
+\caption{Block construction statistics. ``Both F+F'' is the share of blocks eligible for within-block swaps.}
 \label{tab:block_stats}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{lrrrrr}
@@ -248,38 +216,11 @@ C (338 blocks) & 338 & 98 & 97 & 20 & 20 \\
 \subsection{Block-level Markov Decision Process}
 \label{sec:mdp}
 
-The optimization is cast as a finite-horizon MDP $(\mathcal{S}, \mathcal{A}, \mathcal{T}, R, H)$ where the agent selects blocks to invest consolidation resources in.
+The optimization is a finite-horizon MDP $(\mathcal{S},\mathcal{A},\mathcal{T},R,H)$ in which each action selects one block for investment.
 
 \subsubsection{State space}
 
-At step $t$, the state $\mathbf{s}_t$ consists of two components:
-
-\textbf{Per-block features} $\mathbf{X}_t \in \mathbb{R}^{N_b \times K_B}$, where $N_b$ is the number of blocks and $K_B = 17$ features per block:
-\begin{enumerate}
-\item[1--4.] Normalized mean slope, slope standard deviation, minimum slope, and maximum slope of all parcels within the block.
-\item[5--7.] Block area (normalized), farmland count, and forest count within the block.
-\item[8--9.] Farmland ratio and forest ratio within the block.
-\item[10--11.] Mean farmland slope and mean forest slope within the block.
-\item[12.] Contiguity index: mean proportion of same-type neighbors for farmland parcels within the block.
-\item[13.] Compactness: isoperimetric quotient $4\pi A / P^2$ of the block's convex hull.
-\item[14--15.] Number of adjacent blocks and mean slope of adjacent blocks.
-\item[16.] Budget remaining (normalized to $[0, 1]$).
-\item[17.] Step progress ($t / H$).
-\end{enumerate}
-
-\textbf{Global state vector} $\mathbf{g}_t \in \mathbb{R}^{K_G}$, where $K_G = 9$:
-\begin{enumerate}
-\item[1--2.] Normalized global mean farmland slope and mean forest slope.
-\item[3.] Global farmland contiguity index.
-\item[4.] Farmland count deviation from initial.
-\item[5.] Budget utilization ratio.
-\item[6.] Step progress.
-\item[7.] \textit{Baimu fang} count (current).
-\item[8.] Total \textit{baimu fang} area (normalized).
-\item[9.] \textit{Baimu fang} count change from initial.
-\end{enumerate}
-
-The state dimension is $N_b \times 17 + 9$, which for the three townships evaluates to $78 \times 17 + 9 = 1{,}335$ (Township A), $2{,}253$ (B), and $5{,}755$ (C). Although these dimensions are large, the BlockScoringPolicy architecture (Section~\ref{sec:policy}) processes each block independently through a shared scorer, so the number of \textit{learnable parameters} is independent of $N_b$.
+At step $t$, the state contains per-block features $\mathbf{X}_t\in\mathbb{R}^{N_b\times17}$ and a global vector $\mathbf{g}_t\in\mathbb{R}^{9}$. The block features describe slope distribution, area, farmland/forest counts and ratios, within-block contiguity, compactness, neighboring-block context, remaining budget, and episode progress. The global vector records township-level farmland and forest slope, contiguity, farmland-count deviation, budget use, progress, current \textit{baimu fang} count and area, and count change. The raw state dimensions are 1{,}335, 2{,}253, and 5{,}755 for Townships A--C; the shared-scorer policy keeps the number of learnable parameters independent of $N_b$.
 
 \subsubsection{Action space}
 
@@ -287,38 +228,34 @@ At each step, the agent selects one block $a_t \in \{1, 2, \ldots, N_b\}$. An ac
 \begin{equation}
 m_t(b) = \mathbb{1}\!\left[\,n_F^{(b,\text{unused})}(t) > 0 \;\wedge\; n_L^{(b,\text{unused})}(t) > 0\,\right]
 \end{equation}
-where $n_F^{(b,\text{unused})}(t)$ and $n_L^{(b,\text{unused})}(t)$ are the counts of farmland and forest parcels in block $b$ that have \textit{not yet been involved in any swap} during the current episode. To enforce this, the environment maintains a per-parcel boolean mask \texttt{swapped}$_i$ that is set to \texttt{true} as soon as parcel $i$ participates in a paired exchange, and the within-block greedy engine (Section~\ref{sec:greedy_engine}) draws candidates only from parcels with \texttt{swapped}$_i = \texttt{false}$. Each parcel can therefore be involved in at most one farmland--forest swap per episode, preventing repeated swapping or undoing of earlier decisions, and ensuring that the budget $B_{\max}$ corresponds to a fixed number of distinct parcel-level changes rather than a count of potentially redundant operations. When either the unused-farmland or unused-forest count in a block reaches zero, the block is masked out for the rest of the episode.
+where $n_F^{(b,\text{unused})}$ and $n_L^{(b,\text{unused})}$ count unused farmland and forest parcels. A parcel-level \texttt{swapped} mask prevents repeated use of the same parcel, so the 100-swap budget corresponds to distinct paired exchanges.
 
 \subsubsection{Transition function: connectivity-aware greedy engine}
 \label{sec:greedy_engine}
 
-Upon selecting block $b$, the environment executes $\kappa$ farmland--forest swaps within that block ($\kappa = 5$ by default, consuming 5 units of the total budget $B_{\max} = 100$). Each swap proceeds as follows:
+Upon selecting block $b$, the environment executes up to $\kappa=5$ farmland--forest swaps within that block.
 
 \textbf{Farmland removal scoring.} For each farmland parcel $i$ in block $b$:
 \begin{equation}
 \text{score}_{\text{remove}}(i) = s_i - \delta \cdot |\{j \in \mathcal{N}(i) : l_j = F\}|
 \label{eq:score_remove}
 \end{equation}
-where $\delta = 0.5$ is the connectivity penalty. This score preferentially selects farmland parcels that are both steep (high $s_i$) and spatially isolated from other farmland (low farmland neighbor count), preserving the contiguity of the remaining farmland cluster.
+where $\delta=0.5$ penalizes removal of well-connected farmland.
 
 \textbf{Forest conversion scoring.} For each forest parcel $j$ in block $b$:
 \begin{equation}
 \text{score}_{\text{convert}}(j) = s_j - \gamma \cdot |\{k \in \mathcal{N}(j) : l_k = F\}|
 \label{eq:score_convert}
 \end{equation}
-where $\gamma = 1.0$ is the connectivity bonus (note the sign: lower score is selected, so high farmland neighbor count reduces the score, making farmland-adjacent forest parcels \textit{preferred}). This converts forest parcels that are both gentle-slope (low $s_j$) and adjacent to existing farmland, directly promoting farmland contiguity and \textit{baimu fang} formation.
-
-\textbf{Units of $\delta$ and $\gamma$.} Equations~\ref{eq:score_remove} and \ref{eq:score_convert} subtract a dimensionless integer (the same-type neighbour count) from a slope value in degrees. The penalty/bonus magnitudes therefore have units of degrees-per-neighbour: $\gamma=1.0\,^\circ$/neighbour means that one extra adjacent farmland parcel offsets one degree of slope in the forest-conversion ranking, while $\delta=0.5\,^\circ$/neighbour offsets one degree for the farmland-removal ranking. The slopes in the Bishan dataset span roughly 0--35\,$^\circ$ and the same-type neighbour counts range 0--6 in typical Queen contiguity, so the connectivity term and the slope term are of comparable magnitude in the score, and neither dominates the other. We treat $(\gamma,\delta)$ as fixed engine constants throughout the experiments and discuss their sensitivity in Section~\ref{sec:limitations}.
-
-The asymmetry between $\delta = 0.5$ (removal penalty) and $\gamma = 1.0$ (conversion bonus) reflects a deliberate ``active consolidation'' bias: weighting the reward for converting farmland-adjacent forest \textit{twice as heavily} as the penalty for removing well-connected farmland. Intuitively, $\delta$ slows down the destruction of existing contiguous farmland clusters, while $\gamma$ aggressively pulls in forest parcels at the boundaries of those clusters to enlarge them. The 2:1 ratio shifts the within-block engine from a passive ``protect current edges'' regime toward a ``fill the gaps and grow the cluster'' regime---the very behavior that pushes near-threshold farmland clusters past the 6.67\,ha line and creates new \textit{baimu fang}. The asymmetry is held fixed across all townships and all baselines so that the comparison among methods is internally consistent; its sensitivity is discussed in Section~\ref{sec:limitations}.
+where $\gamma=1.0$ rewards forest parcels adjacent to farmland because the lowest score is converted. The 2:1 asymmetry between $\gamma$ and $\delta$ encodes an active-consolidation bias: fill gaps near existing farmland while discouraging destruction of well-connected fields. These constants are fixed for all townships and baselines.
 
 The farmland parcel with the highest $\text{score}_{\text{remove}}$ and the forest parcel with the lowest $\text{score}_{\text{convert}}$ are swapped, provided that the removed farmland's slope exceeds the converted forest's slope (otherwise the swap would worsen the mean farmland slope, and it is skipped). This process repeats $\kappa$ times or until no improving swaps remain.
 
-\textbf{Key design property: spatial spillover.} Because the \textit{baimu fang} metric and the contiguity index are computed over the \textit{entire} township (crossing block boundaries), swaps within one block can change the connectivity-aware scores of parcels in \textit{adjacent} blocks. For example, converting a forest parcel to farmland at the boundary of block $b$ increases the farmland neighbor count of parcels in an adjacent block $b'$, making those parcels more attractive for future forest-to-farmland conversion. This cross-block spatial spillover creates observable sequential dependencies in the block-level formulation: the value of investing in block $b'$ at step $t+1$ depends on whether block $b$ was selected at step $t$. This is the kind of inter-step dependency that the proposed abstraction is designed to expose to a planning policy.
+\textbf{Spatial spillover.} Contiguity and \textit{baimu fang} metrics are computed on the full township graph, so a swap at a block boundary can change scores and connected components in adjacent blocks. This creates inter-step dependencies that a block-level scheduler can exploit.
 
 \subsubsection{Reward function}
 
-The reward at step $t$ combines four components, each defined as a \textit{normalized} improvement signal so that the four channels are dimensionally comparable:
+The reward combines four normalized improvement channels:
 \begin{equation}
 r_t \;=\; w_S \cdot \widetilde{\Delta S}_t \;+\; w_C \cdot \widetilde{\Delta C}_t \;+\; w_B \cdot \widetilde{\Delta A}^{B}_t \;+\; b_B \cdot \Delta n^{B,+}_t
 \label{eq:reward}
@@ -330,62 +267,42 @@ where, denoting the area-weighted mean farmland slope by $\bar{S}_t$, the contig
 \widetilde{\Delta A}^{B}_t &= \frac{A^{B}_t - A^{B}_{t-1}}{A^{F}_0 + \varepsilon}, &
 \Delta n^{B,+}_t &= \max\!\left(0,\; n^{B}_t - n^{B}_{t-1}\right).
 \end{align}
-With this convention, every channel produces a positive reward when the corresponding indicator improves: $\widetilde{\Delta S}_t > 0$ when slope decreases, $\widetilde{\Delta C}_t > 0$ when contiguity rises, $\widetilde{\Delta A}^{B}_t > 0$ when consolidated-field area expands, and $\Delta n^{B,+}_t > 0$ only when a \textit{new} \textit{baimu fang} is formed (existing fields lost are not penalized through this channel; their loss is reflected via the area term). The weights are $w_S = 2000$, $w_C = 500$, $w_B = 500$, $b_B = 20$, identical for all three townships and all 5 seeds (Table~\ref{tab:hyperparams}).
-
-A penalty of $-1.0$ is applied when a selected block yields zero completed swaps (e.g., all available swaps would worsen slope), discouraging wasteful block selections. Because the four channels are normalized to $\sim$O(1) per-step magnitudes, the per-step reward typically falls in $[-1, 1]$ and the cumulative episode return is on the order of tens to a few hundreds---consistent with the per-seed total rewards reported in Table~\ref{tab:per_seed} (Township A $\approx 150$, B $\approx 38$, C $\approx 266$).
-
-The connectivity-aware greedy engine (Section~\ref{sec:greedy_engine}) guarantees that every farmland removal is paired with a forest conversion within the same step, so the parcel \textit{count} of each land-use class is conserved exactly by construction. We discuss the related question of farmland \textit{area} conservation---which the parcel-pairing rule does \textit{not} guarantee---in Section~\ref{sec:limitations} as a known limitation that informs the interpretation of the reported metrics.
+The weights are $w_S=2000$, $w_C=500$, $w_B=500$, and $b_B=20$ for all townships and seeds. A $-1.0$ penalty discourages selecting blocks that yield no completed swaps. The engine exactly conserves farmland parcel count, but not farmland area; area-balance implications are audited in Section~\ref{sec:area_drift} and discussed as a limitation.
 
 \subsubsection{Episode structure}
 
-Each episode consists of $H = 20$ steps. At each step, $\kappa = 5$ swaps are executed within the selected block, for a total budget of $H \times \kappa = 100$ paired swaps per episode. The choice of $\kappa = 5$ balances two competing considerations: (1) \textit{sufficient within-block impact}---with fewer than 3--5 swaps per block visit, the greedy engine cannot substantially alter the block's spatial configuration, weakening the reward signal for block selection; and (2) \textit{sufficient macroscopic decisions}---the agent needs enough steps ($H = B_{\max}/\kappa$) to express a meaningful sequential strategy. At $\kappa = 1$, the agent makes 100 small block selections, which we use as a proxy for the near-independent regime rather than as a full parcel-level DRL benchmark; at $\kappa = 20$, only 5 macro-decisions remain, insufficient for the ``invest-then-recover'' temporal strategies observed on Township C (Section~\ref{sec:strategies}). The value $\kappa = 5$ ($H = 20$) provides a practical middle ground; an explicit ablation over $\kappa \in \{1,3,5,10,20\}$ is reported in Section~\ref{sec:kappa_ablation} (Table~\ref{tab:kappa_ablation}). The discount factor is $\gamma_{\text{RL}} = 0.99$, corresponding to an effective planning horizon of $\sim$100 steps (well beyond the 20-step episode), ensuring that the agent considers the full-episode consequences of early block selections.
+Each episode has $H=20$ steps and $\kappa=5$ swaps per selected block, for a 100-swap budget. This setting balances within-block impact against enough macroscopic decisions for sequencing. A sensitivity check over $\kappa\in\{1,3,5,10,20\}$ is reported in Section~\ref{sec:kappa_ablation}. The discount factor is $\gamma_{\text{RL}}=0.99$.
 
 \subsection{Baimu fang computation}
 \label{sec:baimu}
 
-\textit{Baimu fang} identification is performed via breadth-first search (BFS) on the farmland adjacency subgraph after each step. The algorithm operates as follows:
-
-\begin{enumerate}
-\item Construct the subgraph of all farmland parcels using the pre-computed Queen contiguity adjacency.
-\item Identify connected components via BFS.
-\item For each component, sum the areas of all constituent parcels.
-\item A component qualifies as a \textit{baimu fang} if its total area $\geq A_{\text{baimu}} = 66{,}700$\,m$^2$ (6.67\,ha).
-\item Return the count and total area of qualifying components.
-\end{enumerate}
-
-This computation operates on the \textit{full township} farmland graph, not restricted to individual blocks. Thus, a \textit{baimu fang} can span multiple blocks, and swaps in one block can contribute to forming a consolidated field in a neighboring block---reinforcing the spatial spillover mechanism described in Section~\ref{sec:greedy_engine}.
-
-The BFS computation requires approximately 1.3\,ms per call on the largest township (12{,}950 parcels), adding negligible overhead to training (which involves $\sim$200{,}000 such calls).
+\textit{Baimu fang} identification is performed after each step by breadth-first search on the full township farmland graph. Each connected component whose area is at least $66{,}700$\,m$^2$ is counted, and both count and total qualifying area are returned. The largest township requires approximately 1.3\,ms per call.
 
 \subsection{Policy network architecture}
 \label{sec:policy}
 
-The policy network, which we call \textit{BlockScoringPolicy}, follows a shared-scorer design. It evaluates each block independently with the same neural scorer, so the number of \textit{learnable parameters} is independent of the number of blocks $N_b$. This design is defined here as part of the block-level method and can be reimplemented from the equations below. The architecture consists of two sub-networks:
+The \textit{BlockScoringPolicy} evaluates each block with shared weights, so learnable parameters do not depend on $N_b$. It has a scorer and a value network.
 
-\textbf{Scorer network.} For each block $b \in \{1,\dots,N_b\}$, the per-block feature vector $\mathbf{x}_b \in \mathbb{R}^{17}$ (the 17 local features enumerated in Section~\ref{sec:mdp}, columns of $\mathbf{X}_t$) is concatenated with the global feature vector $\mathbf{g}_t \in \mathbb{R}^{9}$ to form a 26-dimensional input $[\mathbf{x}_b;\, \mathbf{g}_t] \in \mathbb{R}^{26}$. This input is mapped to a scalar logit:
+\textbf{Scorer network.} For each block, the 17 local features are concatenated with the 9 global features and mapped to a scalar logit:
 \begin{equation}
 \text{logit}_b = \text{Scorer}\!\left([\mathbf{x}_b;\, \mathbf{g}_t]\right) \in \mathbb{R}, \quad \text{Scorer}: \mathbb{R}^{26} \to \mathbb{R}
 \end{equation}
-implemented as a two-layer multilayer perceptron (MLP) with structure $26 \to 128 \to 64 \to 1$ and $\tanh$ activations. \textit{Crucially, the same Scorer weights are applied to every block:} the network is invoked $N_b$ times per state, once per block, with the global vector $\mathbf{g}_t$ shared across invocations and only $\mathbf{x}_b$ varying. The $N_b$ resulting logits are then assembled into a vector and passed through a masked softmax that zeroes out blocks ineligible under the action mask (Section~\ref{sec:mdp}):
+implemented as a $26\to128\to64\to1$ MLP with $\tanh$ activations. The $N_b$ logits are passed through a masked softmax:
 \begin{equation}
 \pi(a_t = b \mid \mathbf{s}_t) \;=\; \frac{\exp(\text{logit}_b)\,\mathbb{1}[m_t(b)=1]}{\sum_{b'=1}^{N_b}\exp(\text{logit}_{b'})\,\mathbb{1}[m_t(b')=1]}.
 \end{equation}
-This dimension-invariant construction means a single trained set of weights can in principle be deployed across townships with different $N_b$ values, although we do not exploit this transfer capability in the present study (each township is trained independently).
+Each township is trained independently, but the architecture itself is dimension-invariant.
 
 \textbf{Value network.} The state value depends only on global features:
 \begin{equation}
 V(\mathbf{s}_t) = \text{Value}(\mathbf{g}_t) \in \mathbb{R}, \quad \text{Value}: \mathbb{R}^{9} \to \mathbb{R}
 \end{equation}
-implemented as $9 \to 64 \to 32 \to 1$ with $\tanh$ activations. Restricting the critic to global features keeps the value-function input dimension constant across townships (matching the policy's dimension invariance) and avoids the need for any pooling over a variable number of blocks.
-
-\textbf{Parameter count and inference cost.} The total parameter count is 14{,}530 (Scorer: $26 \times 128 + 128 + 128 \times 64 + 64 + 64 \times 1 + 1 = 11{,}713$; Value: $9 \times 64 + 64 + 64 \times 32 + 32 + 32 \times 1 + 1 = 2{,}721$; with bias terms). This count is identical regardless of $N_b$, which is why the architecture scales gracefully from 78 blocks (Township A) to 338 blocks (Township C). Per-state inference, dominated by $N_b$ Scorer evaluations, is well under 1\,ms even on the largest township, making the framework cheap at deployment time and avoiding the overhead of graph neural networks that would otherwise be tempting given the spatial structure of the problem.
-
-Weights are initialized using orthogonal initialization \citep{saxe2014exact} with gain 0.01 for the scorer (encouraging near-uniform initial action probabilities) and gain 1.0 for the value network.
+implemented as a $9\to64\to32\to1$ MLP. The model has 14{,}530 parameters and per-state inference is under 1\,ms on the largest township. We use orthogonal initialization \citep{saxe2014exact}, with gain 0.01 for the scorer and 1.0 for the value network.
 
 \subsection{Training}
 \label{sec:training}
 
-All models are trained using Maskable PPO from the \texttt{sb3-contrib} library \citep{huang2022closer}. Table~\ref{tab:hyperparams} lists the hyperparameters.
+Models are trained with Maskable PPO from \texttt{sb3-contrib} \citep{huang2022closer}. Table~\ref{tab:hyperparams} lists the hyperparameters.
 
 \begin{table}[htbp]
 \centering
@@ -412,28 +329,12 @@ Total budget ($B_{\max}$) & 100 paired swaps \\
 \end{tabular}
 \end{table}
 
-\textbf{Why 200{,}000 timesteps suffice.} The 20-step episode length means that 200{,}000 timesteps correspond to 10{,}000 episodes per seed---a comfortable margin above the empirically observed plateau, which on all three townships occurs at $\approx$50{,}000 timesteps ($\sim$2{,}500 episodes; Fig.~\ref{fig:training_curves}). The remaining $\sim$150{,}000 timesteps serve as a buffer to confirm that the plateau is stable rather than transient. The block-level formulation's relatively small action space (78--338 blocks) keeps each PPO update inexpensive even on the largest township.
-
-For each of the three townships, 5 models are trained with random seeds 0--4, yielding 15 trained models total. Training was conducted on NVIDIA A100 40GB GPUs, with per-township training times of approximately 25 minutes (A), 50 minutes (B), and 2 hours (C).
+For each township, 5 seeds are trained for 200{,}000 timesteps. This equals 10{,}000 episodes per seed and exceeds the observed $\sim$50{,}000-timestep plateau. Training on an NVIDIA A100 40GB took about 25 minutes (A), 50 minutes (B), and 2 hours (C) per seed.
 
 \subsection{Baseline methods}
 \label{sec:baselines}
 
-We compare the block-level DRL agent against five primary baselines that operate in the same block-level framework (20 steps, $\kappa = 5$ swaps per step, total budget 100). \textit{All baselines share the same connectivity-aware greedy engine for within-block execution}; they differ \textit{only} in their block-selection rule. Four of the five primary baselines do not see the multi-objective reward; the fifth (Reward-Greedy) does, and is included specifically to isolate how much of any DRL advantage is attributable to multi-step planning rather than to access to the multi-objective signal. After identifying Township~B as the critical case, we also run finite-depth deterministic lookahead baselines as targeted robustness checks.
-
-\textbf{Greedy-Global.} At each step, evaluates all $N_b$ blocks and selects the one whose greedy execution yields the greatest single-step \textit{slope} improvement. This is the strongest single-objective slope baseline at the block level, conceptually analogous to the slope-only Greedy baselines that have long been used in farmland consolidation heuristics.
-
-\textbf{Greedy-Sequential.} Iterates through blocks in a fixed order (sorted by initial mean farmland slope, descending). Each block receives one step of investment before moving to the next; after cycling through all blocks, the sequence repeats.
-
-\textbf{Random-Block.} At each step, selects a block uniformly at random from those with valid action masks. Averaged over 5 random seeds.
-
-\textbf{Round-Robin.} Visits all blocks in sequence, allocating one step of investment to each. Blocks with more farmland and forest receive proportionally more attention over the episode.
-
-\textbf{Reward-Greedy (one-step lookahead, multi-objective).} At each step, evaluates all $N_b$ unmasked blocks by simulating the within-block greedy engine on a copy of the environment state, computing the same multi-component reward Eq.~\ref{eq:reward} that DRL is trained on (with the same weights $w_S=2000$, $w_C=500$, $w_B=500$, $b_B=20$), and selecting the block with the largest one-step reward. This is a strong reward-aware myopic baseline and a planning-horizon ablation of DRL. A performance gap between Reward-Greedy and DRL is therefore evidence that one-step reward maximization is insufficient under the tested geometry and weights, although it does not by itself distinguish learned value-function planning from other multi-step search procedures such as shallow beam search.
-
-\textbf{Limited-Lookahead (Township B robustness checks).} To test whether the Township~B gap can be reproduced by ordinary deterministic search without RL training, we run finite-depth lookahead baselines that use the same environment state, reward, action mask, and within-block greedy engine as Reward-Greedy. At each episode step, the baseline recursively evaluates short block-selection sequences by snapshotting and restoring the environment state. The first reported Township~B run uses depth $d=2$ and beam width 0, which means that all valid first-step choices and all valid second-step choices reachable from them are evaluated without immediate-reward pruning. The second run uses depth $d=3$ with beam width 8, a pruned sensitivity analysis rather than an exhaustive depth-three proof. These baselines are not new training procedures; they are model-based search checks on the already defined block environment.
-
-All baselines use identical within-block execution (the connectivity-aware greedy engine with $\gamma = 1.0$, $\delta = 0.5$).
+All baselines use the same 20-step, $\kappa=5$, 100-swap block environment and the same within-block greedy engine. They differ only in block selection: Greedy-Global chooses the block with the largest one-step slope improvement; Greedy-Sequential follows blocks sorted by initial farmland slope; Random-Block samples valid blocks uniformly; Round-Robin cycles through blocks; Reward-Greedy simulates every unmasked block and selects the largest one-step multi-objective reward under Eq.~\ref{eq:reward}. We also run Township~B lookahead checks using the same reward and transition model: exact depth two and pruned depth three with beam width 8.
 
 \subsection{Evaluation}
 
@@ -448,13 +349,11 @@ Trained models are evaluated with deterministic inference: at each step, the tra
 \subsection{Training convergence}
 \label{sec:convergence}
 
-Fig.~\ref{fig:training_curves} shows the training dynamics for all three townships (A, B, C). The episodic reward exhibits clear learning progress, with convergence occurring at approximately 50{,}000 timesteps ($\sim$2{,}500 episodes) in all cases. All 15 seed--township combinations converge to positive reward plateaus, with no instances of degenerate policies or bimodal behavior.
-
-Table~\ref{tab:convergence} reports the convergence outcome of the block-level approach across all 15 seed--township combinations.
+All 15 seed--township combinations converge to positive reward plateaus, with visible stabilization by approximately 50{,}000 timesteps (Fig.~\ref{fig:training_curves}; Table~\ref{tab:convergence}).
 
 \begin{table}[htbp]
 \centering
-\caption{Block-level training convergence on the three Bishan townships under the tested settings (5 seeds per township, identical hyperparameters, 200{,}000 timesteps). A seed is counted as ``converged'' when its deterministic evaluation produces a positive slope reduction relative to the initial configuration. All 15 seed--township combinations converge.}
+\caption{Block-level training convergence under identical hyperparameters and 200{,}000 timesteps per seed.}
 \label{tab:convergence}
 \begin{tabular}{lc}
 \toprule
@@ -469,8 +368,6 @@ Total                                    & \textbf{15/15 (100\%)} \\
 \end{tabular}
 \end{table}
 
-Convergence is uniformly tight: on Township~C the across-seed reward coefficient of variation is $<$1\% (Table~\ref{tab:per_seed}), and no seed--township combination produced a degenerate or bimodal trajectory. Training reward curves on all three townships (Fig.~\ref{fig:training_curves}) cluster tightly across seeds and plateau at approximately 50{,}000 timesteps ($\sim$2{,}500 episodes), well within the 200{,}000-timestep budget. The remainder of this section unpacks the multi-objective behaviour of the converged policies.
-
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.32\textwidth]{paper3_training_curves_109.png}
@@ -478,18 +375,18 @@ Convergence is uniformly tight: on Township~C the across-seed reward coefficient
 \includegraphics[width=0.32\textwidth]{paper3_training_curves_108.png}
 \hfill
 \includegraphics[width=0.32\textwidth]{paper3_training_curves_105.png}
-\caption{Training curves for Township A (left, 78 blocks), Township B (middle, 132 blocks), and Township C (right, 338 blocks), showing 5 seeds each with 200-episode moving average. All metrics (reward, slope change, contiguity, \textit{baimu fang} area, budget usage) exhibit clear learning progress and converge by $\sim$50K timesteps. The seed trajectories cluster tightly throughout training, with no seed in any township producing a degenerate or bimodal trajectory under the tested settings.}
+\caption{Training curves for Townships A--C, showing 5 seeds with a 200-episode moving average. Rewards stabilize by approximately 50K timesteps.}
 \label{fig:training_curves}
 \end{figure}
 
 \subsection{Cross-township comparison}
 \label{sec:main_results}
 
-Table~\ref{tab:main_results} presents the comprehensive results across the primary methods and townships.
+Table~\ref{tab:main_results} compares all primary methods.
 
 \begin{table}[htbp]
 \centering
-\caption{Cross-township comparison of the primary methods. DRL results report mean $\pm$ std across 5 seeds. Slope change: more negative is better; contiguity, \textit{baimu fang} count, and \textit{baimu fang} area changes: more positive is better. Best result per metric per township in bold; ties on the \textit{baimu fang} count column are bolded jointly. Reward-Greedy is a one-step lookahead baseline that, at every step, simulates each unmasked block under the same engine and picks the block whose one-step reward (Eq.~\ref{eq:reward}) is largest. It is the strongest \textit{multi-objective} baseline and the natural ablation that isolates how much of DRL's advantage comes from \emph{multi-step} planning rather than from access to the multi-objective signal alone.}
+\caption{Cross-township comparison. DRL reports mean $\pm$ std across 5 seeds. More negative slope is better; larger contiguity, \textit{baimu fang} count, and \textit{baimu fang} area are better.}
 \label{tab:main_results}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{llrrrr}
@@ -526,7 +423,7 @@ Township & Method & Slope (\%) & Cont. & Baimu cnt & Baimu ha \\
 
 \begin{table}[t]
 \centering
-\caption{Finite-depth lookahead robustness checks on Township~B. Both planners use the same reward and within-block transition model as Reward-Greedy. The $d=2$, $b=0$ run evaluates all valid first- and second-step block choices exactly; the $d=3$, $b=8$ run is a pruned beam-search sensitivity check.}
+\caption{Finite-depth lookahead checks on Township~B under the same reward and transition model as Reward-Greedy.}
 \label{tab:lookahead_b}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{llrrrr}
@@ -540,51 +437,37 @@ B & Lookahead d=3 b=8 & $-4.26$ & $+0.035$ & $0$ & $-103.8$ \\
 }
 \end{table}
 
-Several patterns emerge:
-
-\textbf{DRL is the only tested method with positive \textit{baimu fang} area on Township B.} On Township B every primary baseline produces negative \textit{baimu fang} area, ranging from $-6.9$\,ha for Greedy-Global to $-101.9$\,ha for Reward-Greedy. Only DRL achieves a positive value ($+12.9\pm3.2$\,ha). The finite-depth lookahead checks in Table~\ref{tab:lookahead_b} also remain negative: exact $d=2$ search ends at $-108.8$\,ha, and pruned $d=3$ beam search ends at $-103.8$\,ha under the same reward and transition model. Thus the Township~B gap is not explained by access to the multi-objective reward alone, nor by the absence of the tested short-horizon deterministic search. The result strengthens the interpretation that the trained scheduler avoids a multi-objective trap that one-step and tested finite-depth planning miss.
-
-\textbf{Reward-Greedy is competitive with, and on some metrics surpasses, DRL on Townships A and C.} On Township A, Reward-Greedy achieves slightly better slope ($-3.03\%$ vs.\ DRL $-2.61\%$), better contiguity ($+0.198$ vs.\ $+0.130$), the same \textit{baimu fang} count change ($0$, joint best), and slightly better \textit{baimu fang} area ($+13.5$\,ha vs.\ $+8.8$\,ha). On Township C, Reward-Greedy achieves better slope ($-0.52\%$ vs.\ $-0.33\%$), comparable contiguity, a higher \textit{baimu fang} count change ($+6$ vs.\ $+5$), and similar \textit{baimu fang} area ($+28.0$\,ha vs.\ $+27.7$\,ha). On these two townships a one-step reward-aware lookahead does most of what the trained DRL agent does. This is an important and honest finding: \textit{block-level abstraction is doing most of the work in this paper, not RL-induced multi-step planning per se.} The remaining scheduler-specific gain shows up only on Township B, where one-step Reward-Greedy, exact two-step lookahead, and pruned depth-three beam lookahead all sacrifice \textit{baimu fang} area while chasing short-term slope reduction. We discuss the implication---that the right framing of the contribution is ``block-level abstraction with a learnable scheduler,'' not ``RL beats heuristics across the board''---in Sections~\ref{sec:discussion} and \ref{sec:limitations}.
-
-\textbf{Greedy-Global is the strongest single-objective slope baseline; Reward-Greedy is the strongest multi-objective baseline.} Greedy-Global achieves the best slope reduction on Townships A and C ($-6.36\%$, $-1.48\%$), and the best contiguity on A and C ($+0.439$, $+0.121$); but it produces negative \textit{baimu fang} count change on all three townships and negative \textit{baimu fang} area on Townships A and B. Reward-Greedy improves on Greedy-Global on A and C across all four metrics simultaneously by trading some slope for substantial \textit{baimu fang} count and area gains. On Township B, Reward-Greedy attains the best slope reduction overall ($-4.24\%$) but at the cost of the worst \textit{baimu fang} area outcome---a clear illustration of the multi-objective tension that motivates the use of DRL on this township.
-
-Fig.~\ref{fig:cross_bars} visualizes the cross-township comparison across all four metrics, highlighting DRL's distinctive multi-objective profile.
+Three patterns matter. First, DRL is the only tested method with positive \textit{baimu fang} area on Township~B ($+12.9\pm3.2$\,ha); Reward-Greedy, exact depth-two lookahead, and pruned depth-three lookahead remain negative. This gap is therefore not explained by reward access alone or by the tested short-horizon search. Second, Reward-Greedy is competitive with or stronger than DRL on Townships~A and C, so most of the broad multi-objective gain comes from block-level abstraction plus reward-aware selection. Third, Greedy-Global remains the strongest slope-only baseline but often damages \textit{baimu fang} outcomes. Fig.~\ref{fig:cross_bars} summarizes these trade-offs.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.95\textwidth]{paper3_cross_township_bars.png}
-\caption{Cross-township comparison of all primary methods across four metrics: (a) slope reduction, (b) \textit{baimu fang} area change, (c) contiguity change, and (d) new \textit{baimu fang} count. DRL bars are outlined in black. Both DRL and the reward-aware Reward-Greedy lookahead deliver non-negative \textit{baimu fang} count change on every township; DRL is the only primary method with positive \textit{baimu fang} area on Township~B. The post-hoc finite-depth lookahead checks on Township~B also remain negative (Table~\ref{tab:lookahead_b}).}
+\caption{Cross-township comparison across slope, \textit{baimu fang} area, contiguity, and \textit{baimu fang} count. DRL is outlined in black.}
 \label{fig:cross_bars}
 \end{figure}
 
 \subsection{Township-specific strategy profiles}
 \label{sec:strategies}
 
-The DRL agent, trained with \textit{identical hyperparameters} across all three townships, exhibits qualitatively different optimization profiles that reflect each township's spatial structure:
-
-\textbf{Township A (balanced strategy).} The agent achieves moderate slope reduction ($-2.61\%$), the third-strongest contiguity improvement of any method ($+0.130$), and preserves existing \textit{baimu fang} while slightly growing their area ($+8.8$\,ha). On this township the reward-aware Reward-Greedy baseline is slightly stronger than DRL on slope, contiguity, and \textit{baimu fang} area (Section~\ref{sec:main_results}); we therefore do not claim that DRL Pareto-dominates here, but rather report a balanced multi-objective profile (no single objective is sacrificed, no objective is best either) that emerges naturally from training without any per-township weight tuning. The cross-seed std on slope is $\pm0.44\%$, the largest of the three townships.
-
-\textbf{Township B (contiguity-and-\textit{baimu fang} area strategy).} Under the same reward weights used on Townships A and C, the agent on Township B produces a strategy that delivers strong contiguity improvement ($+0.115$) while being the \textit{only} tested method achieving positive \textit{baimu fang} area ($+12.9$\,ha), including the reward-aware Reward-Greedy lookahead, exact two-step lookahead, and pruned depth-three beam lookahead. Slope reduction is moderate ($-1.64\%$) compared to the slope-optimal Reward-Greedy ($-4.24\%$), the exact two-step lookahead result ($-4.23\%$), the pruned depth-three beam result ($-4.26\%$), and Greedy-Global ($-3.79\%$). Both DRL and Reward-Greedy visit 20 distinct blocks over the 20-step episode; the difference is \emph{which} 20 blocks they pick. Reward-Greedy's first choices are the township's highest-slope blocks, which on Township B coincide with the periphery of existing consolidated farmland clusters---so each early slope gain costs one or more \textit{baimu fang} parcels (Fig.~\ref{fig:trajectory_B_compare}, middle and bottom panels). DRL's first choices instead include blocks that sit \emph{inside} or on the gentle-slope side of existing clusters, where the within-block engine can pair a low-slope forest conversion with a moderately-sloped farmland removal without breaking the cluster's qualifying status. The cumulative \textit{baimu fang} area trace ends at $+10.5$\,ha (seed 0; the 5-seed mean is $+12.9 \pm 3.2$\,ha), and the extremely low seed variance (slope std $= 0.04\%$) indicates a highly stable strategy.
+With identical hyperparameters, the trained policies express different township profiles. Township~A is balanced but not Pareto-dominant. Township~B trades slope reduction for contiguity and \textit{baimu fang} area preservation; both DRL and Reward-Greedy make 20 block choices, but they choose different blocks. Reward-Greedy prioritizes high-slope blocks and dismantles existing consolidated fields, whereas DRL selects blocks that preserve or grow them (Fig.~\ref{fig:trajectory_B_compare}).
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.88\textwidth]{paper3_trajectory_B_compare.png}
-\caption{Township B (132 blocks): per-step trajectory comparison between DRL (seed 0, blue) and the Reward-Greedy one-step lookahead baseline (red) that shares DRL's reward function and weights. Top: cumulative slope change. Middle: \textit{baimu fang} count change. Bottom: \textit{baimu fang} area change. Both methods share the same connectivity-aware engine and total swap budget. Reward-Greedy attains the largest slope reduction in the primary table by greedily removing high-slope farmland parcels at every step, but those parcels are predominantly inside the township's existing consolidated fields, so its \textit{baimu fang} area collapses to $-101.9$\,ha. DRL trades $\sim$2.6 percentage points of slope reduction to keep and slightly grow the existing fields, ending at $+10.5$\,ha (seed 0). Together with the finite-depth lookahead failures in Table~\ref{tab:lookahead_b}, this is the most direct evidence in the paper that, under these reward weights and township geometry, the trained policy can deliver a scheduling advantage on top of access to the multi-objective signal.}
+\caption{Township B trajectory comparison between DRL (seed 0) and Reward-Greedy. Reward-Greedy gains slope but loses \textit{baimu fang} area, whereas DRL preserves and slightly grows it.}
 \label{fig:trajectory_B_compare}
 \end{figure}
 
-\textbf{Township C (\textit{baimu fang}-focused strategy).} The agent achieves only modest slope reduction ($-0.33\%$) but forms 5 new consolidated fields with $+27.7$\,ha total area. Block trajectory analysis (Fig.~\ref{fig:trajectory_C}) reveals a two-phase ``invest-then-recover'' pattern in which the first ten steps pay an early slope penalty (peaking at $+0.93\%$ at step~1) to push near-threshold farmland clusters across the 6.67\,ha line, after which the count is held at $+5$ and the slope channel is recovered to $-0.33\%$. We caution that the formation \emph{gain} on this township is not exclusive to multi-step planning: the Reward-Greedy one-step lookahead baseline introduced in Section~\ref{sec:baselines} forms $+6$ \textit{baimu fang} on Township C without any RL training. The DRL trajectory still illustrates how the planning horizon shifts the agent's objective mix step-by-step, but the count metric on this township is more a property of block-level multi-objective evaluation than of multi-step credit assignment.
-
-These distinct profiles from a single set of hyperparameters indicate that the DRL framework is sensitive to local spatial structure and opportunity landscape without requiring per-township parameter tuning in the present experiments.
+Township~C shows a two-phase ``invest-then-recover'' trajectory: the agent first forms five new \textit{baimu fang}, then recovers the slope channel to a final $-0.33\%$ (Fig.~\ref{fig:trajectory_C}). Because Reward-Greedy forms six new fields on the same township, the strongest DRL-specific evidence remains Township~B rather than Township~C.
 
 \subsection{Per-seed consistency}
 \label{sec:consistency}
 
-Table~\ref{tab:per_seed} reports per-seed results for all three townships.
+Table~\ref{tab:per_seed} reports per-seed DRL results.
 
 \begin{table}[htbp]
 \centering
-\caption{Per-seed DRL results across all three townships. Std row shows standard deviation. CV row shows coefficient of variation of total reward.}
+\caption{Per-seed DRL results. CV is the coefficient of variation of total reward.}
 \label{tab:per_seed}
 \begin{tabular}{clrrrr}
 \toprule
@@ -617,74 +500,62 @@ Township & Seed & Slope (\%) & Cont. & Baimu cnt & Reward \\
 \end{tabular}
 \end{table}
 
-Township C exhibits the most remarkable consistency: reward CV of only 0.26\%, slope std of 0.01\%, and \textit{baimu fang} count identically $+5$ across all seeds. Township B also shows excellent stability with reward CV of 5.9\% and slope std of 0.04\%. Across all three townships, the block-level optimization landscape appears to have well-defined basins of attraction: no seed in any township--seed combination produced a degenerate or bimodal trajectory under the tested settings.
+Per-seed variability is low. Township~C has reward CV of 0.26\%, slope std of 0.01\%, and \textit{baimu fang} count identically $+5$ across all seeds. No township shows degenerate or bimodal seed behavior.
 
 \subsection{Multi-objective Pareto analysis}
 \label{sec:pareto}
 
-Fig.~\ref{fig:pareto} presents the multi-objective Pareto analysis across all primary methods including the Reward-Greedy one-step lookahead baseline. In the slope--\textit{baimu fang} count space (Fig.~\ref{fig:pareto_cnt}), both DRL and Reward-Greedy achieve a non-negative \textit{baimu fang} count change on every township while also maintaining negative slope change on every township; the four reward-unaware baselines (Greedy-Global, Greedy-Sequential, Random, Round-Robin) each fail this cross-township condition on at least one township. On Township C, Reward-Greedy slightly exceeds DRL on \textit{baimu fang} count ($+6$ vs.\ $+5$). On Township B, DRL is the only tested method with a positive \textit{baimu fang} area outcome, because the finite-depth lookahead checks also remain negative (Table~\ref{tab:lookahead_b}).
-
-On Township A, both DRL and Reward-Greedy lie on the Pareto front between Greedy-Global (best slope, worst \textit{baimu fang}) and Round-Robin (worst slope, best \textit{baimu fang} area), with Reward-Greedy slightly closer to the slope axis. The most interpretable summary of the cross-township pattern is: \emph{block-level abstraction plus a reward-aware decision rule (myopic or learned) defines the multi-objective Pareto frontier; learned scheduling on top of that contributes a township-specific increment that is most pronounced on Township B and is not reproduced by the tested finite-depth deterministic search}.
-
-On Township C, Round-Robin achieves the largest \textit{baimu fang} area increase ($+114.4$\,ha vs.\ DRL's $+27.7$\,ha and Reward-Greedy's $+28.0$\,ha), but at the cost of an actual slope \textit{increase} ($+1.10\%$); practitioners interested in maximizing total consolidated area on this township may prefer Round-Robin, while those interested in increasing the count of qualifying fields without raising mean farmland slope will prefer Reward-Greedy or DRL.
+The Pareto plots reinforce the same interpretation. DRL and Reward-Greedy are the only primary methods that maintain non-negative \textit{baimu fang} count on every township while also reducing slope. Reward-aware block selection defines most of the Pareto frontier; learned scheduling adds its clearest increment on Township~B. Round-Robin maximizes \textit{baimu fang} area on Township~C, but only by increasing mean farmland slope.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.95\textwidth]{paper3_pareto_all_slope_baimu.png}
-\caption{Multi-objective Pareto analysis: slope reduction vs.\ \textit{baimu fang} area change across all three townships. Baseline methods shown as squares; DRL seeds as blue circles; DRL mean as blue star; Reward-Greedy as red triangle. Green arrows indicate the ideal direction (more slope reduction and more \textit{baimu fang} area). DRL is the only primary method on Township~B that achieves a positive \textit{baimu fang} area change; the finite-depth lookahead checks also remain negative (Table~\ref{tab:lookahead_b}).}
+\caption{Pareto analysis of slope reduction and \textit{baimu fang} area change. DRL is the only primary method with positive \textit{baimu fang} area on Township~B.}
 \label{fig:pareto}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.95\textwidth]{paper3_pareto_all_slope_baimucnt.png}
-\caption{Pareto analysis: slope reduction vs.\ \textit{baimu fang} count change. Both DRL (blue star) and the reward-aware Reward-Greedy lookahead (not shown explicitly on this plot but reported in Table~\ref{tab:main_results}: $+0$, $+0$, $+6$ across A/B/C) achieve non-negative \textit{baimu fang} count on every township while maintaining negative slope. The reward-unaware baselines fail this cross-township condition on at least one township each (e.g., Greedy-Global is $-1$ on count and $-1.48\%$ on slope on C; Round-Robin is $+2$ on count but $+1.10\%$ on slope on C).}
+\caption{Pareto analysis of slope reduction and \textit{baimu fang} count change. DRL and Reward-Greedy satisfy both non-negative count and negative slope across all townships.}
 \label{fig:pareto_cnt}
 \end{figure}
 
 \subsection{Post-hoc compactness audit of formed \textit{baimu fang}}
 \label{sec:compactness}
 
-The \textit{baimu fang} count reported in Tables~\ref{tab:main_results} and \ref{tab:per_seed} is computed by the BFS-on-Queen-contiguity rule of Section~\ref{sec:baimu}: any farmland connected component with area $\geq$6.67\,ha qualifies. This is the \textit{topological} definition. National high-standard farmland standards (e.g., GB/T~30600-2022) additionally require consolidated fields to be compact enough to support large-scale mechanized operations, which in practice implies a minimum-width / non-elongation requirement that the topological rule does not enforce. To audit how many of the formed \textit{baimu fang} would survive a stricter shape constraint, we replayed every DRL evaluation episode (5~seeds $\times$ 3~townships) deterministically through the same environment, dissolved each final farmland connected component into a single polygon in the EPSG:32648 projection, computed its area $A$ and perimeter $P$, and re-counted those with isoperimetric quotient $\mathrm{IPQ} = 4\pi A/P^2$ above three increasingly strict thresholds. The same audit was applied to the initial land-use configuration as a fairness baseline. Table~\ref{tab:compactness} reports the result.
+The main \textit{baimu fang} count is topological: any Queen-connected farmland component above 6.67\,ha qualifies. Because high-standard farmland also requires practical field shape, we audited final DRL components using isoperimetric quotient $\mathrm{IPQ}=4\pi A/P^2$ under three thresholds (Table~\ref{tab:compactness}).
 
 \input{paper3_compactness_table.tex}
 
-Three observations follow:
-
-\textbf{First, the Queen-contiguity rule produces low-IPQ components even before optimization.} On the initial configurations, only A has any component with $\mathrm{IPQ} \geq 0.10$ (3 out of 9), and \textit{none} of the three townships has any component reaching $\mathrm{IPQ} \geq 0.20$. This is a property of real cadastral parcel geometry combined with our adjacency definition---two parcels touching at a single vertex are counted as connected, so dissolved components inherit highly irregular boundaries from the underlying parcel mosaic---rather than a property created by the optimization. Readers and practitioners should therefore interpret the raw \textit{baimu fang} count in Table~\ref{tab:main_results} as an upper-bound estimate of policy-qualifying consolidated fields, not as a direct claim that all 11 final fields on Township C would pass engineering acceptance.
-
-\textbf{Second, the DRL-formed fields broadly track the initial compactness regime of each township rather than improving on it uniformly.} On Township A the IPQ$\geq$0.10 count drops from 3 to 0.6 between the initial and final states, indicating that the slope/contiguity-driven swaps tend to pull farmland into more elongated configurations even when raw count is unchanged. On B the IPQ$\geq$0.10 count rises modestly (1$\rightarrow$1.6), and on C it rises from 0 to 1.0 alongside the +5 raw count. This honest reading---DRL improves topological consolidation, but compactness gains are mixed and small---is consistent with the fact that compactness is not part of the reward (Eq.~\ref{eq:reward}) and is therefore not being directly optimized.
-
-\textbf{Third, no method---DRL or initial---reaches $\mathrm{IPQ} \geq 0.20$ on any township under Queen contiguity.} This is a structural limitation of the topological \textit{baimu fang} proxy that we have used; we discuss in Section~\ref{sec:limitations} how moving to a shape-aware definition (e.g., compactness-filtered BFS, or a Rook-based or boundary-length-weighted adjacency) would tighten the metric and motivate a future variant of the reward function that targets engineering-qualifying fields directly.
+The audit shows that raw topological counts are upper-bound estimates. Initial components are already irregular, no township reaches $\mathrm{IPQ}\geq0.20$, and DRL's compactness gains are mixed because compactness is not part of the reward.
 
 \subsection{Farmland-area balance audit}
 \label{sec:area_drift}
 
-The exchange engine conserves the \emph{number} of farmland and forest parcels by pairing each farmland removal with one forest-to-farmland conversion, but real cadastral parcels differ substantially in area. A policy reviewer therefore needs to know whether the reported slope and \textit{baimu fang} outcomes are accompanied by large net changes in total farmland area. We conducted a post-hoc area-balance audit by replaying the final configuration of every method through the controlled-access parcel geometry and computing the difference between final and initial farmland area. Table~\ref{tab:area_drift} reports the resulting aggregate diagnostics.
+The engine conserves farmland parcel count, not farmland area. We therefore audited final farmland-area drift for every method (Table~\ref{tab:area_drift}).
 
 \input{paper3_area_drift_table.tex}
 
-The audit supports two readings. First, the final DRL policies have small mean farmland-area drift in all three townships: $+0.14\%$ on A, $+0.28\%$ on B, and $+0.13\%$ on C. Thus the DRL results reported in Table~\ref{tab:main_results} are not driven by a large implicit expansion or contraction of farmland area. Second, the absence of a hard area-balance constraint remains substantively important. Reward-Greedy on Township B loses $3.00\%$ of farmland area while also losing $101.6$\,ha of \textit{baimu fang} area, and some deterministic baselines show township-specific drifts above one percent. We therefore treat Table~\ref{tab:area_drift} as a diagnostic rather than a cure: the present implementation is suitable for pre-screening and scenario exploration, but a deployment-grade planner should replace parcel-count conservation with an explicit area-tolerance or exact area-balanced exchange rule.
+DRL has small mean area drift on all townships ($+0.13$--$+0.28\%$), so its reported gains are not driven by large farmland expansion. However, some baselines drift more, and Reward-Greedy on Township~B loses both farmland area and \textit{baimu fang} area. The present implementation is therefore a screening tool; deployment requires area-tolerant or exact area-balanced transitions.
 
 \subsection{Area-tolerance transition stress test}
 \label{sec:area_tolerance}
 
-Because the area-balance audit is post hoc, we also ran a targeted Township~B stress test with a modified transition engine. The modified engine enforces a cumulative farmland-area tolerance and accepts a paired swap only when it improves the area-weighted mean farmland slope. We report two tolerance settings, 0.5\% and 1.0\%, in Table~\ref{tab:area_tolerance_check}. The deterministic baselines and Reward-Greedy are re-run under the modified engine. The DRL rows replay the existing 5 trained block-selection histories under the modified transition; they are therefore stress tests of the learned block sequences, not policies retrained under the area-tolerant environment.
+We also ran a Township~B stress test with a transition engine that enforces cumulative farmland-area tolerance and accepts only slope-improving paired swaps. The DRL rows replay trained block histories under the modified transition; they are not retrained policies.
 
 \input{paper3_area_tolerance_check_table.tex}
 
-The stress test narrows the policy interpretation of the main results. Under both area tolerances, Greedy-Global remains the best slope-reduction baseline but still loses \textit{baimu fang} area ($-6.9$\,ha). Reward-Greedy no longer collapses by more than 100\,ha, but it remains negative on \textit{baimu fang} area ($-13.3$\,ha at 0.5\% tolerance and $-34.7$\,ha at 1.0\%). Replaying the DRL block histories under the same area-tolerant transition also yields negative mean \textit{baimu fang} area outcomes ($-9.8$ and $-29.7$\,ha), even though farmland-area drift is kept within the requested tolerance. This does not invalidate the count-conserving results in Table~\ref{tab:main_results}, because the policies were not trained for the modified transition rule. It does show, however, that operational use should train and evaluate the scheduler directly in an area-tolerant or exact area-balanced environment rather than relying only on post-hoc area-drift diagnostics.
+Under area tolerance, Reward-Greedy remains negative on \textit{baimu fang} area, and replayed DRL histories also become negative. This does not invalidate the count-conserving experiment, but it shows that operational use must retrain and evaluate under the deployment transition rule.
 
-\subsection{Sensitivity to the swaps-per-step parameter $\kappa$}
+\subsection{Sensitivity to the swaps-per-step parameter \texorpdfstring{$\kappa$}{kappa}}
 \label{sec:kappa_ablation}
 
-The MDP horizon $H = B_{\max}/\kappa$ is the parameter that mediates between ``many small block-level decisions'' ($\kappa$ small, $H$ large, regressing toward parcel-level behaviour) and ``few large block-level decisions'' ($\kappa$ large, $H$ small, leaving the agent without enough macro-level steps to learn an interesting strategy). Section~\ref{sec:mdp} argued for $\kappa = 5$ on heuristic grounds. We now report a small-scale ablation that quantifies the sensitivity directly. We re-train the same MaskablePPO architecture on Township A (the cheapest township) for $\kappa \in \{1, 3, 5, 10, 20\}$, holding the total swap budget at $B_{\max} = 100$ and using a 50{,}000-timestep budget per setting; all other hyperparameters and the random seed are identical. Results are reported in Table~\ref{tab:kappa_ablation}.
+The swaps-per-step parameter $\kappa$ controls the trade-off between many small block decisions and few large ones. We retrained Township~A for $\kappa\in\{1,3,5,10,20\}$ with a fixed 100-swap budget and 50{,}000 timesteps per setting (Table~\ref{tab:kappa_ablation}).
 
 \input{paper3_kappa_ablation_table.tex}
 
-The behaviour is non-monotone and follows the qualitative prediction in Section~\ref{sec:mdp}. The two extremes both fail. At $\kappa = 1$ the agent makes 100 near-independent block selections and ends with reward $-47.9$, slope reduction of only $-0.20\%$, and---most diagnostically---commits only $8/100$ paired swaps, because most of its block selections trigger a within-block engine that can find no slope-improving paired swap and so consumes no budget. This is proxy evidence consistent with the near-independent regime predicted by the geometric analysis, but it does not replace a direct parcel-level DRL benchmark. At $\kappa = 20$ the agent makes only $H = 5$ macroscopic decisions per episode, a horizon too short for PPO to learn a meaningful per-block scoring policy from the Township-A reward signal; the trained policy ends with reward $17.0$, slope reduction of $-0.06\%$, and a negligible budget commitment of $4/100$.
-
-The middle of the range gives the strongest results. $\kappa = 3$ ($H = 33$) and $\kappa = 5$ ($H = 20$) both reach a slope reduction of about $-2\%$ on Township A, with $\kappa = 5$ achieving the highest cumulative reward (85.5) and the most positive \textit{baimu fang} area outcome ($+18.4$\,ha). $\kappa = 10$ ($H = 10$) trails on slope ($-0.59\%$) but is the strongest on \textit{baimu fang} area ($+22.0$\,ha), suggesting that for installations whose policy priority is total consolidated-area growth rather than slope reduction, a larger $\kappa$ may be preferable. The default $\kappa = 5$ used throughout this paper is therefore not a universally optimal choice but a balanced one; practitioners with a different multi-objective preference can re-tune $\kappa$ in the same range and inherit the framework's qualitative behaviour. We caution against extrapolation to Townships B and C: the optimal $\kappa$ likely depends on township size, block granularity, and the absolute distribution of slope and farmland on the landscape, and the ablation here is for a single seed on the smallest township.
+The response is non-monotone. The extremes fail: $\kappa=1$ commits only $8/100$ swaps, while $\kappa=20$ leaves too few macro-decisions. The middle range performs best, with $\kappa=5$ giving the highest reward and $\kappa=10$ giving the largest \textit{baimu fang} area on Township~A. The default is therefore balanced, not universally optimal.
 
 
 % ============================================================================
@@ -694,71 +565,31 @@ The middle of the range gives the strongest results. $\kappa = 3$ ($H = 33$) and
 
 \subsection{Why block-level abstraction can expose a useful scheduling problem}
 
-Section~\ref{sec:intro} argued that on irregular cadastral parcels each individual farmland--forest exchange is approximately a memoryless one-step decision (\textit{swap near-independence}), which can weaken the multi-step planning advantage that DRL relies on. The block-level formulation is designed to break this near-independence through three mechanisms:
+Block-level abstraction can expose scheduling value because it adds three structures that individual parcel swaps often lack. First, the 100-swap budget creates resource competition across blocks. Second, the connectivity-aware engine creates spatial spillover across block boundaries. Third, the 6.67\,ha \textit{baimu fang} threshold makes some block choices discontinuously valuable. These mechanisms explain why a learned scheduler can help in selected cases.
 
-\textbf{Resource competition.} With a fixed budget of 100 swaps and $\kappa = 5$ swaps per step, the agent has exactly 20 block selections to make. Each selection consumes 5\% of the total budget; investing in block $b$ means \textit{not} investing in block $b'$. This creates a genuine allocation problem where the ordering and selection of blocks affects the final outcome.
-
-\textbf{Spatial spillover.} The connectivity-aware greedy engine ($\gamma = 1.0$ for forest conversion) creates cross-block dependencies: converting forest to farmland at a block boundary increases the farmland neighbor count of parcels in adjacent blocks, making them more attractive targets. This spillover effect means that investing in block $b$ at step $t$ changes the expected reward from block $b'$ at step $t+1$, creating the kind of inter-step dependency that a learned scheduler can exploit.
-
-\textbf{Baimu fang threshold effects.} The $\geq$6.67\,ha threshold for \textit{baimu fang} qualification creates discontinuous reward dynamics: a farmland cluster just below the threshold yields zero \textit{baimu fang} reward, but one additional parcel conversion can push it above the threshold, generating a large positive signal. Strategic sequencing---investing in blocks that bring near-threshold clusters above the line---is a planning problem that greedy per-step optimization may solve poorly when short-term slope gains conflict with field-block preservation.
-
-\textbf{Scope of the DRL claim.} These mechanisms explain why block-level abstraction can create a more useful sequential decision problem, but they do not prove that every parcel-level DRL formulation must fail. The present evidence is positive rather than exhaustive: it shows that the proposed block-level formulation is trainable, interpretable, and competitive under matched within-block execution. The $\kappa=1$ experiment provides proxy evidence for a near-independent regime, but a full parcel-level DRL baseline remains a separate robustness test. The finite-depth lookahead results on Township~B narrow the scheduler claim: the DRL advantage is not reproduced by one-step reward maximization, exhaustive two-step deterministic search, or pruned depth-three beam search under the same environment model. It still does not prove that RL is uniquely necessary, because deeper search, value-guided rollouts, or alternative planning heuristics may recover the same behaviour at higher computational cost.
+The claim remains bounded. The results show that this block-level formulation is trainable and interpretable, and that the Township~B advantage is not reproduced by one-step Reward-Greedy, exact depth-two search, or pruned depth-three search. They do not prove that RL is uniquely necessary. Direct parcel-level DRL, value-guided rollouts, and longer-horizon search remain important comparisons.
 
 \subsection{The ``invest-then-recover'' strategy on Township C}
 
-The DRL agent's behavior on Township C merits detailed analysis. Examining the block-by-block trajectory recorded in the per-step evaluation log (Fig.~\ref{fig:trajectory_C}; full per-step CSV provided as Supplementary Material), the agent follows a two-phase strategy:
-
-\textbf{Phase 1 (steps 1--10): \textit{Baimu fang} investment.} The agent selects blocks at the boundaries of existing farmland clusters, converting forest to farmland to push near-threshold clusters across the 6.67\,ha line. The cost is paid up front: the very first block selection raises the area-weighted mean farmland slope by $\approx +0.93\%$ over the initial value, because the agent is converting gentle-slope forest (whose removal as future farmland would have reduced slope) to farmland \textit{now}, and is removing relatively steep farmland \textit{later}. From step 2 onward, the slope penalty monotonically decreases as the engine starts pairing each new forest$\rightarrow$farmland conversion with a higher-slope farmland$\rightarrow$forest removal. By the end of step~10, all 5 new \textit{baimu fang} have been formed (count goes $0 \to 1 \to 1 \to 2 \to 3 \to 3 \to 3 \to 3 \to 4 \to 4 \to 5$ at steps $1,\dots,10$).
-
-\textbf{Phase 2 (steps 11--20): Slope recovery.} With all five \textit{baimu fang} already formed, the agent switches to blocks whose within-block engine yields large slope improvements. The \textit{baimu fang} count stays exactly at $+5$ from step 10 onward (the agent does not form new fields, but importantly, it also does not lose any), and the slope change crosses zero around step~14 and continues decreasing to a final value of $-0.32\%$ by step~20.
+Township~C illustrates objective switching. In the first ten steps, the agent accepts an early slope penalty to push near-threshold clusters across the \textit{baimu fang} threshold. In the remaining steps, it preserves the five new fields and recovers slope to a final $-0.32\%$ (Fig.~\ref{fig:trajectory_C}).
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.95\textwidth]{paper3_trajectory_C.png}
-\caption{Township C (338 blocks) per-step trajectory of the DRL agent (seed 0, deterministic evaluation). Top panel: cumulative slope change (\%) and contiguity change. Bottom panel: \textit{baimu fang} count change and \textit{baimu fang} area change (ha). The two phases are separated by a vertical shading break at step 10. All five new \textit{baimu fang} are formed during Phase~1 (cumulative count: $0\rightarrow5$) at the cost of an initial slope penalty of $\approx +0.93\%$; in Phase~2 the count is held fixed at $+5$ and the slope penalty is recovered, ending at $-0.32\%$. The other four seeds (1--4) follow the same two-phase pattern with very low variance, consistent with the per-seed reward CV of $0.26\%$ reported in Table~\ref{tab:per_seed}; their trajectories are provided as Supplementary Material.}
+\caption{Township C trajectory of the DRL agent. The policy first forms five new \textit{baimu fang}, then recovers slope while holding the count fixed.}
 \label{fig:trajectory_C}
 \end{figure}
 
-This temporal strategy is impossible for any \emph{slope-only} single-step greedy method to discover: Greedy-Global would never select a block that worsens slope in the short term, even if doing so enables superior \textit{baimu fang} formation in the long term. We note, however, that a \emph{reward-aware} one-step lookahead (Reward-Greedy, Section~\ref{sec:baselines}) does discover an analogous count-investing pattern on this township purely through one-step reward maximization---it forms $+6$ new \textit{baimu fang}, even more than DRL's $+5$. The clearest evidence that DRL provides a scheduling advantage rather than just access to the multi-objective signal therefore comes not from Township C, but from Township B (Section~\ref{sec:main_results}), where Reward-Greedy and the tested finite-depth lookahead baselines destroy more than 100\,ha of \textit{baimu fang} area while DRL preserves and grows it. The agent's plateau at $+5$ from step~10 onward on Township C nonetheless illustrates a clean form of objective switching: once the agent identifies that no further qualifying field can be formed within the remaining budget, it switches its effective objective to the slope channel of the reward, which is exactly the kind of value-function-driven behavior that block-level abstraction is meant to enable.
+This pattern is not unique evidence for DRL, because Reward-Greedy forms six new fields on Township~C. It is useful mainly as an interpretable example of how block-level planning can shift between objectives within one episode.
 
 \subsection{Policy implications}
 
-The block-level DRL framework suggests several implications for farmland consolidation policy and land-resource decision support:
-
-\textbf{Alignment with administrative practice.} Consolidation projects are administered at the township and village level, with budgets allocated across candidate project areas (\textit{xiangmu qu}). Our block-level agent performs exactly this allocation function, making its decisions directly interpretable by planners: ``invest 5 swap units in Block 3, then 5 in Block 107'' translates to ``prioritize consolidation in the northern valley cluster, then the eastern hillside.''
-
-\textbf{Threshold-based field-block metrics as decision criteria.} Current practice relies on expert judgment to identify \textit{baimu fang} formation opportunities. The block-level abstraction in our framework---used by either DRL or the Reward-Greedy lookahead---automates this assessment, learning or computing from the spatial configuration which blocks offer the best consolidation potential. On Township C, both DRL ($+5$ new fields) and Reward-Greedy ($+6$) far exceed the four reward-unaware baselines (at most $+2$), suggesting that block-level multi-objective evaluation can identify consolidation opportunities that simple slope-driven heuristics miss. Outside China, the same design can substitute locally meaningful thresholds, such as minimum mechanized-field size, contiguous management-unit area, or restoration-patch size.
-
-\textbf{Multi-objective balancing.} Different townships may have different policy priorities: some emphasize slope reduction (for erosion prevention), others prioritize block formation (for mechanization). The observed township-specific policy profiles suggest that a single framework can be used to explore several policy trade-offs, but the preferred trade-off still depends on the reward weights and on local spatial structure.
-
-\textbf{Property rights, social negotiation, and the optimizer's role.} A critical consideration for real-world implementation is that cadastral parcels carry complex property rights---specifically the \textit{contracted management rights} (\textit{chengbao jingyingquan}) attached to individual rural households grouped into village cooperative units---and farmland--forest exchanges across these ownership boundaries incur substantial transaction costs and require voluntary participation \citep{wu2005consolidation}. We therefore stress that the block-level DRL framework produces physically optimized candidate scenarios under the modeled slope/contiguity/\textit{baimu fang} objectives rather than a binding administrative prescription. It is intended as a decision-support tool that helps planners identify promising physical configurations, leaving the social negotiation step (which exchanges to actually pursue, on what timeline, and with what compensation) to local institutions.
-
-The block-level structure has a useful property in this respect: because consolidation blocks are built from natural-barrier segmentation plus constrained agglomerative clustering (Section~\ref{sec:blocks}), each block is spatially compact and can be aligned with administrative or cooperative boundaries when those layers are available. A practitioner who wants to minimize cross-ownership friction could constrain implementation to within-boundary swaps only, but the performance cost of this extra social constraint has not yet been quantified. A natural extension of the block construction algorithm is to enforce that no block crosses a village or cooperative boundary by passing those administrative polygons in as additional ``hard'' barriers in Step~2 of the construction (alongside roads, waterways, and construction land); this would turn the present physical-screening framework into a more socially constrained planning tool.
+The policy implication is decision support rather than automatic prescription. The block-level action resembles how planners allocate consolidation effort across project areas, and threshold-based metrics translate policy goals into computable objectives. However, cadastral parcels carry contracted management rights, and cross-ownership exchanges require negotiation and compensation \citep{wu2005consolidation}. The framework should therefore screen physical scenarios that planners can evaluate, not dictate implementable land adjustments. Administrative or cooperative boundaries could be added as hard barriers in block construction to reduce social transaction costs.
 
 \subsection{Limitations}
 \label{sec:limitations}
 
-Several limitations should be acknowledged. The first three are especially important for a deployment-grade revision: retraining under an area-tolerance or exact area-balanced transition rule, testing whether value-guided or longer-horizon planning can reproduce the Township~B result, and validating the framework outside Bishan District.
-
-\textbf{Parcel-count conservation does not imply farmland-area conservation.} This is the most important technical boundary for policy use. The connectivity-aware greedy engine pairs each farmland removal with a forest conversion, exactly conserving the parcel \textit{count} of each land-use class by construction. However, paired parcels in real cadastral data have heterogeneous areas: a small steep farmland parcel may be exchanged for a larger gentle forest parcel, or vice versa. Across an episode of 100 paired swaps, the cumulative net change in total farmland \textit{area} can therefore be non-zero, with implications for the area-weighted mean slope (Eq.~\ref{eq:slope}) and for compliance with China's farmland \textit{occupation--compensation balance} (\textit{zhanbu pingheng}) policy. The post-hoc audit in Table~\ref{tab:area_drift} shows that the final DRL policies have small mean area drift under the present settings ($+0.13$--$+0.28\%$), but it also shows that some non-RL baselines can drift by more than one percent and that Reward-Greedy on Township B loses $3.00\%$ of farmland area. The area-tolerance stress test in Table~\ref{tab:area_tolerance_check} further shows that replaying policies trained under the count-conserving engine is not enough to preserve positive \textit{baimu fang} area under a stricter transition rule. Before operational use, the scheduler should therefore be trained and evaluated directly under an area-tolerant or exact area-balanced transition, and the slope-comparison rule should use exact area-weighted $\Delta\bar{S}$ rather than only parcel-level slope ordering. Until that change, the slope and \textit{baimu fang} area numbers in this paper should be read as ``policy-compatible at the parcel-count level'' rather than ``area-balanced.''
-
-\textbf{No direct parcel-level DRL or exhaustive long-horizon search baseline.} The motivation for block-level abstraction rests on the near-independence diagnosis and on the $\kappa=1$ proxy ablation, but this manuscript does not train a full policy that selects among individual parcels in the original cadastral action space. It now reports exact depth-2 and pruned depth-3 lookahead checks on Township~B, neither of which reproduces DRL's positive \textit{baimu fang} area outcome under the same environment model. This strengthens the scheduler claim but does not close the planning baseline space. A direct parcel-level PPO baseline, a parcel-level reward-greedy baseline, deeper or value-guided rollout baselines, and beam-width sensitivity on at least the smallest and medium townships would make the abstraction and scheduler claims sharper.
-
-\textbf{Morphological simplification of \textit{baimu fang} definition.} The current BFS-based identification of \textit{baimu fang} considers only topological connectivity and aggregate area ($\geq$6.67\,ha), without imposing shape constraints. In practice, China's \textit{gaobiaozhun nongtian} (high-standard farmland) standards (e.g., GB/T~30600-2022) require consolidated fields to support large-scale mechanized operations, which implicitly demands compact, regular shapes with minimum widths and accessible field roads. A topologically connected farmland cluster that is extremely elongated (``snake-shaped'') or contains large internal perforations would fail engineering acceptance even if its total area exceeds the threshold. Future work should incorporate compactness metrics---such as the isoperimetric quotient ($4\pi A / P^2$), minimum bounding rectangle ratio, or convexity index---as additional \textit{baimu fang} qualification criteria, and additionally as post-hoc filters that report a ``qualified'' \textit{baimu fang} count alongside the raw connected-component count. This refinement would require re-integration into both the reward function and the BFS-based counting algorithm.
-
-\textbf{Slope--\textit{baimu fang} trade-off.} On Township B, the DRL agent trades slope performance ($-1.64\%$ vs.\ Greedy-Global's $-3.79\%$) for substantially superior contiguity and \textit{baimu fang} area outcomes. On Township C, the agent trades slope for \textit{baimu fang} count formation. While this reflects rational multi-objective optimization, DRL does not dominate Greedy-Global on slope reduction---a metric that may be the primary concern in some policy contexts. The reward weight configuration determines the trade-off point on the Pareto front; practitioners can adjust weights to emphasize their priority objective.
-
-\textbf{Block definition sensitivity.} The block construction method (barrier segmentation + agglomerative clustering) involves parameter choices (minimum block size 3 parcels, minimum block area 0.5\,ha, target $\sim$20 parcels per block, large-component threshold 30 parcels). We have not conducted a systematic ablation of these parameters; the consistency of training convergence across three townships with different spatial structures suggests reasonable robustness, but a quantitative ablation over target $\in\{10,20,40\}$ parcels/block and minimum area $\in\{0.2,0.5,1.0\}$\,ha is needed to establish whether downstream multi-objective performance is similarly stable.
-
-\textbf{Greedy-engine connectivity parameters.} The within-block scoring uses fixed connectivity weights $\gamma = 1.0$ (forest-to-farmland conversion bonus) and $\delta = 0.5$ (farmland removal penalty). The 2:1 asymmetry encodes a deliberate ``active consolidation'' bias: rewarding the formation of new contiguous farmland twice as much as preserving existing edges, so that the engine is willing to fill in interior forest gaps rather than only protecting current boundaries. The values were chosen by domain knowledge rather than through optimization; their effect on the slope/contiguity/\textit{baimu fang} trade-off has not been ablated, and different values might yield different strategy profiles. Because all baselines share the same engine, the comparison among methods is internally consistent, but absolute numbers are conditional on this $(\gamma,\delta)$ choice.
-
-\textbf{Swaps-per-step.} The parameter $\kappa = 5$ used throughout the main experiments was chosen heuristically (Section~\ref{sec:mdp}); we now have a single-seed ablation on Township A across $\kappa \in \{1,3,5,10,20\}$ (Section~\ref{sec:kappa_ablation}, Table~\ref{tab:kappa_ablation}) that confirms both predicted failure modes (regression to parcel-level behaviour at $\kappa{=}1$, insufficient horizon at $\kappa{=}20$) and identifies $\kappa = 5$ as the highest-reward middle setting on that township. We have not, however, repeated the ablation on Townships B and C, nor swept $\kappa$ jointly with the reward weights $w_S, w_C, w_B$; the optimal $\kappa$ may differ on larger townships (where the macroscopic action space is much wider and a smaller $\kappa$ might give the agent more steps to navigate it) or under reward configurations that emphasize \textit{baimu fang} area more (where $\kappa = 10$ is preferable on Township A by that single metric). A full grid over $\kappa$ and the reward weights, on all three townships and with multiple seeds, is left to future work.
-
-\textbf{Reward-Greedy vs.\ DRL gap is small on A and C.} The Reward-Greedy one-step lookahead baseline that shares DRL's reward function and weights (Table~\ref{tab:main_results}) is competitive with DRL on Townships A and C---it actually exceeds DRL's slope reduction, contiguity, and \textit{baimu fang} count on Township C, and is slightly better than DRL on Township A on three out of four metrics. The DRL-specific advantage is concentrated on Township B, where Reward-Greedy's myopic preference for the (large-weight) slope channel destroys consolidated fields. We therefore frame the contribution carefully: the block-level abstraction (Section~\ref{sec:blocks}) and the connectivity-aware engine (Section~\ref{sec:greedy_engine}) carry most of the multi-objective gain, while the trained DRL policy adds a township-dependent increment that is large on B and small on A and C. The exact depth-2 and pruned depth-3 lookahead checks fail to reproduce this Township~B increment ($-108.8$ and $-103.8$\,ha), which strengthens the learned-scheduler interpretation under the tested planning horizons. Value-guided search and longer-horizon planners remain the next boundaries to test.
-
-\textbf{Single district and statistical scope.} All three townships are within Bishan District, limiting geographic generalizability; the framework should be validated on regions with different terrain, climate, and land-use patterns. Statistical reporting is also limited: DRL and Random use 5 seeds, while the deterministic baselines (Greedy-Global, Greedy-Sequential, Round-Robin) report a single trajectory each, so we have not computed confidence intervals or significance tests for the DRL-vs-deterministic-baseline comparisons. Future work should report bootstrap CIs over DRL/Random seeds and, where applicable, perturb deterministic baselines by re-running them with random tie-breaking.
-
-\textbf{Computational cost.} The block-level approach requires GPU training: 200{,}000 timesteps per seed, $\sim$25\,minutes (Township A), $\sim$50\,minutes (B), and $\sim$2\,hours (C) on a single NVIDIA A100 40GB. By contrast, Greedy-Global produces its result in under 0.01\,seconds, and Reward-Greedy in under 5\,seconds (deterministic, no training needed). The finite-depth lookahead runs are also deterministic and training-free, but they remain negative on Township~B despite their wider search horizons. The DRL approach is therefore justified only when the multi-objective optimization capability, particularly the Township~B \textit{baimu fang} preservation behaviour that the tested deterministic planners fail to reproduce (Section~\ref{sec:main_results}), is operationally valued.
+Several limitations remain. First, parcel-count conservation is not area conservation. The DRL area-drift audit is small under the tested setting, but the area-tolerance stress test shows that deployment should train directly under an area-tolerant or exact area-balanced transition. Second, the study lacks a direct parcel-level DRL baseline and exhaustive long-horizon search; the reported finite-depth checks strengthen but do not close the planning-baseline space. Third, \textit{baimu fang} identification is topological and does not yet enforce engineering shape requirements. Fourth, DRL does not dominate slope-only baselines, and the preferred reward weights depend on policy priorities. Fifth, block construction, $(\gamma,\delta)$, and $\kappa$ require broader sensitivity analysis. Finally, all townships are in one district, deterministic baselines lack uncertainty estimates, and DRL training is more costly than greedy planning. These boundaries support interpreting the framework as scalable scenario screening rather than a ready operational planner.
 
 
 % ============================================================================
@@ -766,21 +597,9 @@ Several limitations should be acknowledged. The first three are especially impor
 \label{sec:conclusions}
 % ============================================================================
 
-This paper proposed a block-level spatial abstraction for deep reinforcement learning applied to farmland consolidation planning. The method is motivated by a geometric argument that individual farmland--forest exchanges on irregular cadastral parcels often approach near-independent one-step decisions, and by the hypothesis that a coarser spatial unit can recover useful sequential structure. Through experiments on three townships spanning 3{,}607 to 12{,}950 parcels (78 to 338 blocks) of Third National Land Survey cadastral data, we established the following findings:
+This paper proposed a block-level spatial abstraction for DRL-based farmland consolidation planning. Across three townships, the block-level MDP converged reliably and produced stable township-specific strategies. The strongest scheduler-specific result occurs on Township~B, where DRL is the only tested method with positive \textit{baimu fang} area growth while Reward-Greedy and finite-depth lookahead remain negative. On Townships~A and C, however, Reward-Greedy is competitive or stronger on several metrics, showing that the main contribution is not a blanket claim that RL beats heuristics.
 
-\begin{enumerate}
-\item \textbf{Block-level DRL converges reliably under the tested settings.} All 15 seed--township combinations converge to positive-reward plateaus, with no degenerate or bimodal trajectories observed. On the largest township (12{,}950 parcels, 338 blocks), the across-seed reward coefficient of variation is below 1\%, providing a stable basis for multi-objective evaluation.
-
-\item \textbf{The ``macroscopic planning, microscopic execution'' paradigm creates observable sequential dependencies under the tested settings.} Resource competition between blocks, spatial spillover via the connectivity-aware greedy engine, and \textit{baimu fang} threshold effects combine to create inter-step dependencies that DRL can exploit in selected cases.
-
-\item \textbf{The trained policies exhibit township-specific strategy profiles.} Under identical hyperparameters, the agent develops balanced, contiguity-focused, and \textit{baimu fang} count-focused behaviours on different townships, indicating sensitivity to local spatial structure within the tested study area.
-
-\item \textbf{The multi-objective gains are driven mostly by block-level abstraction itself, with DRL adding a township-specific increment.} A reward-aware one-step lookahead baseline (Reward-Greedy) that shares DRL's reward function is competitive with the trained DRL agent on Townships A and C and even slightly exceeds it on the \textit{baimu fang} count metric on Township C ($+6$ vs.\ $+5$). DRL's distinctive contribution is concentrated on Township B, where it is the only tested method---reward-aware or not---to achieve positive \textit{baimu fang} area growth ($+12.9$\,ha vs.\ Reward-Greedy's $-101.9$\,ha, exact two-step lookahead's $-108.8$\,ha, and pruned depth-three beam lookahead's $-103.8$\,ha), avoiding the short-horizon trap of dismantling consolidated fields to chase slope reduction. This finding supports a learned-scheduler advantage under the tested conditions, while leaving value-guided and longer-horizon search baselines as important remaining checks.
-
-\item \textbf{The framework aligns with consolidation policy but remains a screening tool.} Block-level decision-making mirrors the administrative structure of China's land consolidation governance, and \textit{baimu fang} formation is a directly policy-relevant metric. The area-balance audit shows that final DRL policies have small mean farmland-area drift in the tested cases, while the area-tolerance stress test shows that a deployment-grade version should train directly under area-balanced transition rules. The framework is therefore best interpreted as a pre-screening and scenario-exploration tool rather than an implementable land-adjustment plan.
-\end{enumerate}
-
-These results indicate that spatial abstraction, lifting the optimization from individual parcels to policy-relevant consolidation units, is a defensible design choice for farmland consolidation decision support. The framework's most defensible contribution is the joint package of block-level abstraction, the connectivity-aware engine, and a learnable scheduler whose specific advantage appears in multi-objective tension cases such as Township~B. The next robustness priorities are value-guided or longer-horizon planning baselines, direct parcel-level baselines, area-balanced retraining, block-granularity ablation, cross-district validation, integration with GIS planning tools, and extension to multi-land-type consolidation scenarios involving construction land reclamation and ecological restoration.
+The defensible contribution is the combination of block-level abstraction, connectivity-aware within-block execution, and a learnable scheduler for cases with multi-objective tension. Because the current implementation conserves parcel count rather than exact farmland area and uses a topological \textit{baimu fang} definition, it should be read as a scenario-screening tool. Future work should prioritize area-balanced retraining, parcel-level and longer-horizon baselines, block-granularity sensitivity, and cross-district validation.
 
 
 % ============================================================================

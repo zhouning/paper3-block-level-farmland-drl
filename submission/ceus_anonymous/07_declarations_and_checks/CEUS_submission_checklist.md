@@ -30,7 +30,7 @@
 - [x] Each highlight is below 85 characters.
 - [x] Figures are provided as separate files.
 - [x] Editable LaTeX source and local figure/table inputs are included in the source archive.
-- [ ] Article length is below the CEUS original-research maximum of 8,000 words. Current audit estimate remains above the limit and requires shortening.
+- [x] Article length is below the CEUS original-research maximum of 8,000 words. Current audit estimate is approximately 5,981 main-text words before references.
 
 ## Pre-submission scientific checks still recommended
 
