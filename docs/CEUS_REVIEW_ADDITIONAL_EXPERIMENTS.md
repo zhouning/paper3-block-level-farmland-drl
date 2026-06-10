@@ -4,6 +4,31 @@ This note records the additional experiments implied by the CEUS-style review
 of the current anonymous manuscript. It separates experiments that can be run
 with existing scripts from those that require code changes before execution.
 
+## Status After macOS Runs
+
+The macOS follow-up experiments have been completed and committed to the
+repository.
+
+- Priority 1 completed: Township B depth-3 beam lookahead remains negative on
+  `baimu_fang` area (`-103.8` ha), so it does not reproduce the DRL result.
+- Priority 2 partially completed: the area-tolerance transition check was run
+  as a stress test. Existing DRL block histories were replayed under the
+  modified transition but were not retrained under that environment.
+- Priority 3 partially completed: a Township B, seed-0 kappa diagnostic was
+  generated, but it is not comparable to the main 200k-timestep, five-seed DRL
+  experiments and is best treated as a supplemental diagnostic.
+
+Relevant output files:
+
+```text
+results/derived_analyses/paper3_lookahead_d3_b8_b_depth3_sensitivity_results.json
+results/tables/paper3_lookahead_d3_b8_b_depth3_sensitivity_table_fragment.tex
+results/derived_analyses/paper3_area_tolerance_check_results.json
+results/tables/paper3_area_tolerance_check_table.tex
+results/derived_analyses/paper3_kappa_ablation_b_seed0_results.json
+results/tables/paper3_kappa_ablation_b_seed0_table.tex
+```
+
 ## Priority 1: Township B Depth-3 Lookahead Sensitivity
 
 Purpose: test whether a longer deterministic planner can reproduce the
@@ -101,4 +126,3 @@ Minimum acceptable design:
 - Same preprocessing and block construction pipeline.
 - Report whether block abstraction, Reward-Greedy competitiveness, and the DRL
   scheduler gap persist.
-
