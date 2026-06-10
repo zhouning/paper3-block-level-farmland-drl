@@ -86,7 +86,7 @@ def main() -> None:
                  color="#c0392b", lw=1.8, ms=4.5, label="Reward-Greedy")
     axes[0].axhline(0, color="gray", lw=0.7, ls=":", alpha=0.6)
     axes[0].set_ylabel("Slope change (%)")
-    axes[0].set_title("Township B (132 blocks): DRL vs.\\ Reward-Greedy per-step trajectory")
+    axes[0].set_title("Township B (132 blocks): DRL vs. Reward-Greedy per-step trajectory")
     axes[0].grid(alpha=0.3)
     axes[0].legend(loc="upper right")
 
