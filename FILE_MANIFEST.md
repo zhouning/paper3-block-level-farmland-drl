@@ -25,9 +25,11 @@
 - `results/derived_analyses/`: JSON outputs for derived analyses, including
   the farmland-area balance audit and the controlled-data Township-B depth-2
   limited-lookahead result, depth-3 lookahead sensitivity result, and
-  area-tolerance transition check.
+  area-tolerance transition check, plus the Township-B kappa seed-0 sensitivity
+  retraining result.
 - `results/tables/`: LaTeX table fragments used by the manuscript, including
-  the farmland-area balance, limited-lookahead, and area-tolerance tables.
+  the farmland-area balance, limited-lookahead, area-tolerance, and kappa
+  sensitivity tables.
 - `results/google_drive_artifacts/`: small non-restricted artifacts recovered
   from Google Drive.
 
