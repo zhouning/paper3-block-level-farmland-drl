@@ -12,7 +12,7 @@
 - `scripts/training/`: Colab/A100 training entry points.
 - `scripts/preprocessing/`: DEM slope and parcel feature preprocessing.
 - `scripts/analysis/`: figure, table, reward-greedy, limited-lookahead,
-  area-balance, and robustness analysis scripts.
+  area-balance, area-tolerance, and robustness analysis scripts.
 - `docs/LOOKAHEAD_BASELINE_RUNBOOK.md`: run order and interpretation rules for
   the finite-depth lookahead robustness experiment.
 - `docs/MAC_LOOKAHEAD_EXPERIMENT.md`: macOS setup and command checklist for the
@@ -24,9 +24,10 @@
 - `results/block_construction_audit/`: construction audit outputs and maps.
 - `results/derived_analyses/`: JSON outputs for derived analyses, including
   the farmland-area balance audit and the controlled-data Township-B depth-2
-  limited-lookahead result.
+  limited-lookahead result, depth-3 lookahead sensitivity result, and
+  area-tolerance transition check.
 - `results/tables/`: LaTeX table fragments used by the manuscript, including
-  the farmland-area balance and limited-lookahead tables.
+  the farmland-area balance, limited-lookahead, and area-tolerance tables.
 - `results/google_drive_artifacts/`: small non-restricted artifacts recovered
   from Google Drive.
 

@@ -1,0 +1,21 @@
+\begin{table}[htbp]
+\centering
+\caption{Township B area-tolerance transition check. The modified engine enforces cumulative farmland-area tolerance and uses an exact area-weighted mean-slope improvement check for paired swaps. DRL rows replay existing block histories only and are stress tests, not retrained policies.}
+\label{tab:area_tolerance_check}
+\begin{tabular}{rlrrrrrr}
+\toprule
+Tolerance (\%) & Method & Slope (\%) & Cont. & Baimu cnt & Baimu ha & Farm area (\%) & Budget \\
+\midrule
+0.5 & Greedy-Global & $-3.79$ & $+0.226$ & $-1.0$ & $-6.9$ & $-0.40$ & 100.0 \\
+0.5 & Greedy-Sequential & $-1.26$ & $+0.027$ & $+0.0$ & $-14.1$ & $-0.42$ & 64.0 \\
+0.5 & Round-Robin & $-0.39$ & $+0.045$ & $-1.0$ & $-14.1$ & $-0.44$ & 38.0 \\
+0.5 & Reward-Greedy & $-2.52$ & $+0.123$ & $+1.0$ & $-13.3$ & $-0.45$ & 85.0 \\
+0.5 & DRL replay mean & $-1.93$ & $+0.091$ & $+0.0$ & $-9.8$ & $-0.36$ & 77.6 \\
+1.0 & Greedy-Global & $-3.79$ & $+0.226$ & $-1.0$ & $-6.9$ & $-0.40$ & 100.0 \\
+1.0 & Greedy-Sequential & $-1.78$ & $+0.014$ & $+0.0$ & $-33.5$ & $-0.92$ & 65.0 \\
+1.0 & Round-Robin & $-0.46$ & $+0.045$ & $-1.0$ & $-20.2$ & $-0.61$ & 45.0 \\
+1.0 & Reward-Greedy & $-3.12$ & $+0.089$ & $+1.0$ & $-34.7$ & $-0.99$ & 80.0 \\
+1.0 & DRL replay mean & $-2.59$ & $+0.081$ & $+0.0$ & $-29.7$ & $-0.87$ & 77.6 \\
+\bottomrule
+\end{tabular}
+\end{table}

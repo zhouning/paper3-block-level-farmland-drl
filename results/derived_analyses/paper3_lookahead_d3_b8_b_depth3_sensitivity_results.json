@@ -1,0 +1,334 @@
+{
+  "B": {
+    "method": "lookahead-depth3-beam8",
+    "township_code": "500227108",
+    "depth": 3,
+    "beam_width": 8,
+    "total_reward": 94.44938906002047,
+    "slope_change_pct": -4.261289530531619,
+    "cont_change": 0.03503503503503502,
+    "baimu_count_change": 0,
+    "baimu_area_change_ha": -103.8307067681212,
+    "budget_used": 82,
+    "n_steps": 20,
+    "block_history": [
+      {
+        "step": 1,
+        "block": 31,
+        "lookahead_score": 21.24508089495893,
+        "lookahead_sequence": [
+          31,
+          68,
+          4
+        ],
+        "reward": 6.103855169333609,
+        "swaps": 3,
+        "slope_pct": -0.5369363502731724,
+        "cont": -0.010010010010010006,
+        "baimu_cnt": 0,
+        "baimu_ha": -22.551490865400805
+      },
+      {
+        "step": 2,
+        "block": 83,
+        "lookahead_score": 29.255167795927104,
+        "lookahead_sequence": [
+          83,
+          75,
+          90
+        ],
+        "reward": 3.9142870880733995,
+        "swaps": 5,
+        "slope_pct": -0.7265423080096716,
+        "cont": -0.006006006006006093,
+        "baimu_cnt": 0,
+        "baimu_ha": -25.25385735067278
+      },
+      {
+        "step": 3,
+        "block": 75,
+        "lookahead_score": 33.67291295236543,
+        "lookahead_sequence": [
+          75,
+          90,
+          68
+        ],
+        "reward": 3.7721440927673227,
+        "swaps": 5,
+        "slope_pct": -1.0871318421199287,
+        "cont": -0.01401401401401392,
+        "baimu_cnt": 0,
+        "baimu_ha": -41.47917641310543
+      },
+      {
+        "step": 4,
+        "block": 90,
+        "lookahead_score": 36.777163481826506,
+        "lookahead_sequence": [
+          90,
+          68,
+          4
+        ],
+        "reward": 21.56873661508638,
+        "swaps": 2,
+        "slope_pct": -1.2827781846290973,
+        "cont": -0.024024024024023927,
+        "baimu_cnt": 1,
+        "baimu_ha": -48.524331112656
+      },
+      {
+        "step": 5,
+        "block": 68,
+        "lookahead_score": 19.465876493557275,
+        "lookahead_sequence": [
+          68,
+          65,
+          4
+        ],
+        "reward": 8.332032244511732,
+        "swaps": 5,
+        "slope_pct": -1.8150572552499293,
+        "cont": -0.028028028028028285,
+        "baimu_cnt": 1,
+        "baimu_ha": -60.65610572989434
+      },
+      {
+        "step": 6,
+        "block": 63,
+        "lookahead_score": 15.328511438330295,
+        "lookahead_sequence": [
+          63,
+          65,
+          4
+        ],
+        "reward": 4.032142078636616,
+        "swaps": 5,
+        "slope_pct": -1.9544211172544097,
+        "cont": -0.018018018018018278,
+        "baimu_cnt": 1,
+        "baimu_ha": -61.05262653289922
+      },
+      {
+        "step": 7,
+        "block": 65,
+        "lookahead_score": 15.321976978966308,
+        "lookahead_sequence": [
+          65,
+          4,
+          35
+        ],
+        "reward": 4.472956233170001,
+        "swaps": 3,
+        "slope_pct": -2.3869625901804903,
+        "cont": -0.03003003003003002,
+        "baimu_cnt": 1,
+        "baimu_ha": -78.74587206375823
+      },
+      {
+        "step": 8,
+        "block": 4,
+        "lookahead_score": 14.753073621355615,
+        "lookahead_sequence": [
+          4,
+          35,
+          114
+        ],
+        "reward": 6.823413126523679,
+        "swaps": 2,
+        "slope_pct": -2.394750947898773,
+        "cont": -0.0010010010010010895,
+        "baimu_cnt": 0,
+        "baimu_ha": -59.1983571711462
+      },
+      {
+        "step": 9,
+        "block": 35,
+        "lookahead_score": 11.641233369937577,
+        "lookahead_sequence": [
+          35,
+          114,
+          69
+        ],
+        "reward": 4.025607619272629,
+        "swaps": 2,
+        "slope_pct": -2.6454263669571665,
+        "cont": -0.002002002002002179,
+        "baimu_cnt": 0,
+        "baimu_ha": -65.00342486318536
+      },
+      {
+        "step": 10,
+        "block": 69,
+        "lookahead_score": 11.1210719787512,
+        "lookahead_sequence": [
+          69,
+          114,
+          104
+        ],
+        "reward": 3.711658476191457,
+        "swaps": 5,
+        "slope_pct": -2.7701560473571223,
+        "cont": 0.005005005005005003,
+        "baimu_cnt": 0,
+        "baimu_ha": -62.9411128959056
+      },
+      {
+        "step": 11,
+        "block": 114,
+        "lookahead_score": 10.555184034244734,
+        "lookahead_sequence": [
+          114,
+          104,
+          82
+        ],
+        "reward": 3.903967274473492,
+        "swaps": 5,
+        "slope_pct": -2.9094709476586047,
+        "cont": 0.0160160160160161,
+        "baimu_cnt": 0,
+        "baimu_ha": -65.08099987628273
+      },
+      {
+        "step": 12,
+        "block": 101,
+        "lookahead_score": 9.508362885382583,
+        "lookahead_sequence": [
+          101,
+          104,
+          82
+        ],
+        "reward": 2.835898945055531,
+        "swaps": 4,
+        "slope_pct": -3.138919806663216,
+        "cont": 0.009009009009008917,
+        "baimu_cnt": 0,
+        "baimu_ha": -70.77175302540549
+      },
+      {
+        "step": 13,
+        "block": 104,
+        "lookahead_score": 9.442969616458726,
+        "lookahead_sequence": [
+          104,
+          82,
+          47
+        ],
+        "reward": 3.527116342460541,
+        "swaps": 5,
+        "slope_pct": -3.324912476154805,
+        "cont": 0.020020020020020013,
+        "baimu_cnt": 0,
+        "baimu_ha": -81.78218789760656
+      },
+      {
+        "step": 14,
+        "block": 82,
+        "lookahead_score": 8.516192616580408,
+        "lookahead_sequence": [
+          82,
+          47,
+          43
+        ],
+        "reward": 3.1453475978665115,
+        "swaps": 4,
+        "slope_pct": -3.395396130546936,
+        "cont": 0.03103103103103111,
+        "baimu_cnt": 0,
+        "baimu_ha": -79.7386051963497
+      },
+      {
+        "step": 15,
+        "block": 43,
+        "lookahead_score": 7.98954685965573,
+        "lookahead_sequence": [
+          43,
+          108,
+          47
+        ],
+        "reward": 2.581848851202091,
+        "swaps": 5,
+        "slope_pct": -3.588908523413386,
+        "cont": 0.026026026026026106,
+        "baimu_cnt": 0,
+        "baimu_ha": -84.04847973875069
+      },
+      {
+        "step": 16,
+        "block": 47,
+        "lookahead_score": 7.867695464167056,
+        "lookahead_sequence": [
+          47,
+          108,
+          91
+        ],
+        "reward": 2.788996167511806,
+        "swaps": 4,
+        "slope_pct": -3.8407964358427606,
+        "cont": 0.021021021021021102,
+        "baimu_cnt": 0,
+        "baimu_ha": -94.85935061111338
+      },
+      {
+        "step": 17,
+        "block": 91,
+        "lookahead_score": 7.010432286653626,
+        "lookahead_sequence": [
+          91,
+          108,
+          74
+        ],
+        "reward": 2.4582288965587518,
+        "swaps": 4,
+        "slope_pct": -3.911162530087542,
+        "cont": 0.02702702702702675,
+        "baimu_cnt": 0,
+        "baimu_ha": -93.03947304508127
+      },
+      {
+        "step": 18,
+        "block": 108,
+        "lookahead_score": 6.451152241324911,
+        "lookahead_sequence": [
+          108,
+          74,
+          57
+        ],
+        "reward": 2.6204704000964982,
+        "swaps": 5,
+        "slope_pct": -4.18573123449005,
+        "cont": 0.017017017017016745,
+        "baimu_cnt": 0,
+        "baimu_ha": -103.6501149163928
+      },
+      {
+        "step": 19,
+        "block": 74,
+        "lookahead_score": 3.830681841228412,
+        "lookahead_sequence": [
+          74,
+          57
+        ],
+        "reward": 1.9317329899983757,
+        "swaps": 4,
+        "slope_pct": -4.223311475843629,
+        "cont": 0.025025025025025016,
+        "baimu_cnt": 0,
+        "baimu_ha": -102.72017879963704
+      },
+      {
+        "step": 20,
+        "block": 57,
+        "lookahead_score": 1.8989488512300363,
+        "lookahead_sequence": [
+          57
+        ],
+        "reward": 1.8989488512300363,
+        "swaps": 5,
+        "slope_pct": -4.261289530531619,
+        "cont": 0.03503503503503502,
+        "baimu_cnt": 0,
+        "baimu_ha": -103.8307067681212
+      }
+    ]
+  }
+}

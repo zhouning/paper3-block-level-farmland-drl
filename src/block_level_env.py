@@ -87,7 +87,9 @@ class BlockLevelEnv(gym.Env):
                  slope_weight=1000.0, cont_weight=500.0,
                  baimu_weight=2000.0, baimu_bonus=50.0,
                  baimu_threshold_m2=BAIMU_THRESHOLD_M2,
-                 gamma_conn=1.0, delta_conn=0.5):
+                 gamma_conn=1.0, delta_conn=0.5,
+                 area_tolerance_pct=None,
+                 area_weighted_slope_check=False):
         super().__init__()
 
         self.township_code = township_code
@@ -101,6 +103,8 @@ class BlockLevelEnv(gym.Env):
         self.baimu_threshold_m2 = baimu_threshold_m2
         self.gamma_conn = gamma_conn  # connectivity bonus for forest→farmland
         self.delta_conn = delta_conn  # connectivity penalty for farmland→forest
+        self.area_tolerance_pct = area_tolerance_pct
+        self.area_weighted_slope_check = area_weighted_slope_check
 
         # Load parcel data, adjacency, block compositions, and block adjacency
         self._load_data()
@@ -137,6 +141,12 @@ class BlockLevelEnv(gym.Env):
               f"{self.baimu_total_area/10000:.1f} ha total")
         print(f"  Block adjacency: median {np.median([len(a) for a in self.block_adj]):.0f} neighbors")
         print(f"  Connectivity-aware greedy: γ={self.gamma_conn}, δ={self.delta_conn}")
+        if self.area_tolerance_pct is not None or self.area_weighted_slope_check:
+            print(
+                "  Area-aware transition check: "
+                f"tolerance={self.area_tolerance_pct}, "
+                f"area_weighted_slope={self.area_weighted_slope_check}"
+            )
 
     # ==================================================================
     # Data loading
@@ -360,6 +370,36 @@ class BlockLevelEnv(gym.Env):
     # Greedy execution engine (microscopic execution)
     # ==================================================================
 
+    def _candidate_swap_metrics(self, farm_idx, forest_idx):
+        """Return area and area-weighted slope after a candidate paired swap."""
+        new_area = self.total_farm_area - self.areas[farm_idx] + self.areas[forest_idx]
+        new_weighted_slope = (
+            self.total_weighted_slope
+            - self.slopes[farm_idx] * self.areas[farm_idx]
+            + self.slopes[forest_idx] * self.areas[forest_idx]
+        )
+        new_slope = new_weighted_slope / max(new_area, 1e-8)
+        return new_area, new_slope
+
+    def _swap_is_allowed(self, farm_idx, forest_idx):
+        """Check optional policy constraints before executing a paired swap."""
+        new_area, new_slope = self._candidate_swap_metrics(farm_idx, forest_idx)
+
+        if self.area_weighted_slope_check:
+            if new_slope >= self.avg_farmland_slope:
+                return False
+        elif self.slopes[farm_idx] <= self.slopes[forest_idx]:
+            return False
+
+        if self.area_tolerance_pct is not None:
+            drift_pct = 100.0 * abs(new_area - self.initial_farm_area) / (
+                self.initial_farm_area + 1e-8
+            )
+            if drift_pct > self.area_tolerance_pct:
+                return False
+
+        return True
+
     def _execute_greedy_in_block(self, block_id, max_swaps):
         """Run connectivity-aware greedy paired swaps within a single block.
 
@@ -404,9 +444,27 @@ class BlockLevelEnv(gym.Env):
                              - self.gamma_conn * self.farmland_nbr_count[forest_idx])
             best_forest = forest_idx[np.argmin(forest_scores)]
 
-            # Only swap if beneficial (slope gap still positive)
-            if self.slopes[best_farm] <= self.slopes[best_forest]:
-                break
+            if self.area_tolerance_pct is None and not self.area_weighted_slope_check:
+                if not self._swap_is_allowed(best_farm, best_forest):
+                    break
+            else:
+                best_farm = None
+                best_forest = None
+                farm_order = np.argsort(farm_scores)[::-1]
+                forest_order = np.argsort(forest_scores)
+                for farm_pos in farm_order:
+                    candidate_farm = farm_idx[farm_pos]
+                    for forest_pos in forest_order:
+                        candidate_forest = forest_idx[forest_pos]
+                        if self._swap_is_allowed(candidate_farm, candidate_forest):
+                            best_farm = candidate_farm
+                            best_forest = candidate_forest
+                            break
+                    if best_farm is not None:
+                        break
+
+                if best_farm is None:
+                    break
 
             # Execute paired swap
             self._swap_to_forest(best_farm)
