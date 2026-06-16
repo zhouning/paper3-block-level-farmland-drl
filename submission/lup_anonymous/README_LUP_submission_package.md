@@ -25,11 +25,12 @@ Author-identifying title-page, cover-letter, declaration-of-interest form, and
 author reference manuscript files are not included here because this directory
 may be mirrored to an anonymous review repository.
 
-## Anonymous Review Repository
+## Review Copy Note
 
-Use this URL in the double-anonymized manuscript and submission fields:
-
-`https://anonymous.4open.science/r/block-level-farmland-drl-8456/`
+For double-anonymized review, provide the anonymous repository URL only in the
+separate copy used for journal submission. This public repository copy
+intentionally omits that URL to avoid linking the anonymous review mirror back
+to the author-identifying repository.
 
 The original TNLS cadastral parcel data are restricted and cannot be
 redistributed. Included artifacts are derived or synthetic materials sufficient

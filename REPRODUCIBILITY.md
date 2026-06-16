@@ -97,16 +97,10 @@ The anonymized LUP-oriented submission package for code-review mirroring is
 stored under `submission/lup_anonymous/`. Author-identifying title-page and
 cover-letter files are intentionally excluded from this repository copy.
 
-For double-anonymized review, use:
-
-`https://anonymous.4open.science/r/block-level-farmland-drl-8456/`
-
-The public GitHub repository is:
-
-`https://github.com/zhouning/paper3-block-level-farmland-drl`
-
-Do not use the public GitHub URL in reviewer-facing manuscript text before the
-review process is complete.
+During double-anonymized peer review, distribute reviewer-facing files through
+the journal system or a separate anonymous copy. Do not store links that bridge
+an anonymous review copy and this public repository until peer review is
+complete.
 
 ## 5. Expected Limitations
 

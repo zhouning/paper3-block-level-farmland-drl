@@ -10,18 +10,12 @@ manuscript is prepared for **Land Use Policy** and frames the method as a
 policy-facing tool for comparing constrained consolidation scenarios, not as a
 general claim that reinforcement learning dominates heuristic planning.
 
-## Double-Blind Review
+## Repository Scope
 
-Use the anonymous review mirror in submissions and reviewer-facing documents:
-
-`https://anonymous.4open.science/r/block-level-farmland-drl-8456/`
-
-The corresponding public GitHub repository is:
-
-`https://github.com/zhouning/paper3-block-level-farmland-drl`
-
-Do not use the public GitHub URL in the double-anonymized manuscript or in
-reviewer-facing fields before the review process is complete.
+This public repository is intended for project management and post-review
+reproducibility. During double-anonymized peer review, reviewer-facing materials
+should be shared through the journal system or a separate anonymous copy that
+does not link back to this public repository.
 
 ## Contents
 

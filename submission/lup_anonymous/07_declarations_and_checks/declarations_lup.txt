@@ -5,7 +5,7 @@ Funding
 This research received no specific grant from any funding agency in the public, commercial, or not-for-profit sectors.
 
 Data and code availability
-The original Third National Land Survey cadastral parcel data are subject to access restrictions and cannot be redistributed. Aggregate statistics, derived metrics, synthetic test fixtures, and code required to validate the methodology are available for double-anonymized review at https://anonymous.4open.science/r/block-level-farmland-drl-8456/ and will be made available to readers through a public repository after acceptance.
+The original Third National Land Survey cadastral parcel data are subject to access restrictions and cannot be redistributed. Aggregate statistics, derived metrics, synthetic test fixtures, and code required to validate the methodology are available through the anonymous review repository supplied in the journal submission system and will be made available to readers through a public repository after acceptance.
 
 Publishing route
 The author intends to use the journal's subscription publishing route and does not request Gold Open Access publication.
