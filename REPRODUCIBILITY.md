@@ -21,7 +21,7 @@ or derived tables without raw geospatial data:
 
 ```bash
 python scripts/analysis/paper3_pareto_figures.py
-python scripts/analysis/plot_pareto_all.py
+python scripts/analysis/paper3_cross_township_bars.py
 python scripts/analysis/plot_training_curves.py
 python scripts/analysis/plot_training_curves_108.py
 python scripts/analysis/plot_training_curves_105.py
@@ -29,12 +29,15 @@ python scripts/analysis/plot_block_construction.py
 python scripts/analysis/plot_framework_diagram.py
 ```
 
-Derived analyses that instantiate the real block environment require the
-restricted parcel geometry unless their outputs are already present in
-`results/derived_analyses/`.
+Generated figures are written to `figures/`. The current manuscript figures
+are exported as high-resolution PNG files suitable for journal review.
 
-The area-balance audit added for the revised manuscript replays final
-configurations against the controlled-access parcel geometry:
+Derived analyses that instantiate the real block environment require
+restricted parcel geometry unless their aggregate outputs are already present
+in `results/derived_analyses/`.
+
+The area-balance audit replays final configurations against controlled-access
+parcel geometry:
 
 ```bash
 PAPER3_DLTB_PATH=/path/to/DLTB_with_slope.gpkg python scripts/analysis/paper3_area_drift_audit.py
@@ -45,23 +48,20 @@ It writes `results/derived_analyses/paper3_area_drift_results.json` and
 
 The limited-lookahead robustness baseline also instantiates the real block
 environment and therefore requires the same controlled-access parcel geometry.
-It evaluates shallow depth-2 or depth-3 search under the same reward and
-within-block transition model as Reward-Greedy. Use `--beam-width 0` for the
-primary depth-2 Township-B check: this disables immediate-reward pruning and
-evaluates all valid second-step actions, so the result cannot be dismissed as a
-beam-pruning artifact.
+Use `--beam-width 0` for the primary depth-2 Township-B check. This disables
+immediate-reward pruning and evaluates all valid second-step actions.
 
 ```bash
 PAPER3_DLTB_PATH=/path/to/DLTB_with_slope.gpkg python scripts/analysis/paper3_lookahead_baseline.py --township B --depth 2 --beam-width 0
 PAPER3_DLTB_PATH=/path/to/DLTB_with_slope.gpkg python scripts/analysis/paper3_lookahead_baseline.py --township B --depth 3 --beam-width 8 --suffix b_depth3_sensitivity
 ```
 
-It writes configuration-specific outputs such as
+Configuration-specific outputs include
 `results/derived_analyses/paper3_lookahead_d2_ball_results.json` and
 `results/tables/paper3_lookahead_d2_ball_table_fragment.tex`. The controlled
-Township-B depth-2 result is included in this repository and is reported in the
-revised manuscript. Use Township B first when rerunning because it is the
-critical case for separating DRL from one-step reward-greedy planning.
+Township-B outputs reported in the Land Use Policy manuscript are included.
+Use Township B first when rerunning because it is the critical case for
+separating learned scheduling from one-step reward-greedy planning.
 
 The lookahead action-selection logic can be tested without restricted data:
 
@@ -69,14 +69,14 @@ The lookahead action-selection logic can be tested without restricted data:
 python -m unittest tests.test_paper3_lookahead_baseline -v
 ```
 
-For the exact macOS run sequence on a machine with the restricted parcel
-geometry, see `docs/MAC_LOOKAHEAD_EXPERIMENT.md`.
+For the exact macOS run sequence on a machine with restricted parcel geometry,
+see `docs/MAC_LOOKAHEAD_EXPERIMENT.md`.
 
 ## 3. Re-run Training With Authorized Raw Data
 
-Full raw-data retraining requires local access to the restricted TNLS parcel
-data with slope attributes. After setting the environment variables described
-in `DATASET.md`, run:
+Full raw-data retraining requires local access to restricted TNLS parcel data
+with slope attributes. After setting the environment variables described in
+`DATASET.md`, run:
 
 ```bash
 python scripts/training/colab_train_all.py --township 500227109
@@ -87,12 +87,26 @@ python scripts/training/colab_train_all.py --township 500227105
 The final B-medium results are written to
 `results/blocks/township_500227108_v2`.
 
-## 4. Reproduce Manuscript Package
+## 4. Reproduce the Manuscript Package
 
-The anonymous CEUS package is stored under `submission/ceus_anonymous/`.
-Editable LaTeX source is also stored in `manuscript/latex_source/`. The source
-archive in the submission folder is provided for journal upload if editable
-source is requested.
+The active anonymous Land Use Policy manuscript is stored under
+`manuscript/lup_anonymous/`. Editable LaTeX source is stored in
+`manuscript/latex_source/`.
+
+The anonymized LUP-oriented submission package for code-review mirroring is
+stored under `submission/lup_anonymous/`. Author-identifying title-page and
+cover-letter files are intentionally excluded from this repository copy.
+
+For double-anonymized review, use:
+
+`https://anonymous.4open.science/r/block-level-farmland-drl-8456/`
+
+The public GitHub repository is:
+
+`https://github.com/zhouning/paper3-block-level-farmland-drl`
+
+Do not use the public GitHub URL in reviewer-facing manuscript text before the
+review process is complete.
 
 ## 5. Expected Limitations
 
@@ -100,7 +114,5 @@ source is requested.
 - Public figure/table regeneration works from included derived artifacts.
 - Exact full retraining from source parcels requires controlled raw-data access.
 - Limited-lookahead baseline reruns require controlled parcel geometry; the
-  included Township-B depth-2 output documents the controlled-data run used in
-  the revised manuscript.
-- For CEUS double-blind review, use an anonymous mirror rather than this public
-  GitHub repository.
+  included Township-B outputs document the controlled-data runs used in the
+  LUP manuscript.

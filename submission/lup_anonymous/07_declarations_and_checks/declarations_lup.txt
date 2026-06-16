@@ -1,0 +1,17 @@
+Declaration of competing interest
+The author declares that he has no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
+
+Funding
+This research received no specific grant from any funding agency in the public, commercial, or not-for-profit sectors.
+
+Data and code availability
+The original Third National Land Survey cadastral parcel data are subject to access restrictions and cannot be redistributed. Aggregate statistics, derived metrics, synthetic test fixtures, and code required to validate the methodology are available for double-anonymized review at https://anonymous.4open.science/r/block-level-farmland-drl-8456/ and will be made available to readers through a public repository after acceptance.
+
+Publishing route
+The author intends to use the journal's subscription publishing route and does not request Gold Open Access publication.
+
+Declaration of generative AI and AI-assisted technologies in the manuscript preparation process
+During the preparation of this work, the author used AI-assisted tools to support language editing, LaTeX formatting, and journal-format compliance checks. After using these tools, the author reviewed and edited the content as needed and takes full responsibility for the content of the submitted manuscript.
+
+CRediT author statement
+[Anonymous Author]: Conceptualization, Methodology, Software, Validation, Formal analysis, Investigation, Data curation, Writing - original draft, Visualization, Writing - review and editing.

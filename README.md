@@ -1,37 +1,55 @@
-# Paper3 Block-Level Farmland DRL
+# Paper 3: Block-Level Farmland Consolidation Scenario Screening
 
-Repository for Paper3:
+This repository supports the manuscript:
 
-**From Parcels to Blocks: Rescaling Deep Reinforcement Learning for Farmland
-Consolidation Planning through Spatial Abstraction**
+**Policy-Relevant Block Abstraction for Sequential Farmland Consolidation Scenario Screening**
 
-This repository collects the Paper3 code, anonymous CEUS manuscript files,
-figures, derived block-level results, trained model artifacts, and
-reproducibility documentation.
+The code and derived artifacts implement a block-level decision-support
+framework for early-stage farmland consolidation scenario screening. The
+manuscript is prepared for **Land Use Policy** and frames the method as a
+policy-facing tool for comparing constrained consolidation scenarios, not as a
+general claim that reinforcement learning dominates heuristic planning.
 
-## Double-Blind Review Note
+## Double-Blind Review
 
-This public GitHub repository is useful for long-term project management and
-post-review reproducibility. For CEUS double-blind review, copy the same
-contents to an anonymous review repository and use that anonymous URL in the
-submission system.
+Use the anonymous review mirror in submissions and reviewer-facing documents:
+
+`https://anonymous.4open.science/r/block-level-farmland-drl-8456/`
+
+The corresponding public GitHub repository is:
+
+`https://github.com/zhouning/paper3-block-level-farmland-drl`
+
+Do not use the public GitHub URL in the double-anonymized manuscript or in
+reviewer-facing fields before the review process is complete.
 
 ## Contents
 
-- `src/`: block-level environment, baselines, parcel policy, preprocessing
-  helpers, and training/evaluation entry points.
-- `scripts/analysis/`: figure, table, ablation, reward-greedy, limited
-  lookahead, compactness, area-balance, and trajectory analysis scripts.
+- `src/`: block-level environment, baselines, parcel/block scoring helpers, and
+  training/evaluation entry points.
+- `scripts/analysis/`: figure, table, reward-greedy, limited-lookahead,
+  compactness, area-balance, area-tolerance, trajectory, and kappa-ablation
+  scripts.
 - `scripts/training/`: Colab/A100 training scripts for the three townships.
-- `results/blocks/`: five-seed block-level DRL outputs for townships 109, 108
-  v2, and 105.
+- `results/blocks/`: five-seed block-level DRL outputs for the three study
+  townships.
 - `results/derived_analyses/` and `results/tables/`: downstream analysis JSON
-  and LaTeX table fragments.
-- `figures/`: figure files used by the manuscript.
-- `manuscript/`: anonymous CEUS manuscript and editable LaTeX source.
-- `submission/ceus_anonymous/`: anonymous CEUS review package.
-- `notebooks/`: sanitized Google Colab run notebooks recovered from Drive.
-- `archives/`: legacy Google Drive result archives retained for provenance.
+  files and LaTeX table fragments used by the manuscript.
+- `figures/`: high-resolution manuscript figures regenerated at 600 dpi.
+- `manuscript/lup_anonymous/`: current anonymous Land Use Policy manuscript
+  source and PDF.
+- `manuscript/latex_source/`: editable anonymous LaTeX source package.
+- `submission/lup_anonymous/`: anonymized LUP-oriented submission package for
+  code-review mirroring, including highlights, figure captions, high-resolution
+  figure files, declarations, and anonymous LaTeX source. Author-identifying
+  title-page and cover-letter files are intentionally excluded from this
+  repository copy.
+- `notebooks/`: sanitized Colab provenance notebooks recovered from Drive.
+- `archives/`: legacy non-restricted result archives retained for provenance.
+
+Historical drafts and planning notes, if present under
+`manuscript/development_archive/` or `docs/`, are retained only for provenance
+and are not the active submission target.
 
 ## Quick Start
 
@@ -41,61 +59,56 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-Regenerate selected manuscript figures from included result artifacts:
+Linux/macOS users can replace the activation command with:
+
+```bash
+source .venv/bin/activate
+```
+
+Regenerate key manuscript figures from included result artifacts:
 
 ```bash
 python scripts/analysis/paper3_pareto_figures.py
+python scripts/analysis/paper3_cross_township_bars.py
 python scripts/analysis/plot_training_curves.py
 python scripts/analysis/plot_training_curves_108.py
 python scripts/analysis/plot_training_curves_105.py
+python scripts/analysis/plot_framework_diagram.py
+python scripts/analysis/plot_block_construction.py
 ```
 
 Generated figures are written to `figures/`.
 
-The farmland-area balance audit reported in the revised manuscript requires
-controlled-access parcel geometry:
+## Controlled-Data Analyses
+
+The original Third National Land Survey parcel geometry is restricted and is
+not redistributed here. Analyses that instantiate the real block environment
+from parcel geometry require authorized local data access:
 
 ```bash
 PAPER3_DLTB_PATH=/path/to/DLTB_with_slope.gpkg python scripts/analysis/paper3_area_drift_audit.py
-```
-
-Its aggregate outputs are included as
-`results/derived_analyses/paper3_area_drift_results.json` and
-`results/tables/paper3_area_drift_table.tex`.
-
-The limited-lookahead robustness baseline also requires controlled-access
-parcel geometry if rerun from raw data:
-
-```bash
 PAPER3_DLTB_PATH=/path/to/DLTB_with_slope.gpkg python scripts/analysis/paper3_lookahead_baseline.py --township B --depth 2 --beam-width 0
+PAPER3_DLTB_PATH=/path/to/DLTB_with_slope.gpkg python scripts/analysis/paper3_lookahead_baseline.py --township B --depth 3 --beam-width 8 --suffix b_depth3_sensitivity
 ```
 
-Run Township B first because it is the critical case where DRL differs most
-from one-step Reward-Greedy planning. `--beam-width 0` means exact depth-2
-lookahead over all valid actions; use a positive beam width only for depth-3
-sensitivity runs.
-
-The controlled-data depth-2 Township B result is included as
-`results/derived_analyses/paper3_lookahead_d2_ball_results.json` and
-`results/tables/paper3_lookahead_d2_ball_table_fragment.tex`.
-
-For a step-by-step macOS checklist, see
-`docs/MAC_LOOKAHEAD_EXPERIMENT.md`.
+The aggregate outputs used in the manuscript are included under
+`results/derived_analyses/` and `results/tables/`.
 
 ## Data Availability Boundary
 
-The original Third National Land Survey parcel geometry, geodatabases,
-shapefiles, and DEM-derived rasters are restricted and are not redistributed
-here. The repository includes derived block-level metrics, training logs,
-trained models, evaluation outputs, and figure-generation scripts sufficient to
-validate the reported tables and figures. Full retraining from raw parcels
-requires controlled access to the original geospatial data. See `DATASET.md`
-and `restricted_data_manifest/TNLS_RESTRICTED_DATA.md`.
+Raw TNLS parcel geometries, geodatabases, shapefiles, and DEM-derived rasters
+are excluded. The repository includes derived block-level metrics, training
+logs, model artifacts, evaluation outputs, figure-generation scripts, and
+synthetic tests sufficient to validate the reported tables and figures without
+redistributing restricted raw parcels. See `DATASET.md` and
+`restricted_data_manifest/TNLS_RESTRICTED_DATA.md`.
 
-## Google Drive Recovery
+## Verification
 
-Additional Paper3 files were checked in a local Google Drive mirror.
-Non-restricted artifacts recovered from that location are included under
-`notebooks/` and `results/google_drive_artifacts/`. The private
-`paper3_colab.zip` archive is not included because it contained restricted raw
-geospatial data.
+Run the tests that do not require restricted data:
+
+```bash
+python -m unittest tests.test_paper3_lookahead_baseline -v
+```
+
+For a fuller reproduction checklist, see `REPRODUCIBILITY.md`.

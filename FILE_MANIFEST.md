@@ -12,37 +12,42 @@
 - `scripts/training/`: Colab/A100 training entry points.
 - `scripts/preprocessing/`: DEM slope and parcel feature preprocessing.
 - `scripts/analysis/`: figure, table, reward-greedy, limited-lookahead,
-  area-balance, area-tolerance, and robustness analysis scripts.
+  area-balance, area-tolerance, kappa-sensitivity, and trajectory analysis
+  scripts.
 - `docs/LOOKAHEAD_BASELINE_RUNBOOK.md`: run order and interpretation rules for
-  the finite-depth lookahead robustness experiment.
-- `docs/MAC_LOOKAHEAD_EXPERIMENT.md`: macOS setup and command checklist for the
-  controlled-data Township-B lookahead run.
+  finite-depth lookahead robustness experiments.
+- `docs/MAC_LOOKAHEAD_EXPERIMENT.md`: macOS setup and command checklist for
+  controlled-data Township-B lookahead runs.
 
 ## Results
 
 - `results/blocks/`: final five-seed township result folders.
 - `results/block_construction_audit/`: construction audit outputs and maps.
 - `results/derived_analyses/`: JSON outputs for derived analyses, including
-  the farmland-area balance audit and the controlled-data Township-B depth-2
-  limited-lookahead result, depth-3 lookahead sensitivity result, and
-  area-tolerance transition check, plus the Township-B kappa seed-0 sensitivity
-  retraining result.
-- `results/tables/`: LaTeX table fragments used by the manuscript, including
-  the farmland-area balance, limited-lookahead, area-tolerance, and kappa
-  sensitivity tables.
+  farmland-area balance, controlled-data Township-B depth-2 and depth-3
+  lookahead checks, area-tolerance transition checks, and Township-B kappa
+  seed-0 sensitivity diagnostics.
+- `results/tables/`: LaTeX table fragments used by the LUP manuscript.
 - `results/google_drive_artifacts/`: small non-restricted artifacts recovered
   from Google Drive.
 
 ## Manuscript and Submission
 
-- `manuscript/ceus_anonymous/`: latest anonymous CEUS manuscript source and PDF.
-- `manuscript/latex_source/`: editable anonymous LaTeX source package.
-- `manuscript/development_archive/`: historical Paper3 manuscript drafts.
-- `submission/ceus_anonymous/`: anonymous reviewer-facing CEUS upload package.
+- `manuscript/lup_anonymous/`: current anonymous Land Use Policy manuscript
+  source and PDF.
+- `manuscript/latex_source/`: editable anonymous LaTeX source files and
+  manuscript figures.
+- `manuscript/development_archive/`: historical Paper 3 manuscript drafts. The
+  files here are not the active submission target.
+- `submission/lup_anonymous/`: anonymized Land Use Policy-oriented upload
+  package for review mirroring. Author-identifying title-page and cover-letter
+  files are intentionally excluded from this repository copy. The package also
+  includes separate highlights, figure captions, figures, declarations, and a
+  compressed anonymous LaTeX source archive.
 
 ## Figures and Notebooks
 
-- `figures/`: manuscript figures and diagnostic figures.
+- `figures/`: high-resolution manuscript figures regenerated at 600 dpi.
 - `notebooks/`: sanitized Colab provenance notebooks recovered from Drive.
 
 ## Archives

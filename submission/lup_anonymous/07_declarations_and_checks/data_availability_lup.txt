@@ -1,0 +1,3 @@
+Data and code availability
+
+The original Third National Land Survey cadastral parcel data are subject to access restrictions and cannot be redistributed. Aggregate statistics, derived metrics, synthetic test fixtures, and code required to validate the methodology are available for double-anonymized review at https://anonymous.4open.science/r/block-level-farmland-drl-8456/ and will be made available to readers through a public repository after acceptance.

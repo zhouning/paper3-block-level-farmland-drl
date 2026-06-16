@@ -1,0 +1,18 @@
+Figure captions for:
+Policy-Relevant Block Abstraction for Sequential Farmland Consolidation Scenario Screening
+
+Figure 1. Macroscopic planning and microscopic execution framework (paper3_framework_diagram.png). The DRL agent allocates a consolidation budget across competing blocks, while a deterministic greedy engine executes optimized parcel swaps within each selected block. Spatial spillover across block boundaries creates the sequential dependencies that DRL exploits.
+
+Figure 2. Block construction process (paper3_block_construction.png). Synthetic parcels resembling Township A illustrate five steps: raw parcels colored by land use, barrier removal and swappable-parcel retention, BFS connected-component identification, constrained Ward subdivision of large components, and final block labels with approximately 20 parcels per block.
+
+Figure 3. Training curves across the three Bishan townships (paper3_training_curves_109.png, paper3_training_curves_108.png, paper3_training_curves_105.png). Township A has 78 blocks, Township B has 132 blocks, and Township C has 338 blocks. Curves show five seeds per township with a 200-episode moving average; reward and evaluation indicators stabilize by about 50,000 timesteps.
+
+Figure 4. Cross-township method comparison (paper3_cross_township_bars.png). Four metrics are reported: slope reduction, baimu fang area change, contiguity change, and new baimu fang count. DRL bars are outlined in black. DRL is the only main-table method with positive baimu fang area on Township B, despite a negative baimu fang count change on that township.
+
+Figure 5. Township B trajectory comparison between DRL and Reward-Greedy (paper3_trajectory_B_compare.png). Per-step cumulative changes are shown for slope, baimu fang count, and baimu fang area. Reward-Greedy achieves stronger slope reduction by greedily removing high-slope farmland, but loses qualifying-field area; DRL trades some slope reduction to retain and slightly expand baimu fang area.
+
+Figure 6. Pareto analysis of slope reduction versus baimu fang area change (paper3_pareto_all_slope_baimu.png). Baseline methods are shown as squares, DRL seeds as blue circles, the DRL mean as a blue star, and Reward-Greedy as a red triangle. Green arrows indicate the preferred direction of more slope reduction and more baimu fang area.
+
+Figure 7. Pareto analysis of slope reduction versus baimu fang count change (paper3_pareto_all_slope_baimucnt.png). Reward-Greedy achieves non-negative baimu fang count change on all three townships while maintaining negative slope change. DRL achieves this on Townships A and C but loses one qualifying field on Township B, where its advantage lies instead in positive baimu fang area.
+
+Figure 8. Township C per-step DRL trajectory (paper3_trajectory_C.png). The deterministic seed-0 trajectory shows cumulative slope and contiguity change in the top panel, and baimu fang count and area change in the bottom panel. The two phases are separated at step 10: early steps form all five new baimu fang at a short-term slope cost, after which the policy preserves the count gain while recovering slope performance.

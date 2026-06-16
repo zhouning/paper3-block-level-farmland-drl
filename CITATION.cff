@@ -1,12 +1,10 @@
 cff-version: 1.2.0
-message: "If you use this repository, cite the associated Paper3 manuscript."
-title: "From Parcels to Blocks: Rescaling Deep Reinforcement Learning for Farmland Consolidation Planning through Spatial Abstraction"
+message: "If you use this repository, cite the associated Paper 3 manuscript."
+title: "Policy-Relevant Block Abstraction for Sequential Farmland Consolidation Scenario Screening"
 type: software
 authors:
-  - family-names: "Anonymous"
-    given-names: "Author 1"
-  - family-names: "Anonymous"
-    given-names: "Author 2"
-date-released: "2026-06-07"
-repository-code: "https://github.com/<owner>/paper3-block-level-farmland-drl"
-abstract: "Code, derived result artifacts, figures, and anonymous manuscript files for a block-level deep reinforcement learning study of farmland consolidation planning."
+  - family-names: "Zhou"
+    given-names: "Ning"
+date-released: "2026-06-16"
+repository-code: "https://github.com/zhouning/paper3-block-level-farmland-drl"
+abstract: "Code, derived result artifacts, high-resolution figures, and anonymous manuscript files for a Land Use Policy-oriented block-level farmland consolidation scenario-screening study."

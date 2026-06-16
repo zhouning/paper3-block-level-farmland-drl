@@ -1,0 +1,18 @@
+\begin{table}[htbp]
+\centering
+\caption{Sensitivity of the block-level DRL agent to the swaps-per-step parameter $\kappa$ on Township A (78 blocks). The total paired-swap budget is fixed at 100; the MDP horizon is $H = 100/\kappa$. Each $\kappa$ is trained for 50{,}000 timesteps with seed 0 on CPU and evaluated deterministically. ``Budget used'' is the number of paired swaps actually committed in the deterministic episode out of the 100-swap cap. Reward is the cumulative episodic return under the multi-component reward of Eq.~\ref{eq:reward} with the same weights used elsewhere in the paper. The $\kappa = 5$ value used in the main experiments achieves the highest cumulative reward (bold).}
+\label{tab:kappa_ablation}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{rrrrrrrr}
+\toprule
+$\kappa$ & $H$ & Slope (\%) & Cont. & Baimu cnt & Baimu ha & Budget used & Reward \\
+\midrule
+1  & 100 & $-0.20$ & $-0.011$ & $+2$ & $+6.7$  & 8/100  & $-47.9$ \\
+3  & 33  & $-2.07$ & $+0.113$ & $+1$ & $-4.5$  & 42/100 & $78.5$ \\
+5  & 20  & $-2.01$ & $+0.074$ & $+1$ & $+18.4$ & 38/100 & $\mathbf{85.5}$ \\
+10 & 10  & $-0.59$ & $+0.009$ & $+1$ & $+22.0$ & 18/100 & $52.2$ \\
+20 & 5   & $-0.06$ & $+0.002$ & $+1$ & $-1.7$  & 4/100  & $17.0$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}

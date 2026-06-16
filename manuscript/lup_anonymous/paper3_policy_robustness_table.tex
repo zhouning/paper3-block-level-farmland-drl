@@ -1,0 +1,17 @@
+\begin{table}[htbp]
+\centering
+\caption{Township B policy-robustness checks against stronger short-horizon planning baselines. Depth-2 lookahead evaluates all valid two-step block sequences at each decision point; depth-3 lookahead uses beam width 8 for tractability. Both lookahead baselines use the same within-block execution engine and reward weights as DRL and Reward-Greedy. Slope change is better when more negative; contiguity, \textit{baimu fang} count, and \textit{baimu fang} area are better when more positive.}
+\label{tab:policy_robustness}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrrr}
+\toprule
+Method & Slope (\%) & Cont. & \textit{Baimu} cnt & \textit{Baimu} ha \\
+\midrule
+DRL mean & $-1.64$ & $+0.115$ & $-1$ & $+12.9$ \\
+Reward-Greedy & $-4.24$ & $+0.036$ & $+0$ & $-101.9$ \\
+Lookahead d=2, all actions & $-4.23$ & $+0.013$ & $+1$ & $-108.8$ \\
+Lookahead d=3, beam 8 & $-4.26$ & $+0.035$ & $+0$ & $-103.8$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
