@@ -1,3 +1,0 @@
-Data and code availability
-
-The original Third National Land Survey cadastral parcel data are subject to access restrictions and cannot be redistributed. Aggregate statistics, derived metrics, synthetic test fixtures, and code required to validate the methodology are available through the anonymous review repository supplied in the journal submission system and will be made available to readers through a public repository after acceptance.

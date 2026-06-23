@@ -1,5 +1,0 @@
-- Policy-relevant blocks translate cadastral parcels into planning units.
-- Block-level scheduling supports farmland consolidation scenario screening.
-- Threshold-based field metrics link optimization to land-use policy.
-- The framework converges across 15 seed-township combinations.
-- Results clarify when learned scheduling improves on greedy planning.

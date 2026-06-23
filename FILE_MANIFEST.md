@@ -6,44 +6,30 @@
 - `src/baselines_block.py`: greedy, random, and round-robin baselines.
 - `src/train_block.py`: MaskablePPO block-level training utilities.
 - `src/parcel_scoring_policy.py`: custom parcel/block scoring policy.
-- `src/block_definition.py` and `src/block_definition_all.py`: block
-  construction pipeline.
+- `src/block_definition.py` and `src/block_definition_all.py`: block construction pipeline.
 - `src/paper3_paths.py`: repository-relative path configuration.
 - `scripts/training/`: Colab/A100 training entry points.
 - `scripts/preprocessing/`: DEM slope and parcel feature preprocessing.
-- `scripts/analysis/`: figure, table, reward-greedy, limited-lookahead,
-  area-balance, area-tolerance, kappa-sensitivity, and trajectory analysis
-  scripts.
-- `docs/LOOKAHEAD_BASELINE_RUNBOOK.md`: run order and interpretation rules for
-  finite-depth lookahead robustness experiments.
-- `docs/MAC_LOOKAHEAD_EXPERIMENT.md`: macOS setup and command checklist for
-  controlled-data Township-B lookahead runs.
+- `scripts/analysis/`: figure, table, reward-greedy, limited-lookahead, area-balance, area-tolerance, kappa-sensitivity, and trajectory analysis scripts.
+- `docs/LOOKAHEAD_BASELINE_RUNBOOK.md`: run order and interpretation rules for finite-depth lookahead robustness experiments.
+- `docs/MAC_LOOKAHEAD_EXPERIMENT.md`: macOS setup and command checklist for controlled-data Township-B lookahead runs.
 
 ## Results
 
 - `results/blocks/`: final five-seed township result folders.
 - `results/block_construction_audit/`: construction audit outputs and maps.
-- `results/derived_analyses/`: JSON outputs for derived analyses, including
-  farmland-area balance, controlled-data Township-B depth-2 and depth-3
-  lookahead checks, area-tolerance transition checks, and Township-B kappa
-  seed-0 sensitivity diagnostics.
-- `results/tables/`: LaTeX table fragments used by the LUP manuscript.
-- `results/google_drive_artifacts/`: small non-restricted artifacts recovered
-  from Google Drive.
+- `results/derived_analyses/`: JSON outputs for derived analyses, including farmland-area balance, controlled-data Township-B depth-2 and depth-3 lookahead checks, area-tolerance transition checks, and Township-B kappa seed-0 sensitivity diagnostics.
+- `results/tables/`: LaTeX table fragments used by the manuscript.
+- `results/google_drive_artifacts/`: small non-restricted artifacts recovered from Google Drive.
 
 ## Manuscript and Submission
 
-- `manuscript/lup_anonymous/`: current anonymous Land Use Policy manuscript
-  source and PDF.
-- `manuscript/latex_source/`: editable anonymous LaTeX source files and
-  manuscript figures.
-- `manuscript/development_archive/`: historical Paper 3 manuscript drafts. The
-  files here are not the active submission target.
-- `submission/lup_anonymous/`: anonymized Land Use Policy-oriented upload
-  package for review mirroring. Author-identifying title-page and cover-letter
-  files are intentionally excluded from this repository copy. The package also
-  includes separate highlights, figure captions, figures, declarations, and a
-  compressed anonymous LaTeX source archive.
+- `submission/arxiv/`: active arXiv preprint submission package.
+- `submission/arxiv/source/main.tex`: arXiv LaTeX entry point.
+- `submission/arxiv/source/paper3_*.png`: figures required by the arXiv source.
+- `submission/arxiv/source/paper3_*.tex`: table fragments required by the arXiv source.
+- `manuscript/latex_source/`: editable source snapshot and manuscript figures used to prepare the arXiv package.
+- `manuscript/development_archive/`: historical Paper 3 manuscript drafts. The files here are not the active submission target.
 
 ## Figures and Notebooks
 
@@ -52,10 +38,7 @@
 
 ## Archives
 
-- `archives/paper3_105_results-20260309T133921Z-3-001.zip`: legacy 105 result
-  archive from Google Drive.
-- `archives/paper3_108_results-20260309T040107Z-3-001.zip`: legacy 108 result
-  archive from Google Drive.
+- `archives/paper3_105_results-20260309T133921Z-3-001.zip`: legacy 105 result archive from Google Drive.
+- `archives/paper3_108_results-20260309T040107Z-3-001.zip`: legacy 108 result archive from Google Drive.
 
-The private `paper3_colab.zip` archive is intentionally excluded because it
-contained restricted raw geospatial data.
+The private `paper3_colab.zip` archive is intentionally excluded because it contained restricted raw geospatial data.

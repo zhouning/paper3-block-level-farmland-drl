@@ -1,8 +1,8 @@
-﻿% ============================================================================
+% ============================================================================
 % Policy-Relevant Block Abstraction for Sequential Farmland Consolidation
 % Scenario Screening
 % ============================================================================
-% Target journal: Land Use Policy (Elsevier)
+% arXiv preprint source
 % ============================================================================
 \documentclass[preprint,12pt]{elsarticle}
 
@@ -21,7 +21,7 @@
 
 \sloppy
 
-\journal{Land Use Policy}
+\journal{arXiv preprint}
 
 \begin{document}
 
@@ -29,12 +29,20 @@
 
 \title{Policy-Relevant Block Abstraction for Sequential Farmland Consolidation Scenario Screening}
 
-\author[anon]{[Anonymous Author]\corref{cor1}}
+\author[pku,supermap]{Ning Zhou\corref{cor1}}
 \cortext[cor1]{Corresponding author}
-\ead{[anonymized for peer review]}
+\ead{zhouning1@supermap.com}
 
-\affiliation[anon]{organization={[Anonymous Institution]},
-            country={[Anonymized]}}
+\affiliation[pku]{organization={School of Software and Microelectronics, Peking University},
+            addressline={No. 5 Yiheyuan Road, Haidian District},
+            city={Beijing},
+            postcode={100871},
+            country={China}}
+\affiliation[supermap]{organization={Beijing SuperMap Software Co., Ltd.},
+            addressline={6th Floor, Building 107, Electronic City IT Industrial Park, No. A10 Jiuxianqiao North Road, Chaoyang District},
+            city={Beijing},
+            postcode={100015},
+            country={China}}
 
 \begin{abstract}
 Farmland consolidation policy increasingly requires planners to compare candidate project areas before field investigation, ownership negotiation, and statutory approval. Such screening is difficult because irregular cadastral parcels, terrain, physical barriers, and threshold-based field-block targets interact. This paper evaluates a policy-relevant block abstraction for sequential farmland-consolidation scenario screening. We aggregate swappable farmland and forest parcels into barrier-aware consolidation blocks, then combine a learned block scheduler with a deterministic connectivity-aware execution engine that performs parcel-level farmland--forest exchanges inside selected blocks. The reward and evaluation metrics combine slope reduction, farmland contiguity, and \textit{baimu fang} formation (100-mu contiguous operating fields), treating \textit{baimu fang} as a local policy instance of minimum contiguous management-unit provision. Experiments use three townships in Bishan District, Chongqing, derived from 3,607--12,950 Third National Land Survey parcels and 78--338 constructed blocks. The block-level formulation trains stably across all 15 seed--township combinations. The clearest scheduler-specific result occurs on the medium township, where the learned scheduler is the only tested block-selection rule, including reward-aware one-step and finite-depth lookahead baselines, to produce positive \textit{baimu fang} area growth. On the small and large townships, reward-aware greedy planning remains competitive or stronger on several metrics. The contribution is therefore not a general claim that reinforcement learning dominates heuristics, but a planning-scale abstraction that makes consolidation trade-offs comparable and shows where learned scheduling can add value under multi-objective tension. Area-balance and compactness audits further show that the outputs are opportunity signals, not implementation-ready land-adjustment plans.
@@ -158,7 +166,7 @@ The block construction step (Section~\ref{sec:blocks}) is closely related to a b
 
 \subsection{Study area}
 
-The study area is Bishan District ($29.4^\circ$--$29.7^\circ$N, $106.0^\circ$--$106.3^\circ$E), Chongqing Municipality, southwest China. Bishan lies at the transition between the Sichuan Basin and surrounding low-mountain terrain, with elevations of 180--885\,m above sea level. The subtropical monsoon climate supports a mixed agricultural--forest landscape where paddy fields, dry cropland, orchards, and forest interleave at fine spatial scales. For double-anonymized review, the three experimental townships are reported as Township A, Township B, and Township C. The processing codes below preserve reproducibility of the experimental pipeline without disclosing owner attributes or original parcel geometries.
+The study area is Bishan District ($29.4^\circ$--$29.7^\circ$N, $106.0^\circ$--$106.3^\circ$E), Chongqing Municipality, southwest China. Bishan lies at the transition between the Sichuan Basin and surrounding low-mountain terrain, with elevations of 180--885\,m above sea level. The subtropical monsoon climate supports a mixed agricultural--forest landscape where paddy fields, dry cropland, orchards, and forest interleave at fine spatial scales. The three experimental townships are reported as Township A, Township B, and Township C to keep the discussion focused on spatial scale, policy thresholds, and reproducibility without exposing owner attributes or original parcel geometries.
 
 Three townships were selected to represent a gradient of spatial complexity:
 
@@ -825,7 +833,7 @@ These results indicate that spatial abstraction, lifting the optimization from i
 % ============================================================================
 
 \section*{CRediT authorship contribution statement}
-[Anonymous Author]: Conceptualization, Methodology, Software, Validation, Formal analysis, Investigation, Data curation, Visualization, Writing -- original draft, Writing -- review \& editing.
+Ning Zhou: Conceptualization, Methodology, Software, Validation, Formal analysis, Investigation, Data curation, Visualization, Writing -- original draft, Writing -- review \& editing.
 
 \section*{Declaration of competing interest}
 The author declares that he has no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
@@ -834,7 +842,7 @@ The author declares that he has no known competing financial interests or person
 This research received no specific grant from any funding agency in the public, commercial, or not-for-profit sectors.
 
 \section*{Data and code availability}
-The replication code for the block-level environment, training scripts, baselines, evaluation utilities, and figure-generation pipelines, as well as anonymized aggregate result files supporting all tables and figures in this paper, are available through the anonymous review repository supplied in the journal submission system. The full Third National Land Survey (TNLS) cadastral dataset for Bishan District is governed by the access regulations of the relevant Chinese authorities and cannot be redistributed by the author. Readers wishing to reproduce the experiments on the original data should obtain access through the proper channels of China's Ministry of Natural Resources, after which the present codebase can ingest the data via the documented preprocessing pipeline. Synthetic test fixtures that exercise every code path are included in the repository so that the methodology can be validated end-to-end without access to the restricted dataset. Slope features were derived from the publicly available Copernicus DEM GLO-30 \citep{copernicus2021dem} via standard zonal statistics (mean slope per parcel, computed in the EPSG:32648 projection).
+The replication code for the block-level environment, training scripts, baselines, evaluation utilities, and figure-generation pipelines is available at \url{https://github.com/zhouning/paper3-block-level-farmland-drl}. The repository also includes aggregate result files supporting the manuscript tables and figures. The full Third National Land Survey (TNLS) cadastral dataset for Bishan District is governed by the access regulations of the relevant Chinese authorities and cannot be redistributed by the author. Readers wishing to reproduce the experiments on the original data should obtain access through the proper channels of China's Ministry of Natural Resources. The present codebase can then ingest the data via the documented preprocessing pipeline. Synthetic tests and derived artifacts are included so that the methodology can be validated without access to the restricted dataset. Slope features were derived from the publicly available Copernicus DEM GLO-30 \citep{copernicus2021dem} via standard zonal statistics (mean slope per parcel, computed in the EPSG:32648 projection).
 
 \section*{Declaration of generative AI and AI-assisted technologies in the manuscript preparation process}
 During the preparation of this work, the author used AI-assisted tools to support language editing, LaTeX formatting, and journal-format compliance checks. After using these tools, the author reviewed and edited the content as needed and takes full responsibility for the content of the submitted manuscript.
